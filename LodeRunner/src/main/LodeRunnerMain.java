@@ -1,0 +1,127 @@
+package main;
+
+import java.awt.Point;
+
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+import impl.EditableScreenImpl;
+import impl.EngineImpl;
+import services.Command;
+import services.ItemService;
+
+public class LodeRunnerMain {
+	
+	protected static EngineImpl engine;
+	
+	public LodeRunnerMain(EditableScreenImpl e, Point player, ArrayList<Point> guards, ArrayList<Point> treasures) {
+		engine = new EngineImpl();
+		engine.init(e, player, guards, treasures);
+	}
+	
+	public static String[][] readFile(String file) {
+		String[][] res = null;
+		
+		try (FileReader reader = new FileReader(file);
+				 BufferedReader br = new BufferedReader(reader)) {
+			
+			String line = br.readLine();
+            String[] tailles = line.split(" ");
+            res = new String[Integer.parseInt(tailles[0])][Integer.parseInt(tailles[1])];
+            
+            int j= Integer.parseInt(tailles[1])-1; 
+            
+	        while ((line = br.readLine()) != null) {
+	        	System.out.println(line +"  j="+j);
+	        	for(int i=0; i<line.length(); i++) {
+	        		res[i][j] = String.valueOf(line.charAt(i));
+	        	}
+	        	j--;
+	        }
+	        
+	        reader.close();
+
+		 } catch (IOException e) {
+	        System.err.format("IOException: %s%n", e);
+	     }
+		
+		return res;
+	}
+	
+	public static void afficher() {
+		String [][] res = new String[engine.getEnvi().getWidth()][engine.getEnvi().getHeight()];
+		System.out.println(engine.getEnvi().getWidth()+"  "+engine.getEnvi().getHeight());
+		for (int i=0; i<engine.getEnvi().getWidth(); i++) {
+			for (int j=0; j<engine.getEnvi().getHeight(); j++) {
+				switch(engine.getEnvi().cellNature(i, j)) {
+					case EMP:
+						res[i][j] = " ";
+						break;
+					case PLT:
+						res[i][j] = "=";
+						break;
+					case HOL:
+						res[i][j] = "_";
+						break;
+					case LAD:
+						res[i][j] = "H";
+						break;
+					case HDR:
+						res[i][j] = "‾";
+						break;
+					case MTL:
+						res[i][j] = "X";
+						break;
+						
+				}
+			}
+		}
+		
+		for (ItemService i: engine.getTreasures()) 
+			res[i.getColumn()][i.getHeight()] = "*";
+
+		res[engine.getPlayer().getWidth()][engine.getPlayer().getHeight()] = "O";
+		
+		for(int j=0; j<res.length; j++) {
+			for(int i=0; i<res[j].length; i++) {
+			
+				System.out.print(res[i][j]);
+			
+		}
+			System.out.println();
+		}
+	}
+	
+	public void readCommand() {
+		Scanner scan= new Scanner(System.in);
+		
+		System.out.print("# ");
+		String ligne = scan.nextLine();
+		
+		switch(ligne) {
+			case "z":
+				engine.setCommand(Command.UP);
+				break;
+			case "q":
+				engine.setCommand(Command.LEFT);
+				break;
+			case "s":
+				engine.setCommand(Command.DOWN);
+				break;
+			case "d":
+				engine.setCommand(Command.RIGHT);
+				break;
+			case "4":
+				engine.setCommand(Command.DIGL);
+				break;
+			case "6":
+				engine.setCommand(Command.DIGR);
+				break;
+		}
+		
+		scan.close();
+	}
+}
