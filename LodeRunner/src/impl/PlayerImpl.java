@@ -1,6 +1,7 @@
 package impl;
 
 
+import services.Cell;
 import services.EngineService;
 import services.PlayerService;
 
@@ -21,6 +22,12 @@ public class PlayerImpl extends CharacterImpl implements PlayerService{
 	@Override
 	public void step() {
 		// TODO Auto-generated method stub
+		
+		if(engine.getEnvi().cellNature(getWidth(), getHeight()-1) ==  Cell.EMP) {
+			goDown();
+			return;
+		}
+		
 		switch(engine.nextCommand()) {
 			case LEFT:
 				goLeft();
