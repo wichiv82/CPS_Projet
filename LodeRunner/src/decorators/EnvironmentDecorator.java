@@ -64,4 +64,10 @@ public class EnvironmentDecorator extends ScreenDecorator implements Environment
 		getDelegate().init(e);
 	}
 
+	@Override
+	public void setCellContent(int x, int y, Paire p) {
+		// TODO Auto-generated method stub
+		getDelegate().setCellContent(x, y, p);
+	}
+
 }

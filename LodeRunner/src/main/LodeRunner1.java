@@ -48,19 +48,6 @@ public class LodeRunner1 extends LodeRunnerMain{
 			}
 		}
 		
-		//PlayerImpl joueur = new PlayerImpl();
-		//joueur.init(e, 1, 1);
-		
-		/*ItemImpl t1 = new ItemImpl();
-		t1.init(1, ItemType.TREASURE, 0, 0);
-		
-		ItemImpl t2 = new ItemImpl();
-		t1.init(2, ItemType.TREASURE, 0, 0);
-		
-		ItemImpl t3 = new ItemImpl();
-		t1.init(3, ItemType.TREASURE, 0, 0);
-		*/
-		
 		ArrayList<Point> treasures = new ArrayList<Point>();
 		treasures.add(new Point(6,5));
 		treasures.add(new Point(7,1));

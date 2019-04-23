@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import contracts.PostconditionError;
 import services.Cell;
 import services.CharacterService;
+import services.EditableScreenService;
 import services.EnvironmentService;
 import services.ScreenService;
 
@@ -20,7 +21,8 @@ public class CharacterImpl implements CharacterService{
 	@Override
 	public void init(ScreenService s, int x, int y) {
 		// TODO Auto-generated method stub
-		envi = (EnvironmentService) s;
+		envi = new EnvironmentImpl();
+		envi.init((EditableScreenService)s);
 		width = x;
 		height = y;
 		
@@ -129,7 +131,6 @@ public class CharacterImpl implements CharacterService{
 				switch(getEnvi().cellNature(getWidth(), getHeight() + 1)) {
 					case LAD:
 					case HDR:
-					case EMP:
 						switch(getEnvi().cellNature(getWidth(), getHeight())) {
 							case LAD:
 								getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);

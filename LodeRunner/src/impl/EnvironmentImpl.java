@@ -24,4 +24,11 @@ public class EnvironmentImpl extends ScreenImpl implements EnvironmentService{
 	public Paire cellContent(int x, int y) {
 		return cell_content[x][y];
 	}
+
+
+	@Override
+	public void setCellContent(int x, int y, Paire p) {
+		// TODO Auto-generated method stub
+		cell_content[x][y] = p;
+	}
 }

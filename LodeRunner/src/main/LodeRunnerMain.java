@@ -16,6 +16,7 @@ import services.ItemService;
 public class LodeRunnerMain {
 	
 	protected static EngineImpl engine;
+	private static Scanner scan = new Scanner(System.in);
 	
 	public LodeRunnerMain(EditableScreenImpl e, Point player, ArrayList<Point> guards, ArrayList<Point> treasures) {
 		engine = new EngineImpl();
@@ -53,7 +54,7 @@ public class LodeRunnerMain {
 	
 	public static void afficher() {
 		String [][] res = new String[engine.getEnvi().getWidth()][engine.getEnvi().getHeight()];
-		System.out.println(engine.getEnvi().getWidth()+"  "+engine.getEnvi().getHeight());
+
 		for (int i=0; i<engine.getEnvi().getWidth(); i++) {
 			for (int j=0; j<engine.getEnvi().getHeight(); j++) {
 				switch(engine.getEnvi().cellNature(i, j)) {
@@ -70,7 +71,7 @@ public class LodeRunnerMain {
 						res[i][j] = "H";
 						break;
 					case HDR:
-						res[i][j] = "‾";
+						res[i][j] = "-";
 						break;
 					case MTL:
 						res[i][j] = "X";
@@ -85,22 +86,20 @@ public class LodeRunnerMain {
 
 		res[engine.getPlayer().getWidth()][engine.getPlayer().getHeight()] = "O";
 		
-		for(int j=0; j<res.length; j++) {
-			for(int i=0; i<res[j].length; i++) {
-			
+		for(int j=res[0].length-1; j>=0; j--){
+			for(int i=0; i<res.length; i++) {
 				System.out.print(res[i][j]);
-			
-		}
+			}
 			System.out.println();
 		}
+		
 	}
 	
 	public void readCommand() {
-		Scanner scan= new Scanner(System.in);
-		
 		System.out.print("# ");
 		String ligne = scan.nextLine();
 		
+		System.out.println("--------------------->>>> " + ligne);
 		switch(ligne) {
 			case "z":
 				engine.setCommand(Command.UP);
@@ -122,6 +121,5 @@ public class LodeRunnerMain {
 				break;
 		}
 		
-		scan.close();
 	}
 }

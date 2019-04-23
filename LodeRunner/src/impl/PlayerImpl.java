@@ -13,6 +13,10 @@ public class PlayerImpl extends CharacterImpl implements PlayerService{
 		// TODO Auto-generated method stub
 		return engine;
 	}
+	
+	public void setEngine(EngineService e) {
+		engine = e;
+	}
 
 	@Override
 	public void step() {

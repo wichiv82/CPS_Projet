@@ -76,4 +76,10 @@ public class PlayerDecorator extends CharacterDecorator implements PlayerService
 		getDelegate().step();
 	}
 
+	@Override
+	public void setEngine(EngineService e) {
+		// TODO Auto-generated method stub
+		getDelegate().setEngine(e);
+	}
+
 }

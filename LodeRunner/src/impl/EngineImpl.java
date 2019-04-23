@@ -14,6 +14,7 @@ import services.EnvironmentService;
 import services.GuardService;
 import services.ItemService;
 import services.ItemType;
+import services.Paire;
 import services.PlayerService;
 import services.Status;
 
@@ -30,18 +31,26 @@ public class EngineImpl implements EngineService {
 	@Override
 	public void init(EditableScreenService e, Point player, ArrayList<Point> guards, ArrayList<Point> treasures) {
 		// TODO Auto-generated method stub
+		envi = new EnvironmentImpl();
 		envi.init(e);
-		this.guards = new ArrayList<>();
-		this.treasures = new ArrayList<>();
 		
-		this.player = new PlayerContract(new PlayerImpl());
-		this.player.init(e, (int)player.getX(), (int)player.getY());
+		this.guards = new ArrayList<GuardService>();
+		this.treasures = new ArrayList<ItemService>();
 		
-		for(Point coord : treasures) {
-			this.treasures.add(new ItemContract(new ItemImpl()));
-			this.treasures.get(this.treasures.size()).init(this.treasures.size() - 1, ItemType.TREASURE, (int)coord.getX(), (int)coord.getY());
+		this.player = new PlayerImpl();
+		this.player.init(e, player.x, player.y);
+		envi.setCellContent(player.x, player.y, new Paire(this.player, null));
+		
+		for(int i=0; i<treasures.size(); i++) {
+			ItemImpl t = new ItemImpl();
+			t.init(i, ItemType.TREASURE, treasures.get(i).x, treasures.get(i).y);
+			this.treasures.add(t);
+			envi.setCellContent(treasures.get(i).x, treasures.get(i).y, new Paire(null, t));
 		}
 		
+		status = Status.PLAYING;
+		
+		this.player.setEngine(this);
 	}
 	
 	@Override

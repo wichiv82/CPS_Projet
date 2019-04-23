@@ -25,4 +25,6 @@ public interface EnvironmentService extends ScreenService{
 	 * 			cellNature(init(e),x,y) = e.cellNature(x,y)
 	 */
 	public void init(EditableScreenService e);
+	
+	public void setCellContent(int x, int y, Paire p);
 }
