@@ -129,8 +129,14 @@ public class CharacterImpl implements CharacterService{
 		if(getHeight() != getEnvi().getHeight() - 1)
 			if(getEnvi().cellContent(getWidth(), getHeight() + 1).getCharacter() == null)
 				switch(getEnvi().cellNature(getWidth(), getHeight() + 1)) {
+					case EMP:
+						if (getEnvi().cellNature(getWidth(), getHeight()) == Cell.LAD) {
+							getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
+							height++;
+							getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
+						}
+						break;
 					case LAD:
-					case HDR:
 						switch(getEnvi().cellNature(getWidth(), getHeight())) {
 							case LAD:
 								getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);

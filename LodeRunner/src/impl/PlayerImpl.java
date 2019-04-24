@@ -23,7 +23,9 @@ public class PlayerImpl extends CharacterImpl implements PlayerService{
 	public void step() {
 		// TODO Auto-generated method stub
 		
-		if(engine.getEnvi().cellNature(getWidth(), getHeight()-1) ==  Cell.EMP) {
+		if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.EMP &&
+			(engine.getEnvi().cellNature(getWidth(), getHeight()-1) ==  Cell.EMP
+			|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HDR)) {
 			goDown();
 			return;
 		}
