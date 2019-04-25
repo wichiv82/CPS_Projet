@@ -1,7 +1,6 @@
 package impl;
 
 
-import javax.swing.event.CellEditorListener;
 
 import services.Cell;
 import services.EngineService;
@@ -48,10 +47,14 @@ public class PlayerImpl extends CharacterImpl implements PlayerService{
 			case DIGL:
 				getEnvi().dig(engine.getPlayer().getWidth()-1, engine.getPlayer().getHeight()-1);
 				engine.getEnvi().dig(engine.getPlayer().getWidth()-1, engine.getPlayer().getHeight()-1);
+				engine.getHoles()[engine.getPlayer().getWidth()-1][engine.getPlayer().getHeight()-1] = -1;
+				System.out.println(engine.getHoles()[engine.getPlayer().getWidth()-1][engine.getPlayer().getHeight()-1]);
 				break;
 			case DIGR:
 				getEnvi().dig(engine.getPlayer().getWidth()+1, engine.getPlayer().getHeight()-1);
 				engine.getEnvi().dig(engine.getPlayer().getWidth()+1, engine.getPlayer().getHeight()-1);
+				engine.getHoles()[engine.getPlayer().getWidth()+1][engine.getPlayer().getHeight()-1] = -1;
+				System.out.println(engine.getHoles()[engine.getPlayer().getWidth()+1][engine.getPlayer().getHeight()-1]);
 				break;
 			case NEUTRAL:
 			default:

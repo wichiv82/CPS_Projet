@@ -44,7 +44,6 @@ public class ScreenImpl implements ScreenService{
 		// TODO Auto-generated method stub
 		if (cells[x][y] == Cell.PLT)
 			cells[x][y] = Cell.HOL;
-		System.out.println("CREUSE "+x +" "+y);
 	}
 
 	@Override

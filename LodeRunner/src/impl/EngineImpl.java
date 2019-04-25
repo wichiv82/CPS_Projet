@@ -24,6 +24,7 @@ public class EngineImpl implements EngineService {
 	private ArrayList<ItemService> treasures;
 	
 	private EnvironmentService envi;
+	private int[][] holes;
 	private Status status;
 	
 	private Command command;
@@ -33,6 +34,10 @@ public class EngineImpl implements EngineService {
 		// TODO Auto-generated method stub
 		envi = new EnvironmentImpl();
 		envi.init(e);
+		holes = new int[e.getWidth()][e.getHeight()];
+		for(int i=0; i<e.getWidth(); i++)
+			for(int j=0; j<e.getHeight(); j++)
+				holes[i][j] = 16;
 		
 		this.guards = new ArrayList<GuardService>();
 		this.treasures = new ArrayList<ItemService>();
@@ -58,16 +63,19 @@ public class EngineImpl implements EngineService {
 		// TODO Auto-generated method stub
 		return envi;
 	}
+	
 	@Override
 	public PlayerService getPlayer() {
 		// TODO Auto-generated method stub
 		return player;
 	}
+	
 	@Override
 	public ArrayList<GuardService> getGuards() {
 		// TODO Auto-generated method stub
 		return guards;
 	}
+	
 	@Override
 	public ArrayList<ItemService> getTreasures() {
 		// TODO Auto-generated method stub
@@ -77,26 +85,19 @@ public class EngineImpl implements EngineService {
 				tresors.add(i);
 		return tresors;
 	}
+	
 	@Override
 	public Status getStatus() {
 		// TODO Auto-generated method stub
 		return status;
 	}
+	
 	@Override
-	public HashMap<Point, Integer> getHoles() {
+	public int[][] getHoles() {
 		// TODO Auto-generated method stub
-		HashMap<Point, Integer> trous = new HashMap<Point, Integer>();
-		
-		for(int i=0; i<getEnvi().getWidth(); i++) {
-			for(int j=0; j<getEnvi().getHeight(); j++) {
-				if(getEnvi().cellNature(i, j) == Cell.HOL) {
-					trous.put(new Point(i,j), 0);
-				}
-			}
-		}
-		
-		return trous;
+		return holes;
 	}
+	
 	@Override
 	public Command nextCommand() {
 		// TODO Auto-generated method stub
@@ -119,7 +120,7 @@ public class EngineImpl implements EngineService {
 		}
 		
 		if (treasures.size() == 0) {
-			status = Status.LOSS;
+			status = Status.WIN;
 			return;
 		}
 		
@@ -130,7 +131,26 @@ public class EngineImpl implements EngineService {
 			
 		player.step();
 		
+		xplayer = player.getWidth();
+		yplayer = player.getHeight();
+		
 		envi.cellContent(xplayer, yplayer).setCharacter(player);
+		
+		for (int i=0; i<holes.length; i++) {
+			for (int j=0; j<holes[i].length; j++){
+				holes[i][j]++;
+				if(holes[i][j] == 15) {
+					System.out.println("Un trou a été bouché");
+					envi.fill(i, j);
+					player.getEnvi().fill(i, j);
+				}
+			}
+		}
+		
+		if(envi.cellNature(xplayer, yplayer) == Cell.PLT) {
+			status = Status.LOSS;
+			return;
+		}
 		
 	}
 	

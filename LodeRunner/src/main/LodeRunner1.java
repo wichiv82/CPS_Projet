@@ -65,6 +65,12 @@ public class LodeRunner1 extends LodeRunnerMain{
 		}
 		
 		System.out.println("FIN DE PARTIE !!!");
+		
+		if(engine.getStatus() == Status.WIN) {
+			System.out.println("YOU WIN");
+		}else if(engine.getStatus() == Status.LOSS) {
+			System.out.println("YOU LOSE");
+		}
 	}
 
 }

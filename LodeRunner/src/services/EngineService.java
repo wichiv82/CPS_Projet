@@ -16,7 +16,7 @@ public interface EngineService {
 	
 	public Status getStatus();
 	
-	public HashMap<Point,Integer > getHoles();
+	public int[][] getHoles();
 	
 	public Command nextCommand();
 	

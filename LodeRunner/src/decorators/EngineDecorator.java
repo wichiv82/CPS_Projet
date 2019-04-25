@@ -57,9 +57,9 @@ public class EngineDecorator implements EngineService{
 	}
 
 	@Override
-	public HashMap<Point, Integer> getHoles() {
+	public int[][] getHoles() {
 		// TODO Auto-generated method stub
-		return null;
+		return delegate.getHoles();
 	}
 
 	@Override
