@@ -30,7 +30,6 @@ public class PlayerImpl extends CharacterImpl implements PlayerService{
 			goDown();
 			return;
 		}
-		
 		switch(engine.nextCommand()) {
 			case LEFT:
 				goLeft();
