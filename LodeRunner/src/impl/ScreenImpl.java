@@ -42,19 +42,16 @@ public class ScreenImpl implements ScreenService{
 	@Override
 	public void dig(int x, int y) {
 		// TODO Auto-generated method stub
-		//if (cells[x][y] != Cell.EMP)
-		//	throw new Error("La cellule creusee n'est pas une cellule EMP");
-		if (cells[x][y] == Cell.EMP)
+		if (cells[x][y] == Cell.PLT)
 			cells[x][y] = Cell.HOL;
+		System.out.println("CREUSE "+x +" "+y);
 	}
 
 	@Override
 	public void fill(int x, int y) {
 		// TODO Auto-generated method stub
-		//if (cells[x][y] != Cell.HOL)
-		//	throw new Error("La cellule bouchee n'est pas une cellule HOL");
 		if (cells[x][y] == Cell.HOL)
-			cells[x][y] = Cell.EMP;
+			cells[x][y] = Cell.PLT;
 	}
 	
 }

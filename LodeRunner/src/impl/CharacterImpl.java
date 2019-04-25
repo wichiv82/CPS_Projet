@@ -11,7 +11,7 @@ import services.ScreenService;
 
 public class CharacterImpl implements CharacterService{
 
-	private EnvironmentService envi;
+	protected EnvironmentService envi;
 	private int height;
 	private int width;
 	
@@ -174,6 +174,8 @@ public class CharacterImpl implements CharacterService{
 				case EMP:
 				case LAD:
 				case HDR:
+				case HOL:
+					System.out.println("DEBUT DOWN");
 					switch(getEnvi().cellNature(getWidth(), getHeight())) {
 						case EMP:
 						case LAD:
@@ -181,9 +183,11 @@ public class CharacterImpl implements CharacterService{
 							getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
 							height--;
 							getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
+							System.out.println("DOWN CONFIRMED");
 						default:
 					}
 				default:
+					System.out.println("CHECK DOWN : "+getEnvi().cellNature(getWidth(), getHeight() - 1)+" - "+getWidth()+ " "+ (getHeight()-1));
 				}
 	}	
 		

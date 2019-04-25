@@ -1,6 +1,8 @@
 package impl;
 
 
+import javax.swing.event.CellEditorListener;
+
 import services.Cell;
 import services.EngineService;
 import services.PlayerService;
@@ -22,10 +24,10 @@ public class PlayerImpl extends CharacterImpl implements PlayerService{
 	@Override
 	public void step() {
 		// TODO Auto-generated method stub
-		
 		if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.EMP &&
 			(engine.getEnvi().cellNature(getWidth(), getHeight()-1) ==  Cell.EMP
-			|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HDR)) {
+			|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HDR
+			|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HOL)) {
 			goDown();
 			return;
 		}
@@ -44,9 +46,11 @@ public class PlayerImpl extends CharacterImpl implements PlayerService{
 				goDown();
 				break;
 			case DIGL:
+				getEnvi().dig(engine.getPlayer().getWidth()-1, engine.getPlayer().getHeight()-1);
 				engine.getEnvi().dig(engine.getPlayer().getWidth()-1, engine.getPlayer().getHeight()-1);
 				break;
 			case DIGR:
+				getEnvi().dig(engine.getPlayer().getWidth()-1, engine.getPlayer().getHeight()-1);
 				engine.getEnvi().dig(engine.getPlayer().getWidth()+1, engine.getPlayer().getHeight()-1);
 				break;
 			case NEUTRAL:

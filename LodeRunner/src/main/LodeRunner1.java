@@ -19,7 +19,7 @@ public class LodeRunner1 extends LodeRunnerMain{
 	public static void main(String[] args) {
 		EditableScreenImpl e = new EditableScreenImpl();
 		
-		String[][] lignes = readFile("levels/level3.txt");
+		String[][] lignes = readFile("levels/level4.txt");
 		e.init(lignes.length, lignes[0].length);
 		
 		for(int i=0; i<lignes.length; i++) {
@@ -55,7 +55,7 @@ public class LodeRunner1 extends LodeRunnerMain{
 		
 		ArrayList<Point> gardes = new ArrayList<Point>();
 		
-		LodeRunner1 run = new LodeRunner1(e,new Point(1,1), gardes, treasures);
+		LodeRunner1 run = new LodeRunner1(e,new Point(1,3), gardes, treasures);
 		run.afficher();
 		
 		while(run.engine.getStatus() == Status.PLAYING) {
