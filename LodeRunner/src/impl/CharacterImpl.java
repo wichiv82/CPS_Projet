@@ -163,7 +163,6 @@ public class CharacterImpl implements CharacterService{
 					default:
 				}
 		
-		
 	}
 
 	@Override

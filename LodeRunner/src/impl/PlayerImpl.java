@@ -50,7 +50,7 @@ public class PlayerImpl extends CharacterImpl implements PlayerService{
 				engine.getEnvi().dig(engine.getPlayer().getWidth()-1, engine.getPlayer().getHeight()-1);
 				break;
 			case DIGR:
-				getEnvi().dig(engine.getPlayer().getWidth()-1, engine.getPlayer().getHeight()-1);
+				getEnvi().dig(engine.getPlayer().getWidth()+1, engine.getPlayer().getHeight()-1);
 				engine.getEnvi().dig(engine.getPlayer().getWidth()+1, engine.getPlayer().getHeight()-1);
 				break;
 			case NEUTRAL:

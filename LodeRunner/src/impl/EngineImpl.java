@@ -125,11 +125,11 @@ public class EngineImpl implements EngineService {
 		
 		int xplayer = player.getWidth();
 		int yplayer = player.getHeight();
-		
+
+		envi.cellContent(xplayer, yplayer).removeCharacter();
 			
 		player.step();
 		
-		envi.cellContent(xplayer, yplayer).removeCharacter();
 		envi.cellContent(xplayer, yplayer).setCharacter(player);
 		
 	}

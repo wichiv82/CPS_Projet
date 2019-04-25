@@ -27,4 +27,5 @@ public interface EnvironmentService extends ScreenService{
 	public void init(EditableScreenService e);
 	
 	public void setCellContent(int x, int y, Paire p);
+	
 }
