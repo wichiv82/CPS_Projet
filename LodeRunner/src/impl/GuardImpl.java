@@ -1,5 +1,7 @@
 package impl;
 
+import java.awt.Point;
+
 import services.Cell;
 import services.CharacterService;
 import services.EngineService;
@@ -11,6 +13,7 @@ import services.ScreenService;
 public class GuardImpl extends CharacterImpl implements GuardService{
 
 	private int id;
+	private Point posInit;
 	private CharacterService target;
 	private EngineService engine;
 	private Move behaviour;
@@ -23,6 +26,7 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 		super.init(s, x, y);
 		this.id = id;
 		this.target = target;
+		this.posInit = new Point(x,y);
 	}
 	
 	
@@ -37,6 +41,17 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 	
 	public int getId(){
 		return id;
+	}
+	
+	public void respawn() {
+		getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
+		engine.getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
+		
+		width = posInit.x;
+		height = posInit.y;
+		
+		getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
+		engine.getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
 	}
 	
 	public Move getBehaviour() {
@@ -126,9 +141,11 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 					case HDR:
 						// FAIRE MONTER LE GARDE A GAUCHE
 						engine.getEnvi().setCellContent(getWidth(), getHeight(), new Paire(null, null));
+						getEnvi().setCellContent(getWidth(), getHeight(), new Paire(null, null));
 						width--;
 						height++;
 						engine.getEnvi().setCellContent(getWidth(), getHeight(), new Paire(this, null));
+						getEnvi().setCellContent(getWidth(), getHeight(), new Paire(this, null));
 						break;
 					default:
 						break;
@@ -147,9 +164,11 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 					case HDR:
 						// FAIRE MONTER LE GARDE A DROITE
 						engine.getEnvi().setCellContent(getWidth(), getHeight(), new Paire(null, null));
+						getEnvi().setCellContent(getWidth(), getHeight(), new Paire(null, null));
 						width++;
 						height++;
 						engine.getEnvi().setCellContent(getWidth(), getHeight(), new Paire(this, null));
+						getEnvi().setCellContent(getWidth(), getHeight(), new Paire(this, null));
 						break;
 					default:
 						break;
@@ -161,6 +180,17 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 
 	public void step() {
 		// TODO Auto-generated method stub
+		
+		if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.EMP &&
+				(engine.getEnvi().cellNature(getWidth(), getHeight()-1) ==  Cell.EMP
+				|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HDR
+				|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HOL)) {
+			
+			goDown();
+				
+			return;
+		}
+		
 		if (engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL){
 			timeInHole++;
 			if(timeInHole >= 25){
@@ -171,14 +201,6 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 				timeInHole = 0;
 				return;
 			}
-		}
-		
-		if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.EMP &&
-			(engine.getEnvi().cellNature(getWidth(), getHeight()-1) ==  Cell.EMP
-			|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HDR
-			|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HOL)) {
-			goDown();
-			return;
 		}
 		
 		getBehaviour();
@@ -199,7 +221,6 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 			default:
 				break;
 		}
-		
 	}
 
 }

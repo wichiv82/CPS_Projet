@@ -49,6 +49,12 @@ public class GuardDecorator extends CharacterDecorator implements GuardService {
 		// TODO Auto-generated method stub
 		getDelegate().step();
 	}
+
+	@Override
+	public void respawn() {
+		// TODO Auto-generated method stub
+		getDelegate().respawn();
+	}
 	
 	
 

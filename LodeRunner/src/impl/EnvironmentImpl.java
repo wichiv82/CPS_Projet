@@ -17,7 +17,7 @@ public class EnvironmentImpl extends ScreenImpl implements EnvironmentService{
 				cells[i][j] = e.cellNature(i, j);
 				cell_content[i][j] = new Paire(null, null);
 			}
-				
+			
 	}
 
 	

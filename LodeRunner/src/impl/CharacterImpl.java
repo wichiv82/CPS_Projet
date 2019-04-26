@@ -58,6 +58,7 @@ public class CharacterImpl implements CharacterService{
 		return width;
 	}
 	
+	
 	@Override
 	public void goLeft() {
 		if(getWidth() != 0) {
@@ -76,12 +77,19 @@ public class CharacterImpl implements CharacterService{
 								break;
 							case EMP:
 								switch(getEnvi().cellNature(getWidth(), getHeight() - 1)) {
+									case HOL:
+										if(getEnvi().cellContent(getWidth(), getHeight() - 1).getCharacter() != null) {
+											break;
+										}
 									case PLT:
 									case MTL:
 									case LAD:
 										getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
 										width--;
 										getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
+										break;
+									
+										
 									default:
 							}
 							default:
@@ -109,6 +117,10 @@ public class CharacterImpl implements CharacterService{
 								break;
 							case EMP:
 								switch(getEnvi().cellNature(getWidth(), getHeight() - 1)) {
+									case HOL:
+										if(getEnvi().cellContent(getWidth(), getHeight() - 1).getCharacter() != null) {
+											break;
+										}
 									case PLT:
 									case MTL:
 									case LAD:

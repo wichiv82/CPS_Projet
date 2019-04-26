@@ -16,4 +16,6 @@ public interface GuardService extends CharacterService{
 	public void climbLeft();
 	
 	public void step();
+
+	public void respawn();
 }

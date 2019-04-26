@@ -166,6 +166,11 @@ public class EngineImpl implements EngineService {
 					System.out.println("Un trou a été bouché");
 					envi.fill(i, j);
 					player.getEnvi().fill(i, j);
+					for(GuardService g : guards) {
+						g.getEnvi().fill(i, j);
+						if(g.getWidth() == i && g.getHeight() == j)
+							g.respawn();
+					}
 				}
 			}
 		}
