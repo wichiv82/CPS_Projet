@@ -55,6 +55,7 @@ public class LodeRunner1 extends LodeRunnerMain{
 		
 		ArrayList<Point> gardes = new ArrayList<Point>();
 		gardes.add(new Point(7,3));
+		//gardes.add(new Point(5,3));
 		
 		LodeRunner1 run = new LodeRunner1(e,new Point(1,3), gardes, treasures);
 		run.afficher();

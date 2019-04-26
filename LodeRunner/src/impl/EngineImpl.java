@@ -119,6 +119,18 @@ public class EngineImpl implements EngineService {
 	@Override
 	public void step() {
 		// TODO Auto-generated method stub
+		for (int i=0; i<guards.size(); i++) {
+			int xguard = guards.get(i).getWidth();
+			int yguard = guards.get(i).getHeight();
+			
+			if(player.getWidth() == xguard && player.getHeight() == yguard) {
+				status = Status.LOSS;
+				return;
+			}
+				
+		}
+		
+		
 		for (int i=0; i< treasures.size(); i++) {
 			if (treasures.get(i).getHeight() == player.getHeight() && treasures.get(i).getColumn() == player.getWidth()) {
 				envi.cellContent(treasures.get(i).getColumn(), treasures.get(i).getHeight() ).removeItem();
