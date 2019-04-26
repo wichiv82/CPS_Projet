@@ -12,8 +12,8 @@ import services.ScreenService;
 public class CharacterImpl implements CharacterService{
 
 	protected EnvironmentService envi;
-	private int height;
-	private int width;
+	protected int height;
+	protected int width;
 	
 	protected ArrayList<Cell> cell_libre;//{Cell.EMP, Cell.LAD, Cell.HDR, Cell.HOL};
 	protected ArrayList<Cell> cell_non_libre; //{Cell.MTL, Cell.PLT};

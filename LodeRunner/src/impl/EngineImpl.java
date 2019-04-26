@@ -53,6 +53,14 @@ public class EngineImpl implements EngineService {
 			envi.setCellContent(treasures.get(i).x, treasures.get(i).y, new Paire(null, t));
 		}
 		
+		for (int i=0; i<guards.size(); i++) {
+			GuardImpl g = new GuardImpl();
+			g.init(e, guards.get(i).x, guards.get(i).y, i, this.player);
+			g.setEngine(this);
+			this.guards.add(g);
+			envi.setCellContent(guards.get(i).x, guards.get(i).y, new Paire(this.guards.get(i),null));
+		}
+		
 		status = Status.PLAYING;
 		
 		this.player.setEngine(this);
@@ -135,6 +143,21 @@ public class EngineImpl implements EngineService {
 		yplayer = player.getHeight();
 		
 		envi.cellContent(xplayer, yplayer).setCharacter(player);
+		
+		
+		for (int i=0; i<guards.size(); i++) {
+			int xguard = guards.get(i).getWidth();
+			int yguard = guards.get(i).getHeight();
+			
+			envi.cellContent(xguard, yguard).removeCharacter();
+
+			guards.get(i).step();
+			
+			xguard = guards.get(i).getWidth();
+			yguard = guards.get(i).getHeight();
+			
+			envi.cellContent(xguard, yguard).setCharacter(guards.get(i));
+		}
 		
 		for (int i=0; i<holes.length; i++) {
 			for (int j=0; j<holes[i].length; j++){

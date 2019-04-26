@@ -11,6 +11,7 @@ import java.util.Scanner;
 import impl.EditableScreenImpl;
 import impl.EngineImpl;
 import services.Command;
+import services.GuardService;
 import services.ItemService;
 
 public class LodeRunnerMain {
@@ -84,6 +85,9 @@ public class LodeRunnerMain {
 		for (ItemService i: engine.getTreasures()) 
 			res[i.getColumn()][i.getHeight()] = "*";
 
+		for (GuardService g: engine.getGuards()) 
+			res[g.getWidth()][g.getHeight()] = "+";
+		
 		res[engine.getPlayer().getWidth()][engine.getPlayer().getHeight()] = "O";
 		
 		for(int j=res[0].length-1; j>=0; j--){

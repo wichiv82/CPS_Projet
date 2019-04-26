@@ -1,13 +1,12 @@
 package impl;
 
-
-
 import services.Cell;
 import services.CharacterService;
 import services.EngineService;
 import services.GuardService;
 import services.Move;
-import services.PlayerService;
+import services.Paire;
+import services.ScreenService;
 
 public class GuardImpl extends CharacterImpl implements GuardService{
 
@@ -17,10 +16,11 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 	private Move behaviour;
 	private int timeInHole;
 	
-	private double[] p1 = {0.5,0.7,0.9,1};
-	private double[] p2 = {0.4,0.8,0.9,1};
+	//private double[] p1 = {0.5,0.7,0.9,1};
+	//private double[] p2 = {0.4,0.8,0.9,1};
 	
-	public void init(int id, CharacterService target) {
+	public void init(ScreenService s, int x, int y, int id, CharacterService target) {
+		super.init(s, x, y);
 		this.id = id;
 		this.target = target;
 	}
@@ -118,11 +118,61 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 	 * pre : getEnvi().cellNature(getHeight(), getWidth()) = Cell.HOL
 	 */
 	public void climbLeft() {
-		
+		if(getWidth()>0 && getHeight()<engine.getEnvi().getHeight()-1){
+			if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL){
+				switch(engine.getEnvi().cellNature(getWidth()-1, getHeight()+1)){
+					case EMP:
+					case LAD:
+					case HDR:
+						// FAIRE MONTER LE GARDE A GAUCHE
+						engine.getEnvi().setCellContent(getWidth(), getHeight(), new Paire(null, null));
+						width--;
+						height++;
+						engine.getEnvi().setCellContent(getWidth(), getHeight(), new Paire(this, null));
+						break;
+					default:
+						break;
+				}
+				
+			}	
+		}
+	}
+	
+	public void climbRight(){
+		if(getWidth()<engine.getEnvi().getWidth()-1 && getHeight()<engine.getEnvi().getHeight()-1){
+			if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL){
+				switch(engine.getEnvi().cellNature(getWidth()+1, getHeight()+1)){
+					case EMP:
+					case LAD:
+					case HDR:
+						// FAIRE MONTER LE GARDE A DROITE
+						engine.getEnvi().setCellContent(getWidth(), getHeight(), new Paire(null, null));
+						width++;
+						height++;
+						engine.getEnvi().setCellContent(getWidth(), getHeight(), new Paire(this, null));
+						break;
+					default:
+						break;
+				}
+				
+			}	
+		}
 	}
 
 	public void step() {
 		// TODO Auto-generated method stub
+		if (engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL){
+			timeInHole++;
+			if(timeInHole >= 25){
+				if(getWidth() < target.getWidth())
+					climbRight();
+				else
+					climbLeft();
+				timeInHole = 0;
+				return;
+			}
+		}
+		
 		if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.EMP &&
 			(engine.getEnvi().cellNature(getWidth(), getHeight()-1) ==  Cell.EMP
 			|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HDR
@@ -130,6 +180,8 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 			goDown();
 			return;
 		}
+		
+		getBehaviour();
 		
 		switch(behaviour) {
 			case LEFT:
