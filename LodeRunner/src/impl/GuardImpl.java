@@ -182,6 +182,7 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 		// TODO Auto-generated method stub
 		
 		if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.EMP &&
+				engine.getEnvi().cellContent(getWidth(), getHeight()-1).getCharacter() == null &&
 				(engine.getEnvi().cellNature(getWidth(), getHeight()-1) ==  Cell.EMP
 				|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HDR
 				|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HOL)) {
@@ -207,15 +208,27 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 		
 		switch(behaviour) {
 			case LEFT:
+				for (GuardService g : engine.getGuards())
+					if (engine.getEnvi().cellContent(width-1, height).getCharacter() == g)
+						return;
 				goLeft();
 				break;
 			case RIGHT:
+				for (GuardService g : engine.getGuards())
+					if (engine.getEnvi().cellContent(width+1, height).getCharacter() == g)
+						return;
 				goRight();
 				break;
 			case UP:
+				for (GuardService g : engine.getGuards())
+					if (engine.getEnvi().cellContent(width, height+1).getCharacter() == g)
+						return;
 				goUp();
 				break;
 			case DOWN:
+				for (GuardService g : engine.getGuards())
+					if (engine.getEnvi().cellContent(width, height-1).getCharacter() == g)
+						return;
 				goDown();
 				break;
 			default:
