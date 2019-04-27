@@ -59,6 +59,9 @@ public class LodeRunnerMain {
 		return res;
 	}*/
 	
+	public EngineImpl getEngine() {
+		return this.engine;
+	}
 	
 	public static ArrayList<String[][]> readFile(String file) {
 		ArrayList<String[][]> res = new ArrayList<String[][]>();
@@ -124,7 +127,7 @@ public class LodeRunnerMain {
 						res[i][j] = "H";
 						break;
 					case HDR:
-						res[i][j] = "-";
+						res[i][j] = "‾";
 						break;
 					case MTL:
 						res[i][j] = "X";

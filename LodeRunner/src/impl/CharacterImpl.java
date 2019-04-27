@@ -7,6 +7,7 @@ import services.Cell;
 import services.CharacterService;
 import services.EditableScreenService;
 import services.EnvironmentService;
+import services.ItemService;
 import services.ScreenService;
 
 public class CharacterImpl implements CharacterService{
@@ -88,8 +89,6 @@ public class CharacterImpl implements CharacterService{
 										width--;
 										getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
 										break;
-									
-										
 									default:
 							}
 							default:
@@ -182,10 +181,10 @@ public class CharacterImpl implements CharacterService{
 		if(!(getHeight() == 0))
 			if(getEnvi().cellContent(getWidth(), getHeight() - 1).getCharacter() == null)
 				switch(getEnvi().cellNature(getWidth(), getHeight() - 1)) {
+				case HOL:
 				case EMP:
 				case LAD:
 				case HDR:
-				case HOL:
 					switch(getEnvi().cellNature(getWidth(), getHeight())) {
 						case EMP:
 						case LAD:

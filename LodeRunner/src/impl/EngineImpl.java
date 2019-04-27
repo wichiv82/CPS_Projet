@@ -20,6 +20,7 @@ import services.Status;
 
 public class EngineImpl implements EngineService {
 	private PlayerService player;
+	private int life;
 	private ArrayList<GuardService> guards;
 	private ArrayList<ItemService> treasures;
 	
@@ -61,9 +62,15 @@ public class EngineImpl implements EngineService {
 			envi.setCellContent(guards.get(i).x, guards.get(i).y, new Paire(this.guards.get(i),null));
 		}
 		
+		command = Command.NEUTRAL;
 		status = Status.PLAYING;
 		
 		this.player.setEngine(this);
+		this.life = 3;
+	}
+	
+	public int getLife() {
+		return life;
 	}
 	
 	@Override
@@ -125,6 +132,7 @@ public class EngineImpl implements EngineService {
 			
 			if(player.getWidth() == xguard && player.getHeight() == yguard) {
 				status = Status.LOSS;
+				life--;
 				return;
 			}
 				
@@ -189,6 +197,7 @@ public class EngineImpl implements EngineService {
 		
 		if(envi.cellNature(xplayer, yplayer) == Cell.PLT) {
 			status = Status.LOSS;
+			life--;
 			return;
 		}
 		

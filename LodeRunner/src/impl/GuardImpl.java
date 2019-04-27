@@ -187,6 +187,7 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 				|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HDR
 				|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HOL)) {
 			
+			
 			goDown();
 				
 			return;
