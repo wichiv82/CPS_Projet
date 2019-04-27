@@ -19,7 +19,9 @@ public class LodeRunner1 extends LodeRunnerMain{
 	public static void main(String[] args) {
 		EditableScreenImpl e = new EditableScreenImpl();
 		
-		String[][] lignes = readFile("levels/level4.txt");
+		ArrayList<String[][]> fileInfos = readFile("levels/level3.txt");
+		
+		String[][] lignes = fileInfos.get(0);
 		e.init(lignes.length, lignes[0].length);
 		
 		for(int i=0; i<lignes.length; i++) {
@@ -43,21 +45,26 @@ public class LodeRunner1 extends LodeRunnerMain{
 				case "X" :
 					e.setNature(i, j, Cell.MTL);
 					break;
-					
 				}
 			}
 		}
 		
 		ArrayList<Point> treasures = new ArrayList<Point>();
-		treasures.add(new Point(6,5));
-		treasures.add(new Point(7,1));
-		treasures.add(new Point(0,2));
+		for (int i=0; i<fileInfos.get(2)[0].length; i += 2) {
+			Point posTresor = new Point(Integer.parseInt(fileInfos.get(2)[0][i]), Integer.parseInt(fileInfos.get(2)[0][i+1]));
+			treasures.add(posTresor);
+		}
 		
 		ArrayList<Point> gardes = new ArrayList<Point>();
-		gardes.add(new Point(7,3));
-		gardes.add(new Point(5,3));
+		if(fileInfos.size() > 3) {
+			for (int i=0; i<fileInfos.get(3)[0].length; i += 2) {
+				Point posGarde = new Point(Integer.parseInt(fileInfos.get(3)[0][i]), Integer.parseInt(fileInfos.get(3)[0][i+1]));
+				gardes.add(posGarde);
+			}
+		}
 		
-		LodeRunner1 run = new LodeRunner1(e,new Point(1,3), gardes, treasures);
+		Point posJoueur = new Point(Integer.parseInt(fileInfos.get(1)[0][0]), Integer.parseInt(fileInfos.get(1)[0][1]));
+		LodeRunner1 run = new LodeRunner1(e,posJoueur, gardes, treasures);
 		run.afficher();
 		
 		while(run.engine.getStatus() == Status.PLAYING) {

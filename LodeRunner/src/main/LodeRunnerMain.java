@@ -24,23 +24,75 @@ public class LodeRunnerMain {
 		engine.init(e, player, guards, treasures);
 	}
 	
-	public static String[][] readFile(String file) {
-		String[][] res = null;
+	/*public static String[][][] readFile(String file) {
+		String[][][] res = null;
 		
 		try (FileReader reader = new FileReader(file);
 				 BufferedReader br = new BufferedReader(reader)) {
 			
 			String line = br.readLine();
             String[] tailles = line.split(" ");
-            res = new String[Integer.parseInt(tailles[0])][Integer.parseInt(tailles[1])];
+            res = new String[4][Integer.parseInt(tailles[0])][Integer.parseInt(tailles[1])];
             
             int j= Integer.parseInt(tailles[1])-1; 
             
 	        while ((line = br.readLine()) != null) {
 	        	System.out.println(line +"  j="+j);
-	        	for(int i=0; i<line.length(); i++) {
-	        		res[i][j] = String.valueOf(line.charAt(i));
+	        	if (j>-1) {
+	        		for(int i=0; i<line.length(); i++) {
+	        			res[0][i][j] = String.valueOf(line.charAt(i));
+	        		}
+	        		
+	        	} else if (j == -1){
+	        		res[1] = 
 	        	}
+	        	
+	        	j--;
+	        }
+	        
+	        reader.close();
+
+		 } catch (IOException e) {
+	        System.err.format("IOException: %s%n", e);
+	     }
+		
+		return res;
+	}*/
+	
+	
+	public static ArrayList<String[][]> readFile(String file) {
+		ArrayList<String[][]> res = new ArrayList<String[][]>();
+		
+		try (FileReader reader = new FileReader(file);
+				 BufferedReader br = new BufferedReader(reader)) {
+			
+			String line = br.readLine();
+            String[] tailles = line.split(" ");
+            res.add(new String[Integer.parseInt(tailles[0])][Integer.parseInt(tailles[1])]);
+            
+            int j= Integer.parseInt(tailles[1])-1; 
+            
+	        while ((line = br.readLine()) != null) {
+	        	if (j>-1) { // RECUPERE LES LIGNES DU NIVEAU
+	        		for(int i=0; i<line.length(); i++) {
+	        			res.get(0)[i][j] = String.valueOf(line.charAt(i));
+	        		}
+	        	} else if (j == -1){ // RECUPERE LES COORDONNEES DU JOUEUR
+	        		String[][] posJoueur = new String[1][2];
+	        		posJoueur[0] = line.split(" ");
+	        		res.add(posJoueur);
+	        	} else if(j == -2) { // RECUPERE LES COORDONNEES DES TRESORS
+	        		String[] posTresors = line.split(" ");
+	        		String[][] tresors = new String[1][posTresors.length];
+	        		tresors[0] = posTresors;
+	        		res.add(tresors);;
+	        	} else if(j == -3) { // RECUPERE LES COORDONNEES DES GARDES
+	        		String[] posGardes = line.split(" ");
+	        		String[][] gardes = new String[1][posGardes.length];
+	        		gardes[0] = posGardes;
+	        		res.add(gardes);;
+	        	}
+	        	
 	        	j--;
 	        }
 	        
