@@ -1,13 +1,10 @@
 package impl;
 
 import java.util.ArrayList;
-
-import contracts.PostconditionError;
 import services.Cell;
 import services.CharacterService;
 import services.EditableScreenService;
 import services.EnvironmentService;
-import services.ItemService;
 import services.ScreenService;
 
 public class CharacterImpl implements CharacterService{

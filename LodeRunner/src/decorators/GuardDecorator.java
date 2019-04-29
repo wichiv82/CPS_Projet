@@ -2,7 +2,9 @@ package decorators;
 
 import services.CharacterService;
 import services.GuardService;
+import services.ItemService;
 import services.Move;
+import services.ScreenService;
 
 public class GuardDecorator extends CharacterDecorator implements GuardService {
 
@@ -12,6 +14,12 @@ public class GuardDecorator extends CharacterDecorator implements GuardService {
 	
 	public GuardService getDelegate() {
 		return (GuardService) super.getDelegate();
+	}
+	
+	@Override
+	public void init(ScreenService s, int x, int y, int id, CharacterService target) {
+		// TODO Auto-generated method stub
+		getDelegate().init(s, x, y, id, target);
 	}
 	
 	@Override
@@ -55,6 +63,26 @@ public class GuardDecorator extends CharacterDecorator implements GuardService {
 		// TODO Auto-generated method stub
 		getDelegate().respawn();
 	}
+
+	@Override
+	public boolean hasItem() {
+		// TODO Auto-generated method stub
+		return getDelegate().hasItem();
+	}
+
+	@Override
+	public void removeItem() {
+		// TODO Auto-generated method stub
+		getDelegate().removeItem();
+	}
+
+	@Override
+	public void giveItem(ItemService item) {
+		// TODO Auto-generated method stub
+		getDelegate().giveItem(item);
+	}
+
+	
 	
 	
 

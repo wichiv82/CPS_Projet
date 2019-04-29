@@ -46,4 +46,16 @@ public class ItemDecorator implements ItemService{
 		
 	}
 
+	@Override
+	public void setColumn(int x) {
+		// TODO Auto-generated method stub
+		delegate.setColumn(x);
+	}
+
+	@Override
+	public void setHeight(int y) {
+		// TODO Auto-generated method stub
+		delegate.setHeight(y);
+	}
+
 }

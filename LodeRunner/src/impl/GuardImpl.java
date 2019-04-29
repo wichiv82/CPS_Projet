@@ -6,6 +6,8 @@ import services.Cell;
 import services.CharacterService;
 import services.EngineService;
 import services.GuardService;
+import services.ItemService;
+import services.ItemType;
 import services.Move;
 import services.Paire;
 import services.ScreenService;
@@ -18,6 +20,7 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 	private EngineService engine;
 	private Move behaviour;
 	private int timeInHole;
+	private ItemService item;
 	
 	//private double[] p1 = {0.5,0.7,0.9,1};
 	//private double[] p2 = {0.4,0.8,0.9,1};
@@ -27,6 +30,7 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 		this.id = id;
 		this.target = target;
 		this.posInit = new Point(x,y);
+		this.item = null;
 	}
 	
 	
@@ -43,6 +47,18 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 		return id;
 	}
 	
+	public boolean hasItem() {
+		return item != null;
+	}
+	
+	public void removeItem() {
+		item = null;
+	}
+	
+	public void giveItem(ItemService item) {
+		this.item = item;
+	}
+	
 	public void respawn() {
 		getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
 		engine.getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
@@ -55,44 +71,6 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 	}
 	
 	public Move getBehaviour() {
-		/*double r = Math.random();
-		
-		if(getEngine().getEnvi().cellNature(getWidth(), getHeight()) == Cell.EMP) {
-			if(getHeight() == target.getHeight()) {
-				if(getWidth() > target.getWidth()) {
-					if (r < p1[0])
-						return Move.LEFT;
-					if (r < p1[1])
-						return Move.DOWN;
-					if (r < p1[2])
-						return Move.UP;
-					if (r < p1[3])
-						return Move.RIGHT;
-				}
-				if(getWidth() < target.getWidth()) {
-					if (r < p1[0])
-						return Move.RIGHT;
-					if (r < p1[1])
-						return Move.DOWN;
-					if (r < p1[2])
-						return Move.UP;
-					if (r < p1[3])
-						return Move.LEFT;
-				}	
-			}
-			if(getWidth() == target.getWidth()) {
-				if(getHeight() > target.getHeight()) {
-					if (r < p1[0])
-						return Move.DOWN;
-					if (r < p1[1])
-						return Move.RIGHT;
-					if (r < p1[2])
-						return Move.UP; //A CHANGER A PARTIR D'ICI
-					if (r < p1[3])
-						return Move.RIGHT;
-				}
-			}
-		}*/
 		
 		switch(engine.getEnvi().cellNature(getWidth(), getHeight())) {
 			case EMP:
@@ -187,7 +165,16 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 				|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HDR
 				|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HOL)) {
 			
-			
+			if(engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HOL 
+				 && hasItem()
+				 && engine.getEnvi().cellContent(getWidth(), getHeight()).getItem() == null) {
+				
+				item.setColumn(getWidth());
+				item.setHeight(getHeight());
+				engine.getEnvi().cellContent(getWidth(), getHeight()).setItem(item);
+				getEnvi().cellContent(getWidth(), getHeight()).setItem(item);
+				removeItem();
+			}
 			goDown();
 				
 			return;
@@ -234,6 +221,11 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 				break;
 			default:
 				break;
+		}
+		
+		if(item != null) {
+			item.setColumn(getWidth());
+			item.setHeight(getHeight());
 		}
 	}
 

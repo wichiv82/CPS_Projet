@@ -56,7 +56,7 @@ public class EngineImpl implements EngineService {
 		
 		for (int i=0; i<guards.size(); i++) {
 			GuardImpl g = new GuardImpl();
-			g.init(e, guards.get(i).x, guards.get(i).y, i, this.player);
+			g.init(e, guards.get(i).x, guards.get(i).y, i, this.player); // TOUS LES GARDES PORTENT UN TRESOR A L'HEURE ACTUELLE !!!
 			g.setEngine(this);
 			this.guards.add(g);
 			envi.setCellContent(guards.get(i).x, guards.get(i).y, new Paire(this.guards.get(i),null));
@@ -94,11 +94,11 @@ public class EngineImpl implements EngineService {
 	@Override
 	public ArrayList<ItemService> getTreasures() {
 		// TODO Auto-generated method stub
-		ArrayList<ItemService> tresors = new ArrayList<ItemService>();
+		/*ArrayList<ItemService> tresors = new ArrayList<ItemService>();
 		for (ItemService i : treasures)
 			if (i.getNature() == ItemType.TREASURE)
-				tresors.add(i);
-		return tresors;
+				tresors.add(i);*/
+		return treasures;
 	}
 	
 	@Override
@@ -138,7 +138,6 @@ public class EngineImpl implements EngineService {
 				
 		}
 		
-		
 		for (int i=0; i< treasures.size(); i++) {
 			if (treasures.get(i).getHeight() == player.getHeight() && treasures.get(i).getColumn() == player.getWidth()) {
 				envi.cellContent(treasures.get(i).getColumn(), treasures.get(i).getHeight() ).removeItem();
@@ -169,14 +168,24 @@ public class EngineImpl implements EngineService {
 			int xguard = guards.get(i).getWidth();
 			int yguard = guards.get(i).getHeight();
 			
+			if(!guards.get(i).hasItem()
+					&& envi.cellContent(xguard, yguard).getItem() != null
+					&& envi.cellContent(xguard, yguard).getItem().getNature() == ItemType.TREASURE) {
+				
+				guards.get(i).giveItem(envi.cellContent(xguard, yguard).getItem());
+				envi.cellContent(xguard, yguard).removeItem();
+				
+			}
+			
 			envi.cellContent(xguard, yguard).removeCharacter();
-
+			
 			guards.get(i).step();
 			
 			xguard = guards.get(i).getWidth();
 			yguard = guards.get(i).getHeight();
 			
 			envi.cellContent(xguard, yguard).setCharacter(guards.get(i));
+			
 		}
 		
 		for (int i=0; i<holes.length; i++) {

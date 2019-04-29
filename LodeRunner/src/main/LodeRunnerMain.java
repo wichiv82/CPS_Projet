@@ -140,8 +140,11 @@ public class LodeRunnerMain {
 		for (ItemService i: engine.getTreasures()) 
 			res[i.getColumn()][i.getHeight()] = "*";
 
-		for (GuardService g: engine.getGuards()) 
-			res[g.getWidth()][g.getHeight()] = "+";
+		for (GuardService g: engine.getGuards())
+			if(g.hasItem())
+				res[g.getWidth()][g.getHeight()] = "G";
+			else
+				res[g.getWidth()][g.getHeight()] = "g";
 		
 		res[engine.getPlayer().getWidth()][engine.getPlayer().getHeight()] = "O";
 		

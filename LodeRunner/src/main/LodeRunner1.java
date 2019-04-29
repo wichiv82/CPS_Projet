@@ -17,10 +17,10 @@ public class LodeRunner1 extends LodeRunnerMain{
 	
 	
 	public static void main(String[] args) {
-		int niveau = 1;
+		int niveau = 5;
 		int life = 3;
 		
-		while (niveau <= 4) {
+		while (niveau <= 5) {
 			EditableScreenImpl e = new EditableScreenImpl();
 			
 			ArrayList<String[][]> fileInfos = readFile("levels/level" + niveau +".txt");

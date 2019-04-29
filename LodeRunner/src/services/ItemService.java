@@ -11,4 +11,8 @@ public interface ItemService {
 	public int getHeight();
 	
 	public int getColumn();
+	
+	public void setColumn(int x);
+	
+	public void setHeight(int y);
 }
