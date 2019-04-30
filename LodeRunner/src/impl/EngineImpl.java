@@ -21,6 +21,7 @@ import services.Status;
 public class EngineImpl implements EngineService {
 	private PlayerService player;
 	private int life;
+	private int score;
 	private ArrayList<GuardService> guards;
 	private ArrayList<ItemService> treasures;
 	
@@ -67,10 +68,15 @@ public class EngineImpl implements EngineService {
 		
 		this.player.setEngine(this);
 		this.life = 3;
+		this.score = 0;
 	}
 	
 	public int getLife() {
 		return life;
+	}
+	
+	public int getScore() {
+		return score;
 	}
 	
 	@Override
@@ -142,6 +148,7 @@ public class EngineImpl implements EngineService {
 			if (treasures.get(i).getHeight() == player.getHeight() && treasures.get(i).getColumn() == player.getWidth()) {
 				envi.cellContent(treasures.get(i).getColumn(), treasures.get(i).getHeight() ).removeItem();
 				treasures.remove(i);
+				score++;
 				break;
 			}
 		}
