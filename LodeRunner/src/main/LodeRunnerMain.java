@@ -147,6 +147,9 @@ public class LodeRunnerMain {
 			case "6":
 				engine.setCommand(Command.DIGR);
 				break;
+			default:
+				//engine.setCommand(Command.NEUTRAL);
+				break;
 		}
 		
 	}
