@@ -186,6 +186,7 @@ public class CharacterImpl implements CharacterService{
 						case EMP:
 						case LAD:
 						case HDR:
+						case HOL:
 							getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
 							height--;
 							getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);

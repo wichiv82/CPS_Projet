@@ -112,7 +112,8 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 	 */
 	public void climbLeft() {
 		if(getWidth()>0 && getHeight()<engine.getEnvi().getHeight()-1){
-			if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL){
+			if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL &&
+				engine.getEnvi().cellContent(getWidth(), getHeight()+1).getCharacter() == null){
 				switch(engine.getEnvi().cellNature(getWidth()-1, getHeight()+1)){
 					case EMP:
 					case LAD:
@@ -135,7 +136,8 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 	
 	public void climbRight(){
 		if(getWidth()<engine.getEnvi().getWidth()-1 && getHeight()<engine.getEnvi().getHeight()-1){
-			if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL){
+			if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL &&
+				engine.getEnvi().cellContent(getWidth(), getHeight()+1).getCharacter() == null){
 				switch(engine.getEnvi().cellNature(getWidth()+1, getHeight()+1)){
 					case EMP:
 					case LAD:
@@ -182,7 +184,7 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 		
 		if (engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL){
 			timeInHole++;
-			if(timeInHole >= 25){
+			if(timeInHole >= 5){
 				if(getWidth() < target.getWidth())
 					climbRight();
 				else
