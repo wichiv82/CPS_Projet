@@ -31,12 +31,12 @@ public interface EngineService {
 	public void step();
 	
 	/**
-	 * pre : 0 <= player.x <= e::getWidth()
-	 * pre : 0 <= player.y <= e::getHeight()
+	 * pre : 0 <= player.x <= e.getWidth()
+	 * pre : 0 <= player.y <= e.getHeight()
 	 * pre : forall g in guards {
-		 0 <= g.x <= e::getWidth() && 0 <= g.y <= e::getHeight()
+		 0 <= g.x <= e.getWidth() && 0 <= g.y <= e.getHeight()
 	 * pre : forall t in treasures {
-		 0 <= t.x <= e::getWidth() && 0 <= t.y <= e::getHeight()
+		 0 <= t.x <= e.getWidth() && 0 <= t.y <= e.getHeight()
 	 *
 	 * post : getEnvi == e
 	 * post : getPlayer().getWidth() == player.x && getPlayer().getHeight() == player.y
@@ -48,7 +48,7 @@ public interface EngineService {
 		 getGuards()[i].getWidth() == guards[i].x && 
 		 getGuards()[i].getHeight() == guards[i].y && 
 		 getEnvi().cellContent(treasures[i].x, treasures[i].y).getCharacter() == getCharacter()[i]
-	 * post : forall (x,y) in [0; getEnvi()::getWidth()[ * [0; getEnvi()::getWidth()[{ 
+	 * post : forall (x,y) in [0; getEnvi().getWidth()[ * [0; getEnvi().getWidth()[{ 
 		 getHoles[x][y] == 16
 	 * post : getCommand() == Command.NEUTRAL
 	 * post : getStatus() == Status.PLAYING

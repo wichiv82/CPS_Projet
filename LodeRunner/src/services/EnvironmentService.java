@@ -25,6 +25,14 @@ public interface EnvironmentService extends ScreenService{
 	 */
 	public void init(EditableScreenService e);
 	
+	/**
+	 * pre : 0 <= x < getWidth()   
+	 * pre : 0 <= y < getHeight()
+	 * 
+	 * post : cellContent(x, y) == p
+	 * post : forall (i,j) in [0; getWidth()-1] * [0; getHeight()-1]{
+	 * 			if i != x && j != y then cellContent(i,j) == cellContent(i,j)@pre
+	 */
 	public void setCellContent(int x, int y, Paire p);
 	
 }

@@ -19,6 +19,10 @@ public interface EditableScreenService extends ScreenService{
 	 */
 	public void setNature(int x, int y, Cell c) ;
 	
+	/**
+	 * 
+	 * LECTURE DE FICHIER RIP POUR LE MOEMENT
+	 */
 	public void init(String file_name);
 	
 }
