@@ -1,6 +1,7 @@
 package decorators;
 
 import services.CharacterService;
+import services.EngineService;
 import services.GuardService;
 import services.ItemService;
 import services.Move;
@@ -57,6 +58,12 @@ public class GuardDecorator extends CharacterDecorator implements GuardService {
 		// TODO Auto-generated method stub
 		getDelegate().step();
 	}
+	
+	@Override
+	public void climbRight() {
+		// TODO Auto-generated method stub
+		getDelegate().climbRight();
+	}
 
 	@Override
 	public void respawn() {
@@ -82,8 +89,16 @@ public class GuardDecorator extends CharacterDecorator implements GuardService {
 		getDelegate().giveItem(item);
 	}
 
-	
-	
-	
+	@Override
+	public EngineService getEngine() {
+		// TODO Auto-generated method stub
+		return getDelegate().getEngine();
+	}
+
+	@Override
+	public void setEngine(EngineService engine) {
+		// TODO Auto-generated method stub
+		getDelegate().setEngine(engine);
+	}
 
 }

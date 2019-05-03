@@ -81,4 +81,22 @@ public class EngineDecorator implements EngineService{
 		delegate.init(e, player, guards, treasures);
 	}
 
+	@Override
+	public int getLife() {
+		// TODO Auto-generated method stub
+		return delegate.getLife();
+	}
+
+	@Override
+	public int getScore() {
+		// TODO Auto-generated method stub
+		return delegate.getScore();
+	}
+
+	@Override
+	public void setCommand(Command m) {
+		// TODO Auto-generated method stub
+		delegate.setCommand(m);
+	}
+
 }
