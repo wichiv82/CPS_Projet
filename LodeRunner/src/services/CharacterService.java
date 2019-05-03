@@ -2,8 +2,8 @@ package services;
 
 
 /**
- * getEnvi().cellNature(getHeight(), getWidth()) in {Cell.EMP, Cell.HOL, Cell.LAD, Cell.HDR}
- * getEnvi().cellContent(getHeight(), getWidth()) in {Cell.EMP, Cell.HOL, Cell.LAD, Cell.HDR}
+ * getEnvi().cellNature(getWidth(), getHeight()) in {Cell.EMP, Cell.HOL, Cell.LAD, Cell.HDR}
+ * getEnvi().cellContent(getWidth(), getHeight()) in {Cell.EMP, Cell.HOL, Cell.LAD, Cell.HDR}
  * Character x in getEnvi().cellContent(getHeight(), getWidth()) -> x = this
  */
 
@@ -21,26 +21,47 @@ public interface CharacterService {
 	/**
      * post : getHeigth() == getHeight()@pre
      * post : getWidth() == 0 -> getWidth() == getWidth()@pre
-     * post : getEnvi().CellNature(getWidth()@pre -1,getHeight()@pre) in {Cell.MTL,Cell.PLT}
+     * post : getEnvi().CellNature(getWidth()@pre -1, getHeight()@pre) in {Cell.MTL,Cell.PLT}
      *        -> getWidth() == getWidth()@pre
-     * post : getEnvi().cellContent(getWidth()@pre-1, getHeight()@pre).getCharacter() == null && 
-     * 		  getEnvi().CellNature(getWidth()@pre, getHeight()@pre) not in {Cell.HDR,Cell.LAD} &&
-     *                 Environnement::CellNature(getEnvi(),getWidth(),getHeight()-1) \not \in {Cell.MTL,Cell.PLT} &&
-     *                 \not \exists c : Character \in Environment::CellContent(getEnvi(),getWidth(),getHeight()-1)
-     *                  \implies getWidth(goLeft()) == getWidth()
-     *          \exists c : Character \in Environment::CellContent(getEnvi(),getWidth()-1,getHeight())
-     *            \implies getWidth(goLeft()) == getWidth()
-     *          getWidth() != 0 &&
-     *            Environnement::CellNature(getEnvi(),getWidth()-1,getHeight()) \not \in {Cell.MTL,Cell.PLT} &&
-     *            Environnement::CellNature(getEnvi(),getWidth(),getHeight()) \in {Cell.LAD,Cell.HDR} ||
-     *            Environnement::CellNature(getEnvi(),getWidth(),getHeight()-1) \in {Cell.MTL,Cell.PLT,Cell.LAD} ||
-     *            \exists c : Character \in Environment::CellContent(getEnvi(),getWidth(),getHeight()-1) &&
-     *            \not \exists c : Character \in Environment::CellContent(getEnvi(),getWidth()-1,getHeight())
-     *            \implies getWidth(goLeft()) == getWidth()-1
-     *         
+     * post : (getEnvi().cellContent(getWidth()@pre -1, getHeight()).getCharacter() == null &&
+     * 		  	getEnvi().CellNature(getWidth()@pre, getHeight()@pre) in {Cell.LAD, Cell.HDR, Cell.HOL}) ||
+     * 		  (getEnvi().cellContent(getWidth()@pre -1, getHeight()).getCharacter() == null &&
+     * 		  	getEnvi().CellNature(getWidth()@pre, getHeight()@pre) == Cell.EMP && 
+     * 		  	((getEnvi().CellNature(getWidth()@pre, getHeight()@pre -1) in {Cell.PLT, Cell.MTL, Cell.LAD}) ||
+     * 			 (getEnvi().CellContent(getWidth()@pre, getHeight()@pre -1).getCharacter() == null)))
+     * 		  -> getWidth() == getWidth()@pre-1, 
+     * 			 getEnvi().cellContent(getWidth()@pre, getHeight()@pre).getCharacter() == null,     
+     *        	 getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == this	
+     *        
+     * post : getEnvi().cellContent(getWidth()@pre -1, getHeight()).getCharacter() == null &&
+     * 		  getEnvi().CellNature(getWidth()@pre, getHeight()@pre) == Cell.EMP &&
+     *        getEnvi().CellNature(getWidth()@pre, getHeight()@pre -1) == Cell.HOL &&
+     *        getEnvi().CellContent(getWidth()@pre, getHeight()@pre -1).getCharacter() != null
+     * 		  -> getWidth() == getWidth()@pre
      */
 	public void goLeft();
 	
+	/**
+     * post : getHeigth() == getHeight()@pre
+     * post : getWidth() == getEnvi().getWidth()-1 -> getWidth() == getWidth()@pre
+     * post : getEnvi().CellNature(getWidth()@pre +1, getHeight()@pre) in {Cell.MTL,Cell.PLT}
+     *        -> getWidth() == getWidth()@pre
+     * post : (getEnvi().cellContent(getWidth()@pre +1, getHeight()).getCharacter() == null &&
+     * 		  	getEnvi().CellNature(getWidth()@pre, getHeight()@pre) in {Cell.LAD, Cell.HDR, Cell.HOL}) ||
+     * 		  (getEnvi().cellContent(getWidth()@pre +1, getHeight()).getCharacter() == null &&
+     * 		  	getEnvi().CellNature(getWidth()@pre, getHeight()@pre) == Cell.EMP && 
+     * 		  	((getEnvi().CellNature(getWidth()@pre, getHeight()@pre -1) in {Cell.PLT, Cell.MTL, Cell.LAD}) ||
+     * 			 (getEnvi().CellContent(getWidth()@pre, getHeight()@pre -1).getCharacter() == null)))
+     * 		  -> getWidth() == getWidth()@pre+1, 
+     * 			 getEnvi().cellContent(getWidth()@pre, getHeight()@pre).getCharacter() == null,     
+     *        	 getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == this	
+     *        
+     * post : getEnvi().cellContent(getWidth()@pre +1, getHeight()).getCharacter() == null &&
+     * 		  getEnvi().CellNature(getWidth()@pre, getHeight()@pre) == Cell.EMP &&
+     *        getEnvi().CellNature(getWidth()@pre, getHeight()@pre -1) == Cell.HOL &&
+     *        getEnvi().CellContent(getWidth()@pre, getHeight()@pre -1).getCharacter() != null
+     * 		  -> getWidth() == getWidth()@pre
+     */
 	public void goRight();
 	
 	public void goUp();
