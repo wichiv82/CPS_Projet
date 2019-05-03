@@ -69,6 +69,7 @@ public class CharacterImpl implements CharacterService{
 						switch(getEnvi().cellNature(getWidth(), getHeight())) {
 							case LAD:
 							case HDR:
+							case HOL:
 								getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
 								width--;
 								getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
@@ -107,6 +108,7 @@ public class CharacterImpl implements CharacterService{
 						switch(getEnvi().cellNature(getWidth(), getHeight())) {
 							case LAD:
 							case HDR:
+							case HOL:
 								getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
 								width++;
 								getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);

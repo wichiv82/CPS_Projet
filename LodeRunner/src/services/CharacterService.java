@@ -21,9 +21,10 @@ public interface CharacterService {
 	/**
      * post : getHeigth() == getHeight()@pre
      * post : getWidth() == 0 -> getWidth() == getWidth()@pre
-     * post : getEnvi().CellNature(getWidth()@pre -1,getHeight()@pre) \in {Cell.MTL,Cell.PLT}
+     * post : getEnvi().CellNature(getWidth()@pre -1,getHeight()@pre) in {Cell.MTL,Cell.PLT}
      *        -> getWidth() == getWidth()@pre
-     * post : getEnvi().CellNature(getEnvi(),getWidth(),getHeight()) \not \in {Cell.HDR,Cell.LAD} &&
+     * post : getEnvi().cellContent(getWidth()@pre-1, getHeight()@pre).getCharacter() == null && 
+     * 		  getEnvi().CellNature(getWidth()@pre, getHeight()@pre) not in {Cell.HDR,Cell.LAD} &&
      *                 Environnement::CellNature(getEnvi(),getWidth(),getHeight()-1) \not \in {Cell.MTL,Cell.PLT} &&
      *                 \not \exists c : Character \in Environment::CellContent(getEnvi(),getWidth(),getHeight()-1)
      *                  \implies getWidth(goLeft()) == getWidth()
