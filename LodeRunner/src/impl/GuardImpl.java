@@ -1,15 +1,12 @@
 package impl;
 
 import java.awt.Point;
-
 import services.Cell;
 import services.CharacterService;
 import services.EngineService;
 import services.GuardService;
 import services.ItemService;
-import services.ItemType;
 import services.Move;
-import services.Paire;
 import services.ScreenService;
 
 public class GuardImpl extends CharacterImpl implements GuardService{
@@ -43,6 +40,11 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 	
 	public int getId(){
 		return id;
+	}
+	
+	@Override
+	public ItemService getItem() {
+		return item;
 	}
 	
 	public boolean hasItem() {
@@ -110,9 +112,6 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 		return timeInHole;
 	}
 	
-	/**
-	 * pre : getEnvi().cellNature(getHeight(), getWidth()) = Cell.HOL
-	 */
 	public void climbLeft() {
 		if(getWidth()>0 && getHeight()<engine.getEnvi().getHeight()-1){
 			if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL &&
@@ -124,10 +123,9 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 						// FAIRE MONTER LE GARDE A GAUCHE
 						engine.getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
 						getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
+						
 						width--;
 						height++;
-						//engine.getEnvi().setCellContent(getWidth(), getHeight(), new Paire(this, null));
-						//getEnvi().setCellContent(getWidth(), getHeight(), new Paire(this, null));
 						
 						engine.getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
 						getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
@@ -149,15 +147,12 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 					case LAD:
 					case HDR:
 						// FAIRE MONTER LE GARDE A DROITE
-						//engine.getEnvi().setCellContent(getWidth(), getHeight(), new Paire(null, null));
-						//getEnvi().setCellContent(getWidth(), getHeight(), new Paire(null, null));
-						
 						engine.getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
 						getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
+						
 						width++;
 						height++;
-						//engine.getEnvi().setCellContent(getWidth(), getHeight(), new Paire(this, null));
-						//getEnvi().setCellContent(getWidth(), getHeight(), new Paire(this, null));
+
 						engine.getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
 						getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
 						break;

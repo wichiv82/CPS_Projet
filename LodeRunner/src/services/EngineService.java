@@ -2,7 +2,6 @@ package services;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public interface EngineService {
 	

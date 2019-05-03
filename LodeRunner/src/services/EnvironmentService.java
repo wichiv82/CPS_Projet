@@ -3,13 +3,12 @@ package services;
 
 /**
  * inv : forall (x,y) in [0; getWidth()-1] * [0; getHeight()-1]{
- * 			forall Charcater c1, c2 in CellContent(x, y)²{
+ * 			forall Character c1, c2 in CellContent(x, y)²{
  * 				c1 = c2
  * inv : forall (x,y) in [0; getWidth()-1] * [0; getHeight()-1]{
  * 			if cellNature(x, y) in {Cell.MTL, Cell.PLT} then cellContent(x, y) = Null
  * inv : forall (x,y) in [0; getWidth()-1] * [0; getHeight()-1]{
  * 			if Item.Treasure in cellContent(x, y) then cellNature(x, y) = Cell.EMP && cellNature(x, y-1) in {Cell.MTL, Cell.PLT}
- *
  */
 
 public interface EnvironmentService extends ScreenService{

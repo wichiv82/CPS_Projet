@@ -1,11 +1,8 @@
 package impl;
 
 import java.awt.Point;
-import java.util.ArrayList;
-import java.util.HashMap;
 
-import contracts.ItemContract;
-import contracts.PlayerContract;
+import java.util.ArrayList;
 import services.Cell;
 import services.Command;
 import services.EditableScreenService;

@@ -19,11 +19,11 @@ public interface CharacterService {
 	public void init(ScreenService s, int x, int y);
 	
 	/**
-     * post : getHeigth(goLeft()) = getHeight()
-     *        getWidth() == 0 -> getWidth(goLeft()) == getWidth()
-     *        Environnement::CellNature(getEnvi(),getWidth()-1,getHeight()) \in {Cell.MTL,Cell.PLT,Cell.LAD}
-     *              \implies getWidth(goLeft()) == getWidth()
-     *          Environnement::CellNature(getEnvi(),getWidth(),getHeight()) \not \in {Cell.HDR,Cell.LAD} &&
+     * post : getHeigth() == getHeight()@pre
+     * post : getWidth() == 0 -> getWidth() == getWidth()@pre
+     * post : getEnvi().CellNature(getWidth()@pre -1,getHeight()@pre) \in {Cell.MTL,Cell.PLT}
+     *        -> getWidth() == getWidth()@pre
+     * post : getEnvi().CellNature(getEnvi(),getWidth(),getHeight()) \not \in {Cell.HDR,Cell.LAD} &&
      *                 Environnement::CellNature(getEnvi(),getWidth(),getHeight()-1) \not \in {Cell.MTL,Cell.PLT} &&
      *                 \not \exists c : Character \in Environment::CellContent(getEnvi(),getWidth(),getHeight()-1)
      *                  \implies getWidth(goLeft()) == getWidth()

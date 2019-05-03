@@ -101,4 +101,10 @@ public class GuardDecorator extends CharacterDecorator implements GuardService {
 		getDelegate().setEngine(engine);
 	}
 
+	@Override
+	public ItemService getItem() {
+		// TODO Auto-generated method stub
+		return getDelegate().getItem();
+	}
+
 }
