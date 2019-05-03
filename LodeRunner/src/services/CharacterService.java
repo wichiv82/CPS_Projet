@@ -15,6 +15,13 @@ public interface CharacterService {
 	
 	/**
 	 * pre : s.cellNature(x, y) = Cell.EMP
+	 * pre : 0 <= x < s.getWidth()
+	 * pre : 0 <= y < s.getHeight()
+	 * 
+	 * post : getEnvi() == s
+	 * post : getWidth() == x
+	 * post : getHeight() == y
+	 * post : getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == this
 	 */
 	public void init(ScreenService s, int x, int y);
 	

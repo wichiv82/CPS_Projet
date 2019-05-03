@@ -1,6 +1,5 @@
 package impl;
 
-import java.util.ArrayList;
 import services.Cell;
 import services.CharacterService;
 import services.EditableScreenService;
@@ -13,9 +12,6 @@ public class CharacterImpl implements CharacterService{
 	protected int height;
 	protected int width;
 	
-	protected ArrayList<Cell> cell_libre;//{Cell.EMP, Cell.LAD, Cell.HDR, Cell.HOL};
-	protected ArrayList<Cell> cell_non_libre; //{Cell.MTL, Cell.PLT};
-	
 	@Override
 	public void init(ScreenService s, int x, int y) {
 		// TODO Auto-generated method stub
@@ -25,17 +21,6 @@ public class CharacterImpl implements CharacterService{
 		height = y;
 		
 		getEnvi().cellContent(x, y).setCharacter(this);
-		
-		cell_libre = new ArrayList<Cell>();
-		cell_libre.add(Cell.EMP);
-		cell_libre.add(Cell.LAD);
-		cell_libre.add(Cell.HDR);
-		cell_libre.add(Cell.HOL);
-		
-		cell_non_libre = new ArrayList<Cell>();
-		cell_non_libre.add(Cell.MTL);
-		cell_non_libre.add(Cell.PLT);
-		cell_non_libre.add(Cell.LAD);
 	}
 	
 	@Override
