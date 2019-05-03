@@ -21,7 +21,7 @@ public interface EditableScreenService extends ScreenService{
 	
 	/**
 	 * 
-	 * LECTURE DE FICHIER RIP POUR LE MOEMENT
+	 * LECTURE DE FICHIER RIP POUR LE MOMENT
 	 */
 	public void init(String file_name);
 	

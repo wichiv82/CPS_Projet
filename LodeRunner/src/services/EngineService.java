@@ -55,6 +55,7 @@ public interface EngineService {
 	 * post : getPlayer().getEngine() == this
 	 * post : getLife() == 3
 	 * post : getScore() == 0
+	 * 
 	 */
 	public void init(EditableScreenService e, Point player, ArrayList<Point> guards, ArrayList<Point> treasures);
 	

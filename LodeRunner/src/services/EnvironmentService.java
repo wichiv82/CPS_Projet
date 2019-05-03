@@ -1,6 +1,5 @@
 package services;
 
-
 /**
  * inv : forall (x,y) in [0; getWidth()-1] * [0; getHeight()-1]{
  * 			forall Character c1, c2 in CellContent(x, y)²{
