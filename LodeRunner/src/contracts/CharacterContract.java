@@ -19,12 +19,13 @@ public class CharacterContract extends CharacterDecorator {
 			case HOL :
 				break;
 			default:
-				throw new InvariantError("Le joueur est sur un emplacement indisponible : " + getEnvi().cellNature(getWidth(), getHeight()));
+				throw new InvariantError("L'emplacement (" + getWidth() + "," + getHeight() + ")"
+						+ " n'est pas valide : " + getEnvi().cellNature(getWidth(), getHeight()));
 		}
 		if(getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == null)
-			throw new InvariantError("Le joueur n'est pas présent sur son emplacement.");
+			throw new InvariantError("Aucun Character n'est présent sur l'emplacement (" + getWidth() + "," + getHeight() + ").");
 		if(!(getEnvi().cellContent(getWidth(), getHeight()).getCharacter().equals(delegate)))
-			throw new InvariantError("Le joueur n'est pas présent sur son emplacement.");
+			throw new InvariantError("Un autre joueur est sur l'emplacement (" + getWidth() + "," + getHeight() + ").");
 	}
 	
 	
@@ -37,18 +38,16 @@ public class CharacterContract extends CharacterDecorator {
 		int height_atPre = getHeight();
 		int width_atPre = getWidth();
 		
-		
-		
 		checkInvariants();
 		super.goLeft();
 		checkInvariants();
 		
 		if (!(getHeight() == height_atPre))
-			throw new PostconditionError("La position vertical a été modifié avec un déplacement latéral.");
+			throw new PostconditionError("Le Character se deplace verticalement pendant un deplacement latéral");
 		
 		if(width_atPre == 0)
 			if(!(getWidth() == width_atPre))
-				throw new PostconditionError("Le joueur est sorti sur le coté gauche de l'écran.");
+				throw new PostconditionError("L'emplacement (" + getWidth() + "," + getHeight() + ") est hors jeu.");
 		
 		switch(getEnvi().cellNature(width_atPre, height_atPre)) {
 			case HDR:
@@ -63,7 +62,7 @@ public class CharacterContract extends CharacterDecorator {
 					default:
 						if(getEnvi().cellContent(width_atPre, height_atPre -1).getCharacter() == null)
 							if(!(getWidth() == width_atPre))
-								throw new PostconditionError("Le joueur réalise un mouvement latéral pendant une chute libre.");
+								throw new PostconditionError("Le Character se deplace latéralement pendant une chute libre.");
 				}
 		}
 		
@@ -78,14 +77,18 @@ public class CharacterContract extends CharacterDecorator {
 							case LAD:
 							case HDR:
 								if (!(getWidth() == width_atPre - 1))
-									throw new PostconditionError("Le joueur ne se déplace pas comme prévu.");
+									throw new PostconditionError("Le Character aurait dû se deplacer en "
+											+ "(" + (width_atPre - 1) + "," + height_atPre + ") mais se trouve en "
+											+ "(" + getWidth() + "," + getHeight() + ").");
 							case EMP:
 								switch(getEnvi().cellNature(width_atPre, height_atPre - 1)) {
 								case PLT:
 								case MTL:
 								case LAD:
 									if (!(getWidth() == width_atPre - 1))
-										throw new PostconditionError("Le joueur ne se déplace pas comme prévu.");
+										throw new PostconditionError("Le Character aurait dû se deplacer en "
+												+ "(" + (width_atPre - 1) + "," + height_atPre + ") mais se trouve en "
+												+ "(" + getWidth() + "," + getHeight() + ").");
 								default:
 							}
 							default:
@@ -108,11 +111,11 @@ public class CharacterContract extends CharacterDecorator {
 		checkInvariants();
 		
 		if (!(getHeight() == height_atPre))
-			throw new PostconditionError("La position vertical a été modifié avec un déplacement latéral.");
+			throw new PostconditionError("Le Character se deplace verticalement pendant un deplacement latéral");
 		
 		if(width_atPre == getEnvi().getWidth() - 1)
 			if(!(getWidth() == width_atPre))
-				throw new PostconditionError("Le joueur est sorti sur le coté gauche de l'écran.");
+				throw new PostconditionError("L'emplacement (" + getWidth() + "," + getHeight() + ") est hors jeu.");
 		
 		switch(getEnvi().cellNature(width_atPre, height_atPre)) {
 			case HDR:
@@ -127,7 +130,7 @@ public class CharacterContract extends CharacterDecorator {
 					default:
 						if(getEnvi().cellContent(width_atPre, height_atPre -1).getCharacter() == null)
 							if(!(getWidth() == width_atPre))
-								throw new PostconditionError("Le joueur réalise un mouvement latéral pendant une chute libre.");
+								throw new PostconditionError("Le Character se deplace latéralement pendant une chute libre.");
 				}
 		}
 		
@@ -142,14 +145,18 @@ public class CharacterContract extends CharacterDecorator {
 							case LAD:
 							case HDR:
 								if (!(getWidth() == width_atPre + 1))
-									throw new PostconditionError("Le joueur ne se déplace pas comme prévu.");
+									throw new PostconditionError("Le Character aurait dû se deplacer en "
+											+ "(" + (width_atPre + 1) + "," + height_atPre + ") mais se trouve en "
+											+ "(" + getWidth() + "," + getHeight() + ").");
 							case EMP:
 								switch(getEnvi().cellNature(width_atPre, height_atPre - 1)) {
 								case PLT:
 								case MTL:
 								case LAD:
 									if (!(getWidth() == width_atPre + 1))
-										throw new PostconditionError("Le joueur ne se déplace pas comme prévu.");
+										throw new PostconditionError("Le Character aurait dû se deplacer en "
+												+ "(" + (width_atPre + 1) + "," + height_atPre + ") mais se trouve en "
+												+ "(" + getWidth() + "," + getHeight() + ").");
 								default:
 							}
 							default:
@@ -170,11 +177,11 @@ public class CharacterContract extends CharacterDecorator {
 		checkInvariants();
 		
 		if(!(getWidth() == width_atPre))
-			throw new PostconditionError("La position horizontal a été modifié avec un déplacement vértical.");
+			throw new PostconditionError("Le Character se deplace latéralement pendant un deplacement vertical");
 		
 		if(height_atPre == getEnvi().getHeight() - 1)
 			if(!(getWidth() == width_atPre))
-				throw new PostconditionError("Le joueur est sorti en haut de l'écran.");
+				throw new PostconditionError("L'emplacement (" + getWidth() + "," + getHeight() + ") est hors jeu.");
 			
 		switch(getEnvi().cellNature(width_atPre, height_atPre)) {
 			case HDR:
@@ -188,7 +195,7 @@ public class CharacterContract extends CharacterDecorator {
 					default:
 						if(getEnvi().cellContent(width_atPre, height_atPre -1).getCharacter() == null)
 							if(!(getWidth() == width_atPre))
-								throw new PostconditionError("Le joueur vole.");
+								throw new PostconditionError("Le Character vole pendant une chute libre.");
 				}
 		}
 		
@@ -201,17 +208,23 @@ public class CharacterContract extends CharacterDecorator {
 						switch(getEnvi().cellNature(width_atPre, height_atPre)) {
 							case LAD:
 								if(!(getHeight() == height_atPre + 1))
-									throw new PostconditionError("Le joueur ne se déplace pas comme prévu.");
+									throw new PostconditionError("Le Character aurait dû se deplacer en "
+											+ "(" + width_atPre + "," + (height_atPre + 1) + ") mais se trouve en "
+											+ "(" + getWidth() + "," + getHeight() + ").");
 							case EMP:
 								switch(getEnvi().cellNature(width_atPre, height_atPre - 1)){
 									case MTL:
 									case PLT:
 									if(!(getHeight() == height_atPre + 1))
-										throw new PostconditionError("Le joueur ne se déplace pas comme prévu.");
+										throw new PostconditionError("Le Character aurait dû se deplacer en "
+												+ "(" + width_atPre + "," + (height_atPre + 1) + ") mais se trouve en "
+												+ "(" + getWidth() + "," + getHeight() + ").");
 									default:
 										if(getEnvi().cellContent(width_atPre, height_atPre - 1).getCharacter() != null)
 											if(!(getHeight() == height_atPre + 1))
-												throw new PostconditionError("Le joueur ne se déplace pas comme prévu.");
+												throw new PostconditionError("Le Character aurait dû se deplacer en "
+														+ "(" + width_atPre + "," + (height_atPre + 1) + ") mais se trouve en "
+														+ "(" + getWidth() + "," + getHeight() + ").");
 								}
 							default:
 					}
@@ -231,11 +244,11 @@ public class CharacterContract extends CharacterDecorator {
 		checkInvariants();
 		
 		if(!(getWidth() == width_atPre))
-			throw new PostconditionError("La position horizontal a été modifié avec un déplacement vértical.");
+			throw new PostconditionError("Le Character se deplace latéralement pendant un deplacement vertical");
 		
 		if(height_atPre == 0)
 			if(!(getHeight() == height_atPre))
-				throw new PostconditionError("Le joueur est sorti en bas de l'écran.");
+				throw new PostconditionError("L'emplacement (" + getWidth() + "," + getHeight() + ") est hors jeu.");
 		
 		if(!(height_atPre == 0))
 			if(getEnvi().cellContent(width_atPre, height_atPre - 1).getCharacter() == null)
@@ -248,7 +261,9 @@ public class CharacterContract extends CharacterDecorator {
 						case LAD:
 						case HDR:
 							if(!(getHeight() == height_atPre - 1))
-								throw new PostconditionError("Le joueur ne se déplace pas comme prévu.");
+								throw new PostconditionError("Le Character aurait dû se deplacer en "
+										+ "(" + width_atPre + "," + (height_atPre + 1) + ") mais se trouve en "
+										+ "(" + getWidth() + "," + getHeight() + ").");
 						default:
 					}
 				default:

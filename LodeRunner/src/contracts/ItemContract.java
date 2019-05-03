@@ -13,7 +13,6 @@ public class ItemContract extends ItemDecorator{
 	}
 
 	public void checkInvarinats() {
-		
 	}
 	
 	public void init(int id, ItemType nature, int x, int y) {

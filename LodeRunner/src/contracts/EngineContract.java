@@ -22,25 +22,40 @@ public class EngineContract extends EngineDecorator{
 	}
 	
 	public void checkInvariants() {
+		boolean alive = true;
+		for(GuardService guard : getGuards())
+			if(guard.getWidth() == getPlayer().getWidth() && guard.getHeight() == getPlayer().getHeight())
+				alive = false;
+
 		switch(getStatus()) {
 			case WIN:
 				if (getTreasures().size() != 0)
-					throw new InvariantError("Status incorrect");
+					throw new InvariantError("La partie est gagné alors qu'il reste " + getTreasures().size() + " trésors.");
+				break;
 			case LOSS:
-				if (getTreasures().size() == 0) // Et joueur pas sur un garde
-					throw new InvariantError("Status incorrect");
+				if (alive)
+					throw new InvariantError("La partie est perdu alors que le joueur est en vie.");
+				break;
 			case PLAYING:
-				if (getTreasures().size() == 0) // ou joueur sur un garde
-					throw new InvariantError("Status incorrect");
+				if (getTreasures().size() == 0)
+					throw new InvariantError("La partie continue alors que tous les trésors ont été ramassé.");
+				if (!alive)
+					throw new InvariantError("La partie continue alors que le joueur est mort.");
+				break;
+
 			default:
-				throw new InvariantError("Status inconnu");
+				throw new InvariantError("Le status " + getStatus() + " n'est pas reconnu.");
 		}
 	}
 	
 	public void init(EditableScreenService e, Point player, ArrayList<Point> guards, ArrayList<Point> treasures) {
-		checkInvariants();
 		super.init(e, player, guards, treasures);
 		checkInvariants();
+		
+		if(!(getPlayer().getWidth() == player.getX() && getPlayer().getHeight() == player.getY()))
+			throw new PostconditionError("Le player aurait dû être en "
+					+ "(" + player.getX() + "," + player.getY() + ") "
+					+ "mais a été mal initialisé en (" + getPlayer().getWidth() + "," + getPlayer().getHeight() + ").");
 		
 		if(!(super.getPlayer().equals(player)))
 			if(!(super.getGuards().equals(guards)))
