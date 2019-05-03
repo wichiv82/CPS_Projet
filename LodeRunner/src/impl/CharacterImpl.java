@@ -137,43 +137,19 @@ public class CharacterImpl implements CharacterService{
 	@Override
 	public void goUp() {
 		if(getHeight() != getEnvi().getHeight() - 1)
-			if(getEnvi().cellContent(getWidth(), getHeight() + 1).getCharacter() == null)
+			if(getEnvi().cellContent(getWidth(), getHeight() + 1).getCharacter() == null &&
+					getEnvi().cellNature(getWidth(), getHeight()) == Cell.LAD)
 				switch(getEnvi().cellNature(getWidth(), getHeight() + 1)) {
 					case EMP:
 					case HDR:
-						if (getEnvi().cellNature(getWidth(), getHeight()) == Cell.LAD) {
-							getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
-							height++;
-							getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
-						}
-						break;
 					case LAD:
-						switch(getEnvi().cellNature(getWidth(), getHeight())) {
-							case LAD:
-								getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
-								height++;
-								getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
-								break;
-							case EMP:
-								switch(getEnvi().cellNature(getWidth(), getHeight() - 1)){
-									case MTL:
-									case PLT:
-										getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
-										height++;
-										getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
-										break;
-									default:
-										if(getEnvi().cellContent(getWidth(), getHeight() - 1).getCharacter() != null) {
-											getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
-											height++;
-											getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
-										}
-								}
-							default:
-					}
+						getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
+						height++;
+						getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
+						break;
 					default:
+						break;
 				}
-		
 	}
 
 	@Override

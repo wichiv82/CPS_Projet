@@ -68,17 +68,11 @@ public interface CharacterService {
 	 * post : getWidth() == getWidth()@pre
 	 * post : getHeight() == getEnvi().getHeight()-1 -> getHeight() == getHeight()@pre
 	 * post : getEnvi().cellContent(getWidth()@pre, getHeight()@pre +1).getCharacter() == null &&
-	 * 		  getEnvi().cellNature(getWidth()@pre, getHeight()@pre + 1) in {Cell.EMP, Cell.HDR} &&
+	 * 		  getEnvi().cellNature(getWidth()@pre, getHeight()@pre + 1) in {Cell.EMP, Cell.HDR, Cell.LAD} &&
 	 * 		  getEnvi().cellNature(getWidth()@pre, getHeight()@pre) == Cell.LAD
 	 * 		  -> getHeight() == getHeight()@pre +1, 
 	 * 			 getEnvi().cellContent(getWidth()@pre, getHeight()@pre).getCharacter() == null,
 	 * 			 getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == this
-	 * post : getEnvi().cellContent(getWidth()@pre, getHeight()@pre +1).getCharacter() == null &&
-	 * 		  getEnvi().cellNature(getWidth()@pre, getHeight()@pre + 1) == Cell.LAD && 
-	 * 		  (getEnvi().cellNature(getWidth()@pre, getHeight()@pre) == Cell.LAD || 
-	 * 			(getEnvi().cellNature(getWidth()@pre, getHeight()@pre) == Cell.EMP && 
-	 * 			  getEnvi().cellNature(getWidth()@pre, getHeight()@pre
-	 * 
 	 */
 	public void goUp();
 	
