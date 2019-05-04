@@ -1,5 +1,7 @@
 package decorators;
 
+import java.awt.Point;
+
 import services.CharacterService;
 import services.EngineService;
 import services.GuardService;
@@ -105,6 +107,13 @@ public class GuardDecorator extends CharacterDecorator implements GuardService {
 	public ItemService getItem() {
 		// TODO Auto-generated method stub
 		return getDelegate().getItem();
+	}
+
+	
+	@Override
+	public Point getPosInit() {
+		// TODO Auto-generated method stub
+		return getDelegate().getPosInit();
 	}
 
 }

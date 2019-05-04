@@ -237,4 +237,11 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 		}
 	}
 
+
+	@Override
+	public Point getPosInit() {
+		// TODO Auto-generated method stub
+		return posInit;
+	}
+
 }

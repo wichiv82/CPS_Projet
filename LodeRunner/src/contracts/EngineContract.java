@@ -57,18 +57,54 @@ public class EngineContract extends EngineDecorator{
 					+ "(" + player.getX() + "," + player.getY() + ") "
 					+ "mais a été mal initialisé en (" + getPlayer().getWidth() + "," + getPlayer().getHeight() + ").");
 		
-		if(!(super.getPlayer().equals(player)))
-			if(!(super.getGuards().equals(guards)))
-				if(!(super.getTreasures().equals(treasures)))
-					if(!(super.getEnvi().equals((EnvironmentService)e)))
-						throw new PostconditionError("le jeu s'est mal initialisé.");
+		if(!(guards.size() == getGuards().size()))
+			throw new PostconditionError("Le nombre de garde devrait être de " + guards.size()
+					+ " mais est de " + getGuards().size());
+		
+		for(int i = 0; i < guards.size(); i++)
+			if(!(guards.get(i).getX() == getGuards().get(i).getWidth() && guards.get(i).getY() == getGuards().get(i).getHeight()))
+				throw new PostconditionError("le garde n°" + i + " devrait être en "
+						+ "(" + guards.get(i).getX() + "," + guards.get(i).getY() + ") mais c'est mal initialisé en "
+						+ "(" + getGuards().get(i).getWidth() + "," + getGuards().get(i).getHeight() + ").");
+		
+		if (!(treasures.size() == getTreasures().size()))
+			throw new PostconditionError("Le nombre de trésors devrait être de " + treasures.size()
+					+ " mais est de " + getTreasures().size());
+		
+		for(int i = 0; i < treasures.size(); i++)
+			if(!(treasures.get(i).getX() == getTreasures().get(i).getColumn() && treasures.get(i).getY() == getTreasures().get(i).getHeight()))
+				throw new PostconditionError("le trésor n°" + i + " devrait être en "
+						+ "(" + treasures.get(i).getX() + "," + treasures.get(i).getY() + ") mais c'est mal initialisé en "
+						+ "(" + getTreasures().get(i).getColumn() + "," + getTreasures().get(i).getHeight() + ").");
+		
+		if (!(getEnvi().equals(e)))
+			throw new PostconditionError("EditableScreen c'est mal initialisé dans Engine");
 	}
 
-	public void step(){
+	public void setCommand(Command m) {
+		Command m_atPre = nextCommand();
 		
+		checkInvariants();
+		super.setCommand(m);
+		checkInvariants();
+		
+		if(!(nextCommand().equals(m))) {
+			if(nextCommand().equals(m_atPre))
+				throw new PostconditionError("La commande " + m + " n'as pas été enregistrée.");
+			else
+				throw new PostconditionError("La commande enregistrée est " + nextCommand() + " mais devrait être " + m + ".");
+		}
+	}
+	
+	public void step(){
+		int score_atPre = getScore();
+		int number_of_treasures_atPre = getTreasures().size();
 		checkInvariants();
 		super.step();
 		checkInvariants();
+		
+		if(!(getScore() + getTreasures().size() == score_atPre + number_of_treasures_atPre))
+			throw new PostconditionError("Calcul du score incorrect.");
 	}
 	
 	

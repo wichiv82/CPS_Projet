@@ -17,34 +17,33 @@ public class ScreenContract extends ScreenDecorator{
 	}
 	
 	public void init(int w, int h) {
-		if (!(0 < w && 0< h))
-			throw new PreconditionError("Les dimensions du Screen doivent etre superieurs a 0");
+		if (!(0 < w))
+			throw new PreconditionError("Largeur de EditableScreen est incorrecte : " + w);
+		if (!(0 < h))
+			throw new PreconditionError("Hauteur de EditableScreen est incorrecte : " + h);
 		
-		checkInvariants();
 		super.init(w, h);
 		checkInvariants();
 		
-		if(!(getWidth() == w && getHeight() == h))
-			throw new PostconditionError("Erreur init : les dimensions n'ont pas ete correctement affectes");
+		if(!(w == getWidth()))
+			throw new PostconditionError("La largeur de EditableScreen devrait être " + w + " mais c'est mal initialisée : " + getWidth());
+		if(!(h == getHeight()))
+			throw new PostconditionError("La hauteur de EditableScreen devrait être " + h + " mais c'est mal initialisée : " + getHeight());
 		
-		for (int i=0; i<getWidth(); i++){
-			for (int j=0; j<getHeight(); j++) {
-				if(!(cellNature(i, j) == Cell.EMP))
-					throw new PostconditionError("Erreur init : les cellules ne sont pas tous vides");
-			}
-		}
+		for(int i = 0; i < getWidth(); i++)
+			for(int j = 0; j < getHeight(); j++)
+				if(!(cellNature(i,j) == Cell.EMP))
+					throw new PostconditionError("La cellule (" + i + "," + j + ") n'est pas EMP : " + cellNature(i,j));
 	}
 	
 	public void dig(int x, int y) {
-		if(!(cellNature(x, y) == Cell.PLT))
-			throw new PreconditionError("Dig essaie de boucher une cellule non PLT.");
-		
 		ArrayList<ArrayList<Cell>> tmp = new ArrayList<>();
 		for(int i = 0; i < getWidth(); i++) {
 			tmp.add(new ArrayList<Cell>());
 			for(int j = 0; j < getHeight(); j++)
 				tmp.get(i).add(cellNature(i, j));
 		}
+		
 		checkInvariants();
 		super.dig(x, y);
 		checkInvariants();
@@ -52,26 +51,33 @@ public class ScreenContract extends ScreenDecorator{
 		for(int i = 0; i < getWidth(); i++)
 			for(int j = 0; j < getHeight(); j++) {
 				if(i == x && j == y)
-					if(!(cellNature(x, y) == Cell.HOL))
-						throw new PostconditionError("Le trou n'a pas été creusé.");
+					switch(tmp.get(i).get(j)) {
+						case PLT:
+							if(!(cellNature(x, y) == Cell.HOL))
+								if(cellNature(x, y) == tmp.get(i).get(j))
+									throw new PostconditionError("Aucun HOL n'a été créé alors que la cellule (" + i + "," + j + ") est PLT.");
+								else
+									throw new PostconditionError("La cellule (" + i + "," + j + ") a été transformée en " + cellNature(i,j) + ".");
+						default:
+							if(!(tmp.get(i).get(j) == cellNature(i,j)))
+								throw new PostconditionError("Un HOL à été créé en (" + i + "," + j + ") "
+										+ "alors que la cellule était" + tmp.get(i).get(j) + ".");
+					}
 				else
 					if(!(cellNature(x,y) == tmp.get(i).get(j)))
-						throw new PostconditionError("Dig a modifié le mauvais emplacement.");
-						
+						throw new PostconditionError("Dig a modifié la cellule (" + i + "," + j + ") "
+								+ "alors que la cellule cible est (" + x + "," + y + ").");
 			}
-		
 	}
 
 	public void fill(int x, int y) {
-		if(!(cellNature(x, y) == Cell.HOL))
-			throw new PreconditionError("Fill essaie de boucher une cellule non HOL.");
-		
 		ArrayList<ArrayList<Cell>> tmp = new ArrayList<>();
 		for(int i = 0; i < getWidth(); i++) {
 			tmp.add(new ArrayList<Cell>());
 			for(int j = 0; j < getHeight(); j++)
 				tmp.get(i).add(cellNature(i, j));
 		}
+		
 		checkInvariants();
 		super.fill(x, y);
 		checkInvariants();
@@ -79,12 +85,22 @@ public class ScreenContract extends ScreenDecorator{
 		for(int i = 0; i < getWidth(); i++)
 			for(int j = 0; j < getHeight(); j++) {
 				if(i == x && j == y)
-					if(!(cellNature(x, y) == Cell.PLT))
-						throw new PostconditionError("Le trou n'a pas été creusé.");
+					switch(tmp.get(i).get(j)) {
+						case HOL:
+							if(!(cellNature(x, y) == Cell.PLT))
+								if(cellNature(x, y) == tmp.get(i).get(j))
+									throw new PostconditionError("Aucun PLT n'a été créé alors que la cellule (" + i + "," + j + ") est HOL.");
+								else
+									throw new PostconditionError("La cellule (" + i + "," + j + ") a été transformée en " + cellNature(i,j) + ".");
+						default:
+							if(!(tmp.get(i).get(j) == cellNature(i,j)))
+								throw new PostconditionError("Un PLT à été créé en (" + i + "," + j + ") "
+										+ "alors que la cellule était" + tmp.get(i).get(j) + ".");
+					}
 				else
 					if(!(cellNature(x,y) == tmp.get(i).get(j)))
-						throw new PostconditionError("Fill a modifié le mauvais emplacement.");
-						
+						throw new PostconditionError("Fill a modifié la cellule (" + i + "," + j + ") "
+								+ "alors que la cellule cible est (" + x + "," + y + ").");
 			}
 	}
 }

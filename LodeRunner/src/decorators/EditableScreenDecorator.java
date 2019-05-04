@@ -14,24 +14,6 @@ public class EditableScreenDecorator extends ScreenDecorator implements Editable
 	public EditableScreenService getDelegate() {
 		return (EditableScreenService) super.getDelegate();
 	}
-	
-	@Override
-	public int getHeight() {
-		// TODO Auto-generated method stub
-		return getDelegate().getHeight();
-	}
-
-	@Override
-	public int getWidth() {
-		// TODO Auto-generated method stub
-		return getDelegate().getWidth();
-	}
-
-	@Override
-	public Cell cellNature(int x, int y) {
-		// TODO Auto-generated method stub
-		return getDelegate().cellNature(x, y);
-	}
 
 	@Override
 	public void init(int w, int h) {
@@ -39,18 +21,12 @@ public class EditableScreenDecorator extends ScreenDecorator implements Editable
 		getDelegate().init(w, h);
 		
 	}
-
+	
 	@Override
-	public void dig(int x, int y) {
+	public void init(String file_name) {
 		// TODO Auto-generated method stub
-		getDelegate().dig(x, y);
+		getDelegate().init(file_name);
 		
-	}
-
-	@Override
-	public void fill(int x, int y) {
-		// TODO Auto-generated method stub
-		getDelegate().fill(x, y);
 	}
 
 	@Override
@@ -63,13 +39,6 @@ public class EditableScreenDecorator extends ScreenDecorator implements Editable
 	public void setNature(int x, int y, Cell c) {
 		// TODO Auto-generated method stub
 		getDelegate().setNature(x, y, c);
-		
-	}
-
-	@Override
-	public void init(String file_name) {
-		// TODO Auto-generated method stub
-		getDelegate().init(file_name);
 		
 	}
 

@@ -4,8 +4,11 @@ import java.util.ArrayList;
 
 import decorators.EnvironmentDecorator;
 import services.Cell;
+import services.CharacterService;
 import services.EditableScreenService;
 import services.EnvironmentService;
+import services.ItemService;
+import services.Paire;
 
 public class EnvironmentContract extends EnvironmentDecorator{
 
@@ -44,89 +47,65 @@ public class EnvironmentContract extends EnvironmentDecorator{
 		checkInvariants();
 		
 		if(!(edit.getWidth() == getWidth()))
-			throw new PostconditionError("Largeur mal initialisée.");
+			throw new PostconditionError("La largeur s'est mal initialisée en " + getWidth() 
+					+ "mais devrait être de " + edit.getWidth() + ".");
 		if(!(edit.getHeight() == getHeight()))
-			throw new PostconditionError("Hauteur mal initialisée.");
+			throw new PostconditionError("La hauteur s'est mal initialisée en " + getHeight()
+					+ "mais devrait être de " + edit.getHeight() + ".");
 		
 		for(int i = 0; i < getWidth(); i++)
 			for(int j = 0; j < getHeight(); j++) {
-				if(cellContent(i,j) == null)
-					throw new InvariantError("le contenu de la cellule "+ i +"," + j + " n'est pas initialisé.");
+				if(!(cellContent(i,j).getCharacter() == null))
+					throw new InvariantError("Un Character à été créé dans la cellule ("+ i +"," + j + ") sans raison.");
+				if(!(cellContent(i,j).getItem() == null))
+					throw new InvariantError("Un Item à été créé dans la cellule ("+ i +"," + j + ") sans raison.");
 				if(!(cellNature(i, j) == edit.cellNature(i, j)))
-					throw new PostconditionError("la cellule " + i + ", " + j + " s'est mal initialisée." );
+					throw new PostconditionError("La cellule (" + i + ", " + j + ") est" + cellNature(i, j) 
+							+ " mais devrait être " + edit.cellNature(i, j) + ".");
 			}
 	}
 	
-	public void init(int w, int h) {
-		if (!(0 < w && 0< h))
-			throw new PreconditionError("Les dimensions du Screen doivent etre superieurs a 0");
+	public void setCellContent(int x, int y, Paire p) {
+		ArrayList<ArrayList<CharacterService>> character_atPre = new ArrayList<>();
+		ArrayList<ArrayList<ItemService>> item_atPre = new ArrayList<>();
 		
-		super.init(w, h);
-		checkInvariants();
-		
-		if(!(w == getWidth()))
-			throw new PostconditionError("Largeur mal initialisée.");
-		if(!(h == getHeight()))
-			throw new PostconditionError("Hauteur mal initialisée.");
-		
-		for(int i = 0; i < getWidth(); i++)
-			for(int j = 0; j < getHeight(); j++) {
-				super.init(i, j);
-				if(!(cellNature(i, j) == Cell.EMP))
-					throw new PostconditionError("la cellule " + i + ", " + j + " s'est mal initialisée." );
-			}
-	}
-	
-	public void dig(int x, int y) {
-		if(!(cellNature(x, y) == Cell.PLT))
-			throw new PreconditionError("Dig essaie de boucher une cellule non PLT.");
-		
-		ArrayList<ArrayList<Cell>> tmp = new ArrayList<>();
 		for(int i = 0; i < getWidth(); i++) {
-			tmp.add(new ArrayList<Cell>());
-			for(int j = 0; j < getHeight(); j++)
-				tmp.get(i).add(cellNature(i, j));
-		}
-		checkInvariants();
-		super.dig(x, y);
-		checkInvariants();
-		
-		for(int i = 0; i < getWidth(); i++)
+			character_atPre.add(new ArrayList<CharacterService>());
+			item_atPre.add(new ArrayList<ItemService>());			
 			for(int j = 0; j < getHeight(); j++) {
-				if(i == x && j == y)
-					if(!(cellNature(x, y) == Cell.HOL))
-						throw new PostconditionError("Le trou n'a pas été creusé.");
-				else
-					if(!(cellNature(x,y) == tmp.get(i).get(j)))
-						throw new PostconditionError("Dig a modifié le mauvais emplacement.");
-						
+				character_atPre.get(i).add(cellContent(i, j).getCharacter());
+				item_atPre.get(i).add(cellContent(i, j).getItem());
 			}
-		
-	}
-
-	public void fill(int x, int y) {
-		if(!(cellNature(x, y) == Cell.HOL))
-			throw new PreconditionError("Fill essaie de boucher une cellule non HOL.");
-		
-		ArrayList<ArrayList<Cell>> tmp = new ArrayList<>();
-		for(int i = 0; i < getWidth(); i++) {
-			tmp.add(new ArrayList<Cell>());
-			for(int j = 0; j < getHeight(); j++)
-				tmp.get(i).add(cellNature(i, j));
 		}
+		
 		checkInvariants();
-		super.fill(x, y);
+		getDelegate().setCellContent(x, y, p);
 		checkInvariants();
 		
 		for(int i = 0; i < getWidth(); i++)
 			for(int j = 0; j < getHeight(); j++) {
-				if(i == x && j == y)
-					if(!(cellNature(x, y) == Cell.PLT))
-						throw new PostconditionError("Le trou n'a pas été creusé.");
-				else
-					if(!(cellNature(x,y) == tmp.get(i).get(j)))
-						throw new PostconditionError("Fill a modifié le mauvais emplacement.");
-						
+				if(i == x && j == y) {
+					if(!(cellContent(i,j).getCharacter().equals(p.getCharacter()))) {
+						if(cellContent(i,j).getCharacter().equals(character_atPre.get(i).get(j)))
+							throw new PostconditionError("Le Character n'as pas été modifié en (" + i + "," + j + ").");
+						else
+							throw new PostconditionError("Le Character en (" + i + "," + j + ") n'as pas été modifié comme voulu.");
+					}
+					if(!(cellContent(i,j).getItem().equals(p.getItem()))) {
+						if(cellContent(i,j).getItem().equals(item_atPre.get(i).get(j)))
+							throw new PostconditionError("L'Item n'as pas été modifié en (" + i + "," + j + ").");
+						else
+							throw new PostconditionError("L'Item en (" + i + "," + j + ") n'as pas été modifié comme voulu.");
+					}
+				}
+				else {
+					if(!(cellContent(i,j).getCharacter().equals(character_atPre.get(i).get(j))))
+						throw new PostconditionError("La présence d'un character à été modifié dans la cellule (" + i + "," + j + ")"
+								+ " alors que la cellule cible est (" + x + "," + y + ").");
+					if(!(cellContent(i,j).getItem().equals(item_atPre.get(i).get(j))))
+						throw new PostconditionError("La présence d'un item à été modifié dans la cellule (" + i + "," + j + ")"
+								+ " alors que la cellule cible est (" + x + "," + y +").");
+				}
 			}
 	}
 }

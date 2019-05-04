@@ -1,5 +1,7 @@
 package services;
 
+import java.awt.Point;
+
 public interface GuardService extends CharacterService{
 	
 	public int getId();
@@ -108,4 +110,9 @@ public interface GuardService extends CharacterService{
 	 * post : getItem() == item
 	 */
 	public void giveItem(ItemService item);
+	
+	/**
+	 * post : getPosInit() == posInit()
+	 */
+	public Point getPosInit();
 }
