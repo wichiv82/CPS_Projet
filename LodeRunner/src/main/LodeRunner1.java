@@ -17,7 +17,7 @@ public class LodeRunner1 extends LodeRunnerMain{
 	
 	
 	public static void main(String[] args) {
-		int niveau = 2;
+		int niveau = 3;
 		int life = 3;
 		
 		while (niveau <= 5) {

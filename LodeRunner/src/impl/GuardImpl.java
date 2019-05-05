@@ -192,6 +192,11 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 			}
 			goDown();
 				
+			if(item != null) {
+				item.setColumn(getWidth());
+				item.setHeight(getHeight());
+			}
+			
 			return;
 		}
 		
