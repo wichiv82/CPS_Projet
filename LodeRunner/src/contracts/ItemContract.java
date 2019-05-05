@@ -16,15 +16,15 @@ public class ItemContract extends ItemDecorator{
 	}
 	
 	public void init(int id, ItemType nature, int x, int y) {
-		this.checkInvarinats();
 		this.getDelegate().init(id, nature, x, y);
 		this.checkInvarinats();
 		
-		if(!(this.getDelegate().getId() == id))
-			if(!(this.getDelegate().getNature().equals(nature)))
-				if(!(this.getDelegate().getColumn() == x))
-					if(!(this.getDelegate().getHeight() == y))
-						throw new PostconditionError("le trésor s'est mal initialisé.");
-		
+		if(!(getId() == id))
+			throw new PostconditionError("Le trésor enregistré a l'ID n°" + getId() + " Au lieu du n°" + id + ".");
+		if(!(getNature() == nature))
+			throw new PostconditionError("Le trésor enregistré est de nature " + getNature() + " et non de nature " + nature + ".");
+		if(!(getColumn() == x && getHeight() == y))
+			throw new PostconditionError("Le trésor est sur la cellule (" + getColumn() + "," + getHeight() + ")"
+					+ " au lieu d'être sur la cellule (" + x + "," + y + ").");
 	}
 }

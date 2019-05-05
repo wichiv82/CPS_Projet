@@ -2,6 +2,7 @@ package contracts;
 
 import decorators.PlayerDecorator;
 import services.Cell;
+import services.EngineService;
 import services.PlayerService;
 import services.ScreenService;
 
@@ -25,26 +26,14 @@ public class PlayerContract extends PlayerDecorator {
 			throw new InvariantError("Le joueur n'est pas présent sur son emplacement.");
 	}
 	
-	public void init(ScreenService s, int x, int y) {
-		if(!(x >= 0))
-			throw new PreconditionError("coord x = " + x + " en dehors du jeu " + s.getWidth());
-		if(!(x < s.getWidth()))
-			throw new PreconditionError("coord x = " + x + " en dehors du jeu " + s.getWidth());
-		if(!(y >= 0))
-			throw new PreconditionError("coord y = " + y + "en dehors du jeu " + s.getHeight());
-		if(!(y < s.getHeight()))
-			throw new PreconditionError("coord y = " + y + "en dehors du jeu " + s.getHeight());
+	public void setEngine(EngineService e) {
+		super.setEngine(e);
+		checkInvariants();
 		
-		getDelegate().init(s, x, y);
-		
-		for(int i = 0; i < getEnvi().getWidth(); i++)
-			for(int j = 0; j < getEnvi().getWidth(); j++)
-				if(!(s.cellNature(i, j) == getEnvi().cellNature(i, j)))
-					throw new PostconditionError("jeu du joueur mal initialisé");
-		if(!(getWidth() == x))
-			throw new PostconditionError("x mal initialisé.");
-		if(!(getHeight() == y))
-			throw new PostconditionError("y mal initialisé.");
+		if(!(e == null) && getEngine() == null)
+			throw new PostconditionError("L'Engine du Player ne s'est pas enregistrée.");
+		if(!(e == null && getEngine() == null) && !(getEngine().equals(e)))
+			throw new PostconditionError("L'Engine enregistrée par le Player n'est pas la bonne.");
 	}
 	
 	public void step() {
@@ -62,8 +51,9 @@ public class PlayerContract extends PlayerDecorator {
 					break;
 				default:
 					if(getEnvi().cellNature(width_atPre, height_atPre - 1) == Cell.EMP)
-						if(getHeight() != height_atPre -1 && getWidth() != width_atPre)
-							throw new PostconditionError("Le joueur ne tombe pas.");
+						if(getEngine().getEnvi().cellContent(width_atPre, height_atPre - 1).getCharacter() == null)
+							if(getHeight() != height_atPre -1 && getWidth() != width_atPre)
+								throw new PostconditionError("Le joueur ne tombe pas.");
 			}
 	}
 }

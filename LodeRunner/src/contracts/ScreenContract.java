@@ -17,11 +17,6 @@ public class ScreenContract extends ScreenDecorator{
 	}
 	
 	public void init(int w, int h) {
-		if (!(0 < w))
-			throw new PreconditionError("Largeur de EditableScreen est incorrecte : " + w);
-		if (!(0 < h))
-			throw new PreconditionError("Hauteur de EditableScreen est incorrecte : " + h);
-		
 		super.init(w, h);
 		checkInvariants();
 		
