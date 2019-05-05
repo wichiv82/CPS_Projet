@@ -131,6 +131,8 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 						
 						engine.getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
 						getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
+						
+						timeInHole = 0;
 						break;
 					default:
 						break;
@@ -158,6 +160,8 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 
 						engine.getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
 						getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
+						
+						timeInHole = 0;
 						break;
 					default:
 						break;
@@ -204,7 +208,6 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 					 	case LAD:
 					 	case EMP:
 					 		climbRight();
-					 		timeInHole = 0;
 					 		break;
 					 	default:
 					 		break;
@@ -219,7 +222,6 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 						case LAD:
 						case EMP:
 							climbLeft();
-						 	timeInHole = 0;
 						 	break;
 						default:
 						 	break;
