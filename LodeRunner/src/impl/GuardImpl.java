@@ -73,6 +73,7 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 	public Move getBehaviour() {
 		
 		switch(engine.getEnvi().cellNature(getWidth(), getHeight())) {
+			case HOL: 
 			case EMP:
 			case HDR:
 				if(getWidth() < target.getWidth()) {
@@ -115,7 +116,8 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 	public void climbLeft() {
 		if(getWidth()>0 && getHeight()<engine.getEnvi().getHeight()-1){
 			if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL &&
-				engine.getEnvi().cellContent(getWidth(), getHeight()+1).getCharacter() == null){
+				engine.getEnvi().cellContent(getWidth(), getHeight()+1).getCharacter() == null &&
+				engine.getEnvi().cellContent(getWidth()-1, getHeight()+1).getCharacter() == null){
 				switch(engine.getEnvi().cellNature(getWidth()-1, getHeight()+1)){
 					case EMP:
 					case LAD:
@@ -141,7 +143,8 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 	public void climbRight(){
 		if(getWidth()<engine.getEnvi().getWidth()-1 && getHeight()<engine.getEnvi().getHeight()-1){
 			if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL &&
-				engine.getEnvi().cellContent(getWidth(), getHeight()+1).getCharacter() == null){
+				engine.getEnvi().cellContent(getWidth(), getHeight()+1).getCharacter() == null &&
+				engine.getEnvi().cellContent(getWidth()+1, getHeight()+1).getCharacter() == null){
 				switch(engine.getEnvi().cellNature(getWidth()+1, getHeight()+1)){
 					case EMP:
 					case LAD:
@@ -191,12 +194,37 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 		if (engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL){
 			timeInHole++;
 			if(timeInHole >= 25){
-				if(getWidth() < target.getWidth())
-					climbRight();
-				else
-					climbLeft();
-				timeInHole = 0;
-				return;
+				if(getWidth() < target.getWidth() &&
+					(engine.getEnvi().cellNature(getWidth()+1, getHeight()) == Cell.MTL 
+					|| engine.getEnvi().cellNature(getWidth()+1, getHeight()) == Cell.PLT
+					|| getEnvi().cellContent(getWidth()+1, getHeight()).getCharacter() != null)) { 
+					 switch(engine.getEnvi().cellNature(getWidth()+1, getHeight()+1)) {
+					 	case HOL:
+					 	case HDR:
+					 	case LAD:
+					 	case EMP:
+					 		climbRight();
+					 		timeInHole = 0;
+					 		break;
+					 	default:
+					 		break;
+					 }
+				}else if(getWidth() > target.getWidth() &&
+					(engine.getEnvi().cellNature(getWidth()-1, getHeight()) == Cell.MTL 
+					|| engine.getEnvi().cellNature(getWidth()-1, getHeight()) == Cell.PLT
+					|| getEnvi().cellContent(getWidth()-1, getHeight()).getCharacter() != null)) { 
+					switch(engine.getEnvi().cellNature(getWidth()-1, getHeight()+1)) {
+						case HOL:
+						case HDR:
+						case LAD:
+						case EMP:
+							climbLeft();
+						 	timeInHole = 0;
+						 	break;
+						default:
+						 	break;
+					}
+				}
 			}
 		}
 		
