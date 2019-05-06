@@ -53,13 +53,14 @@ public class ScreenContract extends ScreenDecorator{
 									throw new PostconditionError("Aucun HOL n'a été créé alors que la cellule (" + i + "," + j + ") est PLT.");
 								else
 									throw new PostconditionError("La cellule (" + i + "," + j + ") a été transformée en " + cellNature(i,j) + ".");
+							break;
 						default:
 							if(!(tmp.get(i).get(j) == cellNature(i,j)))
 								throw new PostconditionError("Un HOL à été créé en (" + i + "," + j + ") "
-										+ "alors que la cellule était" + tmp.get(i).get(j) + ".");
+										+ "alors que la cellule était " + tmp.get(i).get(j) + ".");
 					}
 				else
-					if(!(cellNature(x,y) == tmp.get(i).get(j)))
+					if(!(cellNature(i,j) == tmp.get(i).get(j)))
 						throw new PostconditionError("Dig a modifié la cellule (" + i + "," + j + ") "
 								+ "alors que la cellule cible est (" + x + "," + y + ").");
 			}
@@ -87,13 +88,14 @@ public class ScreenContract extends ScreenDecorator{
 									throw new PostconditionError("Aucun PLT n'a été créé alors que la cellule (" + i + "," + j + ") est HOL.");
 								else
 									throw new PostconditionError("La cellule (" + i + "," + j + ") a été transformée en " + cellNature(i,j) + ".");
+							break;
 						default:
 							if(!(tmp.get(i).get(j) == cellNature(i,j)))
 								throw new PostconditionError("Un PLT à été créé en (" + i + "," + j + ") "
-										+ "alors que la cellule était" + tmp.get(i).get(j) + ".");
+										+ "alors que la cellule était " + tmp.get(i).get(j) + ".");
 					}
 				else
-					if(!(cellNature(x,y) == tmp.get(i).get(j)))
+					if(!(cellNature(i,j) == tmp.get(i).get(j)))
 						throw new PostconditionError("Fill a modifié la cellule (" + i + "," + j + ") "
 								+ "alors que la cellule cible est (" + x + "," + y + ").");
 			}

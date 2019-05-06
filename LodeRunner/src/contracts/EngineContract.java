@@ -77,8 +77,13 @@ public class EngineContract extends EngineDecorator{
 						+ "(" + treasures.get(i).getX() + "," + treasures.get(i).getY() + ") mais c'est mal initialisé en "
 						+ "(" + getTreasures().get(i).getColumn() + "," + getTreasures().get(i).getHeight() + ").");
 		
-		if (!(getEnvi().equals(e)))
-			throw new PostconditionError("EditableScreen c'est mal initialisé dans Engine");
+		System.out.println(getEnvi() + "," + e);
+		
+		if(getEnvi() == null)
+			throw new PostconditionError("EditableScreen ne s'est pas enregistré.");
+		
+//		if (!(getEnvi().get == e))
+//			throw new PostconditionError("EditableScreen c'est mal initialisé dans Engine");
 	}
 
 	public void setCommand(Command m) {

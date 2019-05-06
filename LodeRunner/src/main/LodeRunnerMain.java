@@ -20,7 +20,7 @@ public class LodeRunnerMain {
 	private static Scanner scan = new Scanner(System.in);
 	
 	public LodeRunnerMain(EditableScreenImpl e, Point player, ArrayList<Point> guards, ArrayList<Point> treasures) {
-		engine = new EngineImpl();
+		engine = new EngineImpl(false);
 		engine.init(e, player, guards, treasures);
 	}
 	

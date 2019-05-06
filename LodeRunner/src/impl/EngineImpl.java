@@ -3,6 +3,11 @@ package impl;
 import java.awt.Point;
 
 import java.util.ArrayList;
+
+import contracts.EnvironmentContract;
+import contracts.GuardContract;
+import contracts.ItemContract;
+import contracts.PlayerContract;
 import services.Cell;
 import services.Command;
 import services.EditableScreenService;
@@ -28,10 +33,17 @@ public class EngineImpl implements EngineService {
 	
 	private Command command;
 	
+	private boolean contract = false;
+	public EngineImpl(boolean contract) {
+		this.contract = contract;
+	}
+	
 	@Override
 	public void init(EditableScreenService e, Point player, ArrayList<Point> guards, ArrayList<Point> treasures) {
 		// TODO Auto-generated method stub
-		envi = new EnvironmentImpl();
+		if(contract)
+			envi = new EnvironmentContract(new EnvironmentImpl());
+		else envi = new EnvironmentImpl();
 		envi.init(e);
 		holes = new int[e.getWidth()][e.getHeight()];
 		for(int i=0; i<e.getWidth(); i++)
@@ -41,19 +53,27 @@ public class EngineImpl implements EngineService {
 		this.guards = new ArrayList<GuardService>();
 		this.treasures = new ArrayList<ItemService>();
 		
-		this.player = new PlayerImpl();
+		if(contract)
+			this.player = new PlayerContract(new PlayerImpl());
+		else this.player = new PlayerImpl();
 		this.player.init(e, player.x, player.y);
 		envi.setCellContent(player.x, player.y, new Paire(this.player, null));
 		
+		ItemService t;
 		for(int i=0; i<treasures.size(); i++) {
-			ItemImpl t = new ItemImpl();
+			if(contract)
+				t = new ItemContract(new ItemImpl());
+			else t = new ItemImpl();
 			t.init(i, ItemType.TREASURE, treasures.get(i).x, treasures.get(i).y);
 			this.treasures.add(t);
 			envi.setCellContent(treasures.get(i).x, treasures.get(i).y, new Paire(null, t));
 		}
 		
+		GuardService g;
 		for (int i=0; i<guards.size(); i++) {
-			GuardImpl g = new GuardImpl();
+			if(contract)
+				g = new GuardContract(new GuardImpl());
+			else g = new GuardImpl();
 			g.init(e, guards.get(i).x, guards.get(i).y, i, this.player); // TOUS LES GARDES PORTENT UN TRESOR A L'HEURE ACTUELLE !!!
 			g.setEngine(this);
 			this.guards.add(g);

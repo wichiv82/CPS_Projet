@@ -1,9 +1,10 @@
 package decorators;
 
+import contracts.ScreenContract;
 import services.Cell;
 import services.EditableScreenService;
 
-public class EditableScreenDecorator extends ScreenDecorator implements EditableScreenService{
+public class EditableScreenDecorator extends ScreenContract implements EditableScreenService{
 
 	
 	public EditableScreenDecorator(EditableScreenService delegate) {

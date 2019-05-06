@@ -2,6 +2,7 @@ package decorators;
 
 import java.awt.Point;
 
+import contracts.CharacterContract;
 import services.CharacterService;
 import services.EngineService;
 import services.GuardService;
@@ -9,7 +10,7 @@ import services.ItemService;
 import services.Move;
 import services.ScreenService;
 
-public class GuardDecorator extends CharacterDecorator implements GuardService {
+public class GuardDecorator extends CharacterContract implements GuardService {
 
 	public GuardDecorator(GuardService delegate) {
 		super(delegate);

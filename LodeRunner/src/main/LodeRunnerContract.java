@@ -3,13 +3,15 @@ package main;
 import java.awt.Point;
 import java.util.ArrayList;
 
+import contracts.EditableScreenContract;
 import impl.EditableScreenImpl;
 import services.Cell;
+import services.EditableScreenService;
 import services.Status;
 
-public class LodeRunner1 extends LodeRunnerMain{
+public class LodeRunnerContract extends LodeRunnerContractMain{
 
-	public LodeRunner1(EditableScreenImpl e, Point player, ArrayList<Point> guards, ArrayList<Point> treasures) {
+	public LodeRunnerContract(EditableScreenService e, Point player, ArrayList<Point> guards, ArrayList<Point> treasures) {
 		super(e, player, guards, treasures);
 		// TODO Auto-generated constructor stub
 	}
@@ -17,16 +19,17 @@ public class LodeRunner1 extends LodeRunnerMain{
 	
 	
 	public static void main(String[] args) {
-		int niveau = 1;
+		int niveau = 2;
 		int life = 3;
 		
 		while (niveau <= 5) {
 			EditableScreenImpl e = new EditableScreenImpl();
+			EditableScreenContract edit = new EditableScreenContract(e);
 			
 			ArrayList<String[][]> fileInfos = readFile("levels/level" + niveau +".txt");
 			
 			String[][] lignes = fileInfos.get(0);
-			e.init(lignes.length, lignes[0].length);
+			edit.init(lignes.length, lignes[0].length);
 			
 			System.out.println("LEVEL "+ niveau);
 			
@@ -34,22 +37,22 @@ public class LodeRunner1 extends LodeRunnerMain{
 				for(int j=0; j<lignes[i].length; j++) {
 					switch(lignes[i][j]) {
 					case "-":
-						e.setNature(i, j, Cell.EMP);
+						edit.setNature(i, j, Cell.EMP);
 						break;
 					case "=":
-						e.setNature(i, j, Cell.PLT);
+						edit.setNature(i, j, Cell.PLT);
 						break;
 					case "_":
-						e.setNature(i, j, Cell.HOL);
+						edit.setNature(i, j, Cell.HOL);
 						break;
 					case "H":
-						e.setNature(i, j, Cell.LAD);
+						edit.setNature(i, j, Cell.LAD);
 						break;
 					case "‾":
-						e.setNature(i, j, Cell.HDR);
+						edit.setNature(i, j, Cell.HDR);
 						break;
 					case "X" :
-						e.setNature(i, j, Cell.MTL);
+						edit.setNature(i, j, Cell.MTL);
 						break;
 					}
 				}
@@ -70,7 +73,7 @@ public class LodeRunner1 extends LodeRunnerMain{
 			}
 			
 			Point posJoueur = new Point(Integer.parseInt(fileInfos.get(1)[0][0]), Integer.parseInt(fileInfos.get(1)[0][1]));
-			LodeRunner1 run = new LodeRunner1(e,posJoueur, gardes, treasures);
+			LodeRunnerContract run = new LodeRunnerContract(e,posJoueur, gardes, treasures);
 			run.afficher();
 			
 			while(run.engine.getStatus() == Status.PLAYING) {

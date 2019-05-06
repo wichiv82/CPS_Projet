@@ -22,8 +22,10 @@ public class PlayerContract extends PlayerDecorator {
 			default:
 				throw new InvariantError("Le joueur est sur un emplacement indisponible.");
 		}
-		if (!getEnvi().cellContent(getWidth(), getHeight()).getCharacter().equals(this))
+		if(getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == null)
 			throw new InvariantError("Le joueur n'est pas présent sur son emplacement.");
+//		if (!getEnvi().cellContent(getWidth(), getHeight()).getCharacter().equals(this))
+//			throw new InvariantError("Le joueur n'est pas présent sur son emplacement.");
 	}
 	
 	public void setEngine(EngineService e) {

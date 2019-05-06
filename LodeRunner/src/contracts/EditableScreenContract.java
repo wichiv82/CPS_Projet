@@ -25,7 +25,7 @@ public class EditableScreenContract extends EditableScreenDecorator{
 		}
 	}
 	
-	public void init (int h, int w) {
+	public void init (int w, int h) {
 		if (!(0 < w))
 			throw new PreconditionError("Largeur de EditableScreen est incorrecte : " + w);
 		if (!(0 < h))

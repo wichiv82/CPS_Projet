@@ -47,11 +47,11 @@ public class EnvironmentContract extends EnvironmentDecorator{
 		checkInvariants();
 		
 		if(!(edit.getWidth() == getWidth()))
-			throw new PostconditionError("La largeur s'est mal initialisée en " + getWidth() 
-					+ "mais devrait être de " + edit.getWidth() + ".");
+			throw new PostconditionError("La largeur s'est mal initialisée et est de " + getWidth() 
+					+ " au lieu de " + edit.getWidth() + ".");
 		if(!(edit.getHeight() == getHeight()))
-			throw new PostconditionError("La hauteur s'est mal initialisée en " + getHeight()
-					+ "mais devrait être de " + edit.getHeight() + ".");
+			throw new PostconditionError("La hauteur s'est mal initialisée et est de " + getHeight()
+					+ " au lieu de " + edit.getHeight() + ".");
 		
 		for(int i = 0; i < getWidth(); i++)
 			for(int j = 0; j < getHeight(); j++) {
@@ -79,32 +79,47 @@ public class EnvironmentContract extends EnvironmentDecorator{
 		}
 		
 		checkInvariants();
-		getDelegate().setCellContent(x, y, p);
+		super.setCellContent(x, y, p);
 		checkInvariants();
 		
 		for(int i = 0; i < getWidth(); i++)
 			for(int j = 0; j < getHeight(); j++) {
 				if(i == x && j == y) {
-					if(!(cellContent(i,j).getCharacter().equals(p.getCharacter()))) {
-						if(cellContent(i,j).getCharacter().equals(character_atPre.get(i).get(j)))
-							throw new PostconditionError("Le Character n'as pas été modifié en (" + i + "," + j + ").");
-						else
-							throw new PostconditionError("Le Character en (" + i + "," + j + ") n'as pas été modifié comme voulu.");
-					}
-					if(!(cellContent(i,j).getItem().equals(p.getItem()))) {
-						if(cellContent(i,j).getItem().equals(item_atPre.get(i).get(j)))
-							throw new PostconditionError("L'Item n'as pas été modifié en (" + i + "," + j + ").");
-						else
-							throw new PostconditionError("L'Item en (" + i + "," + j + ") n'as pas été modifié comme voulu.");
-					}
+					if(cellContent(i,j).getCharacter() == null && !(p.getCharacter() == null))
+						throw new PostconditionError("Le Character n'a pas été placé.");
+					if(!(cellContent(i,j).getCharacter() == null) && p.getCharacter() == null)
+						throw new PostconditionError("Un Character a été placé sans raison.");
+//					if(!(cellContent(i,j).getCharacter().equals(p.getCharacter()))) {
+//						if(cellContent(i,j).getCharacter().equals(character_atPre.get(i).get(j)))
+//							throw new PostconditionError("Le Character n'as pas été modifié en (" + i + "," + j + ").");
+//						else
+//							throw new PostconditionError("Le Character en (" + i + "," + j + ") n'as pas été modifié comme voulu.");
+//					}
+					if(cellContent(i,j).getItem() == null && !(p.getItem() == null))
+						throw new PostconditionError("L'Item n'a pas été placé.");
+					if(!(cellContent(i,j).getItem() == null) && p.getItem() == null)
+						throw new PostconditionError("Un Item a été placé sans raison.");
+//					if(!(cellContent(i,j).getItem().equals(p.getItem()))) {
+//						if(cellContent(i,j).getItem().equals(item_atPre.get(i).get(j)))
+//							throw new PostconditionError("L'Item n'as pas été modifié en (" + i + "," + j + ").");
+//						else
+//							throw new PostconditionError("L'Item en (" + i + "," + j + ") n'as pas été modifié comme voulu.");
 				}
 				else {
-					if(!(cellContent(i,j).getCharacter().equals(character_atPre.get(i).get(j))))
-						throw new PostconditionError("La présence d'un character à été modifié dans la cellule (" + i + "," + j + ")"
-								+ " alors que la cellule cible est (" + x + "," + y + ").");
-					if(!(cellContent(i,j).getItem().equals(item_atPre.get(i).get(j))))
-						throw new PostconditionError("La présence d'un item à été modifié dans la cellule (" + i + "," + j + ")"
-								+ " alors que la cellule cible est (" + x + "," + y +").");
+					if(cellContent(i,j).getCharacter() == null && !(character_atPre.get(i).get(j) == null))
+						throw new PostconditionError("Un Character a été supprimé sans raison.");
+					if(!(cellContent(i,j).getCharacter() == null) && character_atPre.get(i).get(j) == null)
+						throw new PostconditionError("Un Character a été créé sans raison.");
+//					if(!(cellContent(i,j).getCharacter().equals(character_atPre.get(i).get(j))))
+//						throw new PostconditionError("La présence d'un character à été modifié dans la cellule (" + i + "," + j + ")"
+//								+ " alors que la cellule cible est (" + x + "," + y + ").");
+					if(cellContent(i,j).getItem() == null && !(item_atPre.get(i).get(j) == null))
+						throw new PostconditionError("Un Item a été supprimé sans raison.");
+					if(!(cellContent(i,j).getItem() == null) && item_atPre.get(i).get(j) == null)
+						throw new PostconditionError("Un Item a été créé sans raison.");
+//					if(!(cellContent(i,j).getItem().equals(item_atPre.get(i).get(j))))
+//						throw new PostconditionError("La présence d'un item à été modifié dans la cellule (" + i + "," + j + ")"
+//								+ " alors que la cellule cible est (" + x + "," + y +").");
 				}
 			}
 	}

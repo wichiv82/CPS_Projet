@@ -1,11 +1,12 @@
 package decorators;
 
+import contracts.ScreenContract;
 import services.Cell;
 import services.EditableScreenService;
 import services.EnvironmentService;
 import services.Paire;
 
-public class EnvironmentDecorator extends ScreenDecorator implements EnvironmentService{
+public class EnvironmentDecorator extends ScreenContract implements EnvironmentService{
 
 	public EnvironmentDecorator(EnvironmentService delegate) {
 		// TODO Auto-generated constructor stub
@@ -19,7 +20,7 @@ public class EnvironmentDecorator extends ScreenDecorator implements Environment
 	@Override
 	public void init(EditableScreenService e) {
 		// TODO Auto-generated method stub
-		
+		getDelegate().init(e);
 	}
 	
 	@Override
