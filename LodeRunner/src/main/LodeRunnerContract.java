@@ -19,7 +19,7 @@ public class LodeRunnerContract extends LodeRunnerContractMain{
 	
 	
 	public static void main(String[] args) {
-		int niveau = 2;
+		int niveau = 1;
 		int life = 3;
 		
 		while (niveau <= 5) {

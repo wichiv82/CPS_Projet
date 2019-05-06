@@ -32,6 +32,25 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 	@Override
 	public Move getBehaviour() {
 		// TODO Auto-generated method stub
+		switch(engine.nextCommand()) {
+			case RIGHT:
+				behaviour = Move.RIGHT;
+				break;
+			case LEFT:
+				behaviour = Move.LEFT;
+				break;
+			case UP:
+				behaviour = Move.UP;
+				break;
+			case DOWN:
+				behaviour = Move.DOWN;
+				break;
+			case NEUTRAL:
+				behaviour = Move.NEUTRAL;
+				break;
+			default :
+				break;
+		}
 		return behaviour;
 	}
 
@@ -64,7 +83,6 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 				
 			}	
 		}
-		
 	}
 
 	@Override
@@ -101,7 +119,18 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 	@Override
 	public void step() {
 		// TODO Auto-generated method stub
+		if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.EMP &&
+				engine.getEnvi().cellContent(getWidth(), getHeight()-1).getCharacter() == null &&
+				(engine.getEnvi().cellNature(getWidth(), getHeight()-1) ==  Cell.EMP
+				|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HDR
+				|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HOL)) {
+			
+			goDown();
+			
+			return;
+		}
 		
+		getBehaviour();
 	}
 
 }

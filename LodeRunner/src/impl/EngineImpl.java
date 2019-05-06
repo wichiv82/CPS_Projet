@@ -149,31 +149,7 @@ public class EngineImpl implements EngineService {
 	@Override
 	public void step() {
 		// TODO Auto-generated method stub
-		for (int i=0; i<guards.size(); i++) {
-			int xguard = guards.get(i).getWidth();
-			int yguard = guards.get(i).getHeight();
-			
-			if(player.getWidth() == xguard && player.getHeight() == yguard) {
-				status = Status.LOSS;
-				life--;
-				return;
-			}
-				
-		}
 		
-		for (int i=0; i< treasures.size(); i++) {
-			if (treasures.get(i).getHeight() == player.getHeight() && treasures.get(i).getColumn() == player.getWidth()) {
-				envi.cellContent(treasures.get(i).getColumn(), treasures.get(i).getHeight() ).removeItem();
-				treasures.remove(i);
-				score++;
-				break;
-			}
-		}
-		
-		if (treasures.size() == 0) {
-			status = Status.WIN;
-			return;
-		}
 		
 		int xplayer = player.getWidth();
 		int yplayer = player.getHeight();
@@ -228,9 +204,35 @@ public class EngineImpl implements EngineService {
 			}
 		}
 		
+		for (int i=0; i<guards.size(); i++) {
+			int xguard = guards.get(i).getWidth();
+			int yguard = guards.get(i).getHeight();
+			
+			if(player.getWidth() == xguard && player.getHeight() == yguard) {
+				status = Status.LOSS;
+				life--;
+				return;
+			}
+				
+		}
+		
 		if(envi.cellNature(xplayer, yplayer) == Cell.PLT) {
 			status = Status.LOSS;
 			life--;
+			return;
+		}
+		
+		for (int i=0; i< treasures.size(); i++) {
+			if (treasures.get(i).getHeight() == player.getHeight() && treasures.get(i).getColumn() == player.getWidth()) {
+				envi.cellContent(treasures.get(i).getColumn(), treasures.get(i).getHeight() ).removeItem();
+				treasures.remove(i);
+				score++;
+				break;
+			}
+		}
+		
+		if (treasures.size() == 0) {
+			status = Status.WIN;
 			return;
 		}
 		
