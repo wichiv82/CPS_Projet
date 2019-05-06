@@ -23,13 +23,15 @@ public class GuardContract extends GuardDecorator {
 	
 	
 	public void init(ScreenService s, int x, int y, int id, CharacterService target) {
-		super.init(s, x, y);
+		super.init(s, x, y, id, target);
 		checkInvariants();
 		
 		if(!(getId() == id))
 			throw new PostconditionError("L'ID du Garde est " + id + " au lieu de " + getId() + ".");
+		if(getTarget() == null)
+			throw new PostconditionError("La target n'a pas été enregistrée.");
 		if(!(getTarget().equals(target)))
-			throw new PostconditionError("La target s'est mal initialisée");
+			throw new PostconditionError("La target s'est mal initialisée.");
 		if(!(getPosInit().getX() == x && getPosInit().getY() == y))
 			throw new PostconditionError("La position initial a mal été enregistré en "
 					+ "(" + getPosInit().getX() + "," + getPosInit().getY() + ") au lieu de "
