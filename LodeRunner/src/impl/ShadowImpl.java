@@ -3,6 +3,7 @@ package impl;
 import services.Cell;
 import services.EngineService;
 import services.Move;
+import services.ScreenService;
 import services.ShadowService;
 
 public class ShadowImpl extends CharacterImpl implements ShadowService {
@@ -10,6 +11,10 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 	private EngineService engine;
 	private Move behaviour;
 	private int timeInHole;
+	
+	public void init(ScreenService s, int x, int y) {
+		super.init(s, x, y);
+	}
 	
 	@Override
 	public int getTimeInHole() {
@@ -65,7 +70,6 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 					case EMP:
 					case LAD:
 					case HDR:
-						// FAIRE MONTER LE GARDE A GAUCHE
 						engine.getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
 						getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
 						
@@ -96,7 +100,6 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 					case EMP:
 					case LAD:
 					case HDR:
-						// FAIRE MONTER LE GARDE A DROITE
 						engine.getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
 						getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
 						
@@ -111,7 +114,6 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 					default:
 						break;
 				}
-				
 			}	
 		}
 	}
@@ -131,6 +133,67 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 		}
 		
 		getBehaviour();
+		
+		if (engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL){
+			timeInHole++;
+			if(timeInHole >= 5){
+				if(behaviour == Move.RIGHT &&
+					(engine.getEnvi().cellNature(getWidth()+1, getHeight()) == Cell.MTL 
+					|| engine.getEnvi().cellNature(getWidth()+1, getHeight()) == Cell.PLT
+					|| getEnvi().cellContent(getWidth()+1, getHeight()).getCharacter() != null)) { 
+					 switch(engine.getEnvi().cellNature(getWidth()+1, getHeight()+1)) {
+					 	case HOL:
+					 	case HDR:
+					 	case LAD:
+					 	case EMP:
+					 		climbRight();
+					 		return;
+					 	default:
+					 		break;
+					 }
+				}else if(behaviour == Move.LEFT  &&
+					(engine.getEnvi().cellNature(getWidth()-1, getHeight()) == Cell.MTL 
+					|| engine.getEnvi().cellNature(getWidth()-1, getHeight()) == Cell.PLT
+					|| getEnvi().cellContent(getWidth()-1, getHeight()).getCharacter() != null)) { 
+					switch(engine.getEnvi().cellNature(getWidth()-1, getHeight()+1)) {
+						case HOL:
+						case HDR:
+						case LAD:
+						case EMP:
+							climbLeft();
+						 	return;
+						default:
+						 	break;
+					}
+				}
+			}
+		}
+		
+		
+		switch(behaviour) {
+		case LEFT:
+			if (engine.getEnvi().cellContent(width-1, height).getCharacter() == engine.getPlayer())
+				return;
+			goLeft();
+			break;
+		case RIGHT:
+			if (engine.getEnvi().cellContent(width+1, height).getCharacter() == engine.getPlayer())
+				return;
+			goRight();
+			break;
+		case UP:
+			if (engine.getEnvi().cellContent(width, height+1).getCharacter() == engine.getPlayer())
+				return;
+			goUp();
+			break;
+		case DOWN:
+			if (engine.getEnvi().cellContent(width, height-1).getCharacter() == engine.getPlayer())
+				return;
+			goDown();
+			break;
+		default:
+			break;
+		}
 	}
 
 }

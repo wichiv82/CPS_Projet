@@ -18,14 +18,17 @@ import services.ItemService;
 import services.ItemType;
 import services.Paire;
 import services.PlayerService;
+import services.ShadowService;
 import services.Status;
 
 public class EngineImpl implements EngineService {
 	private PlayerService player;
 	private int life;
 	private int score;
+	private Point spawn;
 	private ArrayList<GuardService> guards;
 	private ArrayList<ItemService> treasures;
+	private ShadowService shadow;
 	
 	private EnvironmentService envi;
 	private int[][] holes;
@@ -58,6 +61,7 @@ public class EngineImpl implements EngineService {
 		else this.player = new PlayerImpl();
 		this.player.init(e, player.x, player.y);
 		envi.setCellContent(player.x, player.y, new Paire(this.player, null));
+		spawn = player;
 		
 		ItemService t;
 		for(int i=0; i<treasures.size(); i++) {
@@ -150,7 +154,6 @@ public class EngineImpl implements EngineService {
 	public void step() {
 		// TODO Auto-generated method stub
 		
-		
 		int xplayer = player.getWidth();
 		int yplayer = player.getHeight();
 
@@ -204,6 +207,20 @@ public class EngineImpl implements EngineService {
 			}
 		}
 		
+		if(shadow != null) {
+			shadow.step();
+			for (int i=0; i<guards.size(); i++) {
+				int xguard = guards.get(i).getWidth();
+				int yguard = guards.get(i).getHeight();
+				
+				if(shadow.getWidth() == xguard && shadow.getHeight() == yguard) {
+					
+					break;
+				}
+			
+			}
+		}
+		
 		for (int i=0; i<guards.size(); i++) {
 			int xguard = guards.get(i).getWidth();
 			int yguard = guards.get(i).getHeight();
@@ -213,7 +230,6 @@ public class EngineImpl implements EngineService {
 				life--;
 				return;
 			}
-				
 		}
 		
 		if(envi.cellNature(xplayer, yplayer) == Cell.PLT) {
@@ -227,6 +243,12 @@ public class EngineImpl implements EngineService {
 				envi.cellContent(treasures.get(i).getColumn(), treasures.get(i).getHeight() ).removeItem();
 				treasures.remove(i);
 				score++;
+				
+				if (shadow == null && envi.cellContent(spawn.x, spawn.y).getCharacter() == null) {
+					shadow = new ShadowImpl();
+					shadow.init(envi, spawn.x, spawn.y);
+				}
+				
 				break;
 			}
 		}
