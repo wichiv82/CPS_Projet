@@ -61,6 +61,7 @@ public class CharacterImpl implements CharacterService{
 								break;
 							case EMP:
 								switch(getEnvi().cellNature(getWidth(), getHeight() - 1)) {
+									case EMP:
 									case HOL:
 										if(getEnvi().cellContent(getWidth(), getHeight() - 1).getCharacter() != null) {
 											break;
@@ -100,6 +101,7 @@ public class CharacterImpl implements CharacterService{
 								break;
 							case EMP:
 								switch(getEnvi().cellNature(getWidth(), getHeight() - 1)) {
+									case EMP:
 									case HOL:
 										if(getEnvi().cellContent(getWidth(), getHeight() - 1).getCharacter() != null) {
 											break;

@@ -202,7 +202,7 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 		
 		if (engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL){
 			timeInHole++;
-			if(timeInHole >= 25){
+			if(timeInHole >= 5){
 				if(getWidth() < target.getWidth() &&
 					(engine.getEnvi().cellNature(getWidth()+1, getHeight()) == Cell.MTL 
 					|| engine.getEnvi().cellNature(getWidth()+1, getHeight()) == Cell.PLT
@@ -232,6 +232,7 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 						 	break;
 					}
 				}
+				return;
 			}
 		}
 		

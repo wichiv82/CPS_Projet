@@ -174,22 +174,22 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 		
 		switch(behaviour) {
 		case LEFT:
-			if (engine.getEnvi().cellContent(width-1, height).getCharacter() == engine.getPlayer())
+			if (width > 0 && engine.getEnvi().cellContent(width-1, height).getCharacter() == engine.getPlayer())
 				return;
 			goLeft();
 			break;
 		case RIGHT:
-			if (engine.getEnvi().cellContent(width+1, height).getCharacter() == engine.getPlayer())
+			if (width < envi.getWidth()-1 && engine.getEnvi().cellContent(width+1, height).getCharacter() == engine.getPlayer())
 				return;
 			goRight();
 			break;
 		case UP:
-			if (engine.getEnvi().cellContent(width, height+1).getCharacter() == engine.getPlayer())
+			if (height < envi.getHeight()-1 && engine.getEnvi().cellContent(width, height+1).getCharacter() == engine.getPlayer())
 				return;
 			goUp();
 			break;
 		case DOWN:
-			if (engine.getEnvi().cellContent(width, height-1).getCharacter() == engine.getPlayer())
+			if (height > 0 && engine.getEnvi().cellContent(width, height-1).getCharacter() == engine.getPlayer())
 				return;
 			goDown();
 			break;
@@ -207,12 +207,26 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 	@Override
 	public void setAlive(boolean a) {
 		// TODO Auto-generated method stub
-		if(a && !alive && envi.cellContent(getWidth(), getHeight()).getCharacter() == null) {
+		if(a && !alive && engine.getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == null) {
 			alive = a;
-			envi.cellContent(getWidth(), getHeight()).setCharacter(this);;
+			envi.cellContent(getWidth(), getHeight()).setCharacter(this);
+			engine.getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
+			engine.getPlayer().getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
+			
+			for(int i=0; i<engine.getGuards().size(); i++)
+				engine.getGuards().get(i).getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
+				
+			System.out.println("Multiclonage");
 		}else if(!a) {
 			alive = a;
-			envi.cellContent(getWidth(), getHeight()).removeCharacter();
+			envi.cellContent(getWidth(), getHeight()).removeCharacter();;
+			engine.getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
+			engine.getPlayer().getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
+			
+			for(int i=0; i<engine.getGuards().size(); i++)
+				engine.getGuards().get(i).getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
+			
+			System.out.println("Pouf");
 		}
 	}
 

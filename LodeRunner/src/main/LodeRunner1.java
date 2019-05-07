@@ -14,13 +14,11 @@ public class LodeRunner1 extends LodeRunnerMain{
 		// TODO Auto-generated constructor stub
 	}
 	
-	
-	
 	public static void main(String[] args) {
-		int niveau = 2;
-		int life = 3;
+		int niveau = 3;
+		int life = 1000;
 		
-		while (niveau <= 5) {
+		while (niveau <= 6) {
 			EditableScreenImpl e = new EditableScreenImpl();
 			
 			ArrayList<String[][]> fileInfos = readFile("levels/level" + niveau +".txt");

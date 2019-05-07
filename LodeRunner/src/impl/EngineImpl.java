@@ -51,7 +51,7 @@ public class EngineImpl implements EngineService {
 		holes = new int[e.getWidth()][e.getHeight()];
 		for(int i=0; i<e.getWidth(); i++)
 			for(int j=0; j<e.getHeight(); j++)
-				holes[i][j] = 16;
+				holes[i][j] = 11;
 		
 		this.guards = new ArrayList<GuardService>();
 		this.treasures = new ArrayList<ItemService>();
@@ -60,7 +60,8 @@ public class EngineImpl implements EngineService {
 			this.player = new PlayerContract(new PlayerImpl());
 		else this.player = new PlayerImpl();
 		this.player.init(e, player.x, player.y);
-		envi.setCellContent(player.x, player.y, new Paire(this.player, null));
+		//envi.setCellContent(player.x, player.y, new Paire(this.player, null));
+		envi.cellContent(player.x, player.y).setCharacter(this.player);
 		spawn = player;
 		
 		ItemService t;
@@ -70,7 +71,8 @@ public class EngineImpl implements EngineService {
 			else t = new ItemImpl();
 			t.init(i, ItemType.TREASURE, treasures.get(i).x, treasures.get(i).y);
 			this.treasures.add(t);
-			envi.setCellContent(treasures.get(i).x, treasures.get(i).y, new Paire(null, t));
+			//envi.setCellContent(treasures.get(i).x, treasures.get(i).y, new Paire(null, t));
+			envi.cellContent(treasures.get(i).x, treasures.get(i).y).setItem(t);
 		}
 		
 		GuardService g;
@@ -81,7 +83,8 @@ public class EngineImpl implements EngineService {
 			g.init(e, guards.get(i).x, guards.get(i).y, i, this.player); // TOUS LES GARDES PORTENT UN TRESOR A L'HEURE ACTUELLE !!!
 			g.setEngine(this);
 			this.guards.add(g);
-			envi.setCellContent(guards.get(i).x, guards.get(i).y, new Paire(this.guards.get(i),null));
+			//envi.setCellContent(guards.get(i).x, guards.get(i).y, new Paire(this.guards.get(i),null));
+			envi.cellContent(guards.get(i).x, guards.get(i).y).setCharacter(this.guards.get(i));
 		}
 		
 		command = Command.NEUTRAL;
@@ -206,7 +209,7 @@ public class EngineImpl implements EngineService {
 		for (int i=0; i<holes.length; i++) {
 			for (int j=0; j<holes[i].length; j++){
 				holes[i][j]++;
-				if(holes[i][j] == 15) {
+				if(holes[i][j] == 10) {
 					System.out.println("Un trou a été bouché");
 					envi.fill(i, j);
 					player.getEnvi().fill(i, j);
@@ -219,13 +222,47 @@ public class EngineImpl implements EngineService {
 			}
 		}
 		
-		if(!shadow.isAlive()) {
+		if(shadow.isAlive()) {
+			int xshadow = shadow.getWidth();
+			int yshadow = shadow.getHeight();
+			
+			envi.cellContent(xshadow, yshadow).removeCharacter();
+			player.getEnvi().cellContent(xshadow, yshadow).removeCharacter();
+			for(int i=0; i<guards.size(); i++)
+				guards.get(i).getEnvi().cellContent(xshadow, yshadow).removeCharacter();
+			
 			shadow.step();
+			System.out.println("Clone : "+shadow.getWidth()+" " + shadow.getHeight());
+			
+			xshadow = shadow.getWidth();
+			yshadow = shadow.getHeight();
+			
+			envi.cellContent(xshadow, yshadow).setCharacter(shadow);
+			player.getEnvi().cellContent(xshadow, yshadow).setCharacter(shadow);
+			
 			for (int i=0; i<guards.size(); i++) {
 				int xguard = guards.get(i).getWidth();
 				int yguard = guards.get(i).getHeight();
 				
+				guards.get(i).getEnvi().cellContent(xshadow, yshadow).setCharacter(shadow);
+				
 				if(shadow.getWidth() == xguard && shadow.getHeight() == yguard) {
+					ItemService itemGardeMort = guards.get(i).getItem();
+					
+					if(guards.get(i).hasItem()) {
+						
+						if (envi.cellContent(xguard, yguard).getItem() == null) {
+							envi.cellContent(xguard, yguard).setItem(itemGardeMort);
+							player.getEnvi().cellContent(xguard, yguard).setItem(itemGardeMort);
+							for (int j=0; j<guards.size(); j++) 
+								guards.get(j).getEnvi().cellContent(xguard, yguard).setItem(itemGardeMort);
+						}else{
+							treasures.remove(itemGardeMort);
+							score++;
+						}
+						
+					}
+					
 					guards.remove(i);
 					shadow.setAlive(false);
 					break;
@@ -257,9 +294,10 @@ public class EngineImpl implements EngineService {
 				treasures.remove(i);
 				score++;
 				
-				if(!shadow.isAlive() && guards.size() > 0)
+				if(!shadow.isAlive() && guards.size() > 0) {
 					shadow.setAlive(true);
-				
+					System.out.println("Apparition d'une ombre !!! ");
+				}
 				break;
 			}
 		}
