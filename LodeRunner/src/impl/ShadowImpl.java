@@ -11,9 +11,11 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 	private EngineService engine;
 	private Move behaviour;
 	private int timeInHole;
+	private boolean alive;
 	
 	public void init(ScreenService s, int x, int y) {
 		super.init(s, x, y);
+		alive = false;
 	}
 	
 	@Override
@@ -193,6 +195,24 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 			break;
 		default:
 			break;
+		}
+	}
+
+	@Override
+	public boolean isAlive() {
+		// TODO Auto-generated method stub
+		return alive;
+	}
+
+	@Override
+	public void setAlive(boolean a) {
+		// TODO Auto-generated method stub
+		if(a && !alive && envi.cellContent(getWidth(), getHeight()).getCharacter() == null) {
+			alive = a;
+			envi.cellContent(getWidth(), getHeight()).setCharacter(this);;
+		}else if(!a) {
+			alive = a;
+			envi.cellContent(getWidth(), getHeight()).removeCharacter();
 		}
 	}
 

@@ -8,6 +8,10 @@ public interface ShadowService extends CharacterService{
 	
 	public EngineService getEngine();
 	
+	public boolean isAlive();
+	
+	public void setAlive(boolean a);
+	
 	public void setEngine(EngineService engine);
 	
 	public Move getBehaviour();

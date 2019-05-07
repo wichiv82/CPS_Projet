@@ -112,6 +112,9 @@ public class LodeRunnerMain {
 			else
 				res[g.getWidth()][g.getHeight()] = "g";
 		
+		if(engine.getShadow().isAlive())
+			res[engine.getShadow().getWidth()][engine.getShadow().getHeight()] = "C";
+		
 		res[engine.getPlayer().getWidth()][engine.getPlayer().getHeight()] = "O";
 		
 		for(int j=res[0].length-1; j>=0; j--){

@@ -17,6 +17,8 @@ public interface EngineService {
 	
 	public ArrayList<ItemService> getTreasures();
 	
+	public ShadowService getShadow();
+	
 	public Status getStatus();
 	
 	public int[][] getHoles();

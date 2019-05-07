@@ -11,6 +11,7 @@ import services.EnvironmentService;
 import services.GuardService;
 import services.ItemService;
 import services.PlayerService;
+import services.ShadowService;
 import services.Status;
 
 public class EngineDecorator implements EngineService{
@@ -97,6 +98,12 @@ public class EngineDecorator implements EngineService{
 	public void setCommand(Command m) {
 		// TODO Auto-generated method stub
 		delegate.setCommand(m);
+	}
+
+	@Override
+	public ShadowService getShadow() {
+		// TODO Auto-generated method stub
+		return getDelegate().getShadow();
 	}
 
 }

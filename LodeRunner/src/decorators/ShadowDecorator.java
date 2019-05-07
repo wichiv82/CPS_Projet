@@ -58,4 +58,16 @@ public class ShadowDecorator extends CharacterDecorator implements ShadowService
 		
 	}
 
+	@Override
+	public boolean isAlive() {
+		// TODO Auto-generated method stub
+		return getDelegate().isAlive();
+	}
+
+	@Override
+	public void setAlive(boolean a) {
+		// TODO Auto-generated method stub
+		getDelegate().setAlive(a);
+	}
+
 }

@@ -88,8 +88,14 @@ public class EngineImpl implements EngineService {
 		status = Status.PLAYING;
 		
 		this.player.setEngine(this);
+		
+		this.shadow = new ShadowImpl();
+		this.shadow.init(e, spawn.x, spawn.y);
+		this.shadow.setEngine(this);
+		
 		this.life = 3;
 		this.score = 0;
+		
 	}
 	
 	public int getLife() {
@@ -126,6 +132,12 @@ public class EngineImpl implements EngineService {
 			if (i.getNature() == ItemType.TREASURE)
 				tresors.add(i);*/
 		return treasures;
+	}
+	
+	@Override
+	public ShadowService getShadow() {
+		// TODO Auto-generated method stub
+		return shadow;
 	}
 	
 	@Override
@@ -207,14 +219,15 @@ public class EngineImpl implements EngineService {
 			}
 		}
 		
-		if(shadow != null) {
+		if(!shadow.isAlive()) {
 			shadow.step();
 			for (int i=0; i<guards.size(); i++) {
 				int xguard = guards.get(i).getWidth();
 				int yguard = guards.get(i).getHeight();
 				
 				if(shadow.getWidth() == xguard && shadow.getHeight() == yguard) {
-					
+					guards.remove(i);
+					shadow.setAlive(false);
 					break;
 				}
 			
@@ -244,20 +257,19 @@ public class EngineImpl implements EngineService {
 				treasures.remove(i);
 				score++;
 				
-				if (shadow == null && envi.cellContent(spawn.x, spawn.y).getCharacter() == null) {
-					shadow = new ShadowImpl();
-					shadow.init(envi, spawn.x, spawn.y);
-				}
+				if(!shadow.isAlive() && guards.size() > 0)
+					shadow.setAlive(true);
 				
 				break;
 			}
 		}
 		
-		if (treasures.size() == 0) {
+		if (treasures.size() == 0 && guards.size() == 0) {
 			status = Status.WIN;
 			return;
 		}
 		
 	}
+
 	
 }
