@@ -37,6 +37,12 @@ public class CharacterContract extends CharacterDecorator {
 		super.init(s, x, y);
 		checkInvariants();
 		
+		if(!(getWidth() == x && getHeight() == y))
+			throw new PostconditionError("Position (" + getWidth() + "," + getHeight() + ")"
+					+ " not (" + x + "," + y + ")");
+		if(getEnvi() == null)
+			throw new PostconditionError("ScreenService not initialize");
+		
 	}
 	
 	public void goLeft() {

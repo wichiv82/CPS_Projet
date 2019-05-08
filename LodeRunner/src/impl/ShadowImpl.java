@@ -63,6 +63,7 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 
 	@Override
 	public void climbLeft() {
+		System.out.println(getHeight() + " " + getEnvi());
 		// TODO Auto-generated method stub
 		if(getWidth()>0 && getHeight()<engine.getEnvi().getHeight()-1){
 			if(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL &&

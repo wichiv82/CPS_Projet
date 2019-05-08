@@ -181,7 +181,7 @@ public class EngineTest extends MyTest{
 		engine.init(edit, player, guards, treasures);
 		treasures.clear();guards.clear();
 		engine.setCommand(Command.RIGHT);
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 5; i++)
 			engine.step();
 		if(!(engine.getStatus() == Status.WIN))
 			Assert.fail();

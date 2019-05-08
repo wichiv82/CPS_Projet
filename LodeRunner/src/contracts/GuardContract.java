@@ -128,35 +128,24 @@ public class GuardContract extends GuardDecorator {
 			}
 		}
 			
-		if(getEnvi().cellNature(x_atPre, y_atPre) == Cell.HOL)
-			if(getWidth() > 0 && getHeight() < getEnvi().getHeight() - 1)
-				if(getEnvi().cellContent(x_atPre, y_atPre + 1).getCharacter() == null)
-					switch(getEnvi().cellNature(x_atPre, y_atPre + 1)) {
-						case EMP:
-						case HDR:
-						case HOL:
-						case LAD:
-							switch(getEnvi().cellNature(x_atPre - 1, y_atPre)) {
-								case EMP:
-									break;
-								case HOL:
-									if(getEnvi().cellContent(x_atPre - 1, y_atPre).getCharacter() == null)
-										break;
-								default:
-									switch(getEnvi().cellNature(x_atPre - 1, y_atPre + 1)) {
-										case MTL:
-										case PLT:
-											break;
-										default:
-											if(!(getHeight() == y_atPre + 1))
-												throw new PostconditionError("Le Guard s'est déplacé en "
-														+ "(" + getWidth() + "," + getHeight() + ") au lieu d'aller en "
-														+ "(" + x_atPre + "," + (y_atPre + 1) + ") pour sortir d'un HOL");
-									}
-							}
-							
-						default:
-						}
+		if(getWidth()>0 && getHeight()<getEngine().getEnvi().getHeight()-1){
+			if(getEngine().getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL &&
+				getEngine().getEnvi().cellContent(getWidth(), getHeight()+1).getCharacter() == null &&
+				getEngine().getEnvi().cellContent(getWidth()-1, getHeight()+1).getCharacter() == null){
+				switch(getEngine().getEnvi().cellNature(getWidth()-1, getHeight()+1)){
+					case EMP:
+					case LAD:
+					case HDR:
+						if(!(getHeight() == y_atPre + 1))
+							throw new PostconditionError("Le Guard s'est déplacé en "
+									+ "(" + getWidth() + "," + getHeight() + ") au lieu d'aller en "
+									+ "(" + x_atPre + "," + (y_atPre + 1) + ") pour sortir d'un HOL");
+						break;
+					default:
+				}
+				
+			}	
+		}
 	}
 	
 	public void climbRight() {
@@ -215,35 +204,24 @@ public class GuardContract extends GuardDecorator {
 			}
 		}
 			
-		if(getEnvi().cellNature(x_atPre, y_atPre) == Cell.HOL)
-			if(getWidth() < getEnvi().getWidth() - 1 && getHeight() < getEnvi().getHeight() - 1)
-				if(getEnvi().cellContent(x_atPre, y_atPre + 1).getCharacter() == null)
-					switch(getEnvi().cellNature(x_atPre, y_atPre + 1)) {
-						case EMP:
-						case HDR:
-						case HOL:
-						case LAD:
-							switch(getEnvi().cellNature(x_atPre + 1, y_atPre)) {
-								case EMP:
-									break;
-								case HOL:
-									if(getEnvi().cellContent(x_atPre + 1, y_atPre).getCharacter() == null)
-										break;
-								default:
-									switch(getEnvi().cellNature(x_atPre + 1, y_atPre + 1)) {
-										case MTL:
-										case PLT:
-											break;
-										default:
-											if(!(getHeight() == y_atPre + 1))
-												throw new PostconditionError("Le Guard s'est déplacé en "
-														+ "(" + getWidth() + "," + getHeight() + ") au lieu d'aller en "
-														+ "(" + x_atPre + "," + (y_atPre + 1) + ") pour sortir d'un HOL");
-									}
-							}
-							
-						default:
-						}
+		if(getWidth()<getEngine().getEnvi().getWidth()-1 && getHeight()<getEngine().getEnvi().getHeight()-1){
+			if(getEngine().getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL &&
+					getEngine().getEnvi().cellContent(getWidth(), getHeight()+1).getCharacter() == null &&
+							getEngine().getEnvi().cellContent(getWidth()+1, getHeight()+1).getCharacter() == null){
+				switch(getEngine().getEnvi().cellNature(getWidth()+1, getHeight()+1)){
+					case EMP:
+					case LAD:
+					case HDR:
+						if(!(getHeight() == y_atPre + 1))
+							throw new PostconditionError("Le Guard s'est déplacé en "
+									+ "(" + getWidth() + "," + getHeight() + ") au lieu d'aller en "
+									+ "(" + x_atPre + "," + (y_atPre + 1) + ") pour sortir d'un HOL");
+						break;
+					default:
+				}
+				
+			}	
+		}
 	}
 	
 	public void removeItem() {

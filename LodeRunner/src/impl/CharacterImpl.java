@@ -63,7 +63,7 @@ public class CharacterImpl implements CharacterService{
 									case EMP:
 									case HOL:
 										if(getEnvi().cellContent(getWidth(), getHeight() - 1).getCharacter() == null) {
-											System.out.println("FAIT RIEN");
+//											System.out.println("FAIT RIEN");
 											break;
 										}
 									case PLT:
@@ -104,7 +104,7 @@ public class CharacterImpl implements CharacterService{
 									case EMP:
 									case HOL:
 										if(getEnvi().cellContent(getWidth(), getHeight() - 1).getCharacter() == null) {
-											System.out.println("FAIT RIEN");
+//											System.out.println("FAIT RIEN");
 											break;
 										}
 									case PLT:

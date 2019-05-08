@@ -111,6 +111,7 @@ public class GuardTest extends MyTest{
 //		Assert.fail();
 	}
 	
+	@Test
 	public void climb_valide() {
 		edit.init(3,3);
 		for(int i = 0; i < 3; i++) {
