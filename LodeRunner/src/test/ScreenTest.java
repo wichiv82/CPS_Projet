@@ -6,12 +6,13 @@ import org.junit.Test;
 import contracts.PreconditionError;
 import contracts.ScreenContract;
 import impl.ScreenImpl;
+import services.Cell;
 import services.ScreenService;
 
 public class ScreenTest extends MyTest{
 
 	private ScreenService screen = new ScreenContract(new ScreenImpl());
-
+	
 	/* public void init(int w, int h) */
 	
 	public ScreenTest() {
@@ -47,4 +48,6 @@ public class ScreenTest extends MyTest{
 			return;
 		}Assert.fail();
 	}
+	
+	
 }

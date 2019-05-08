@@ -112,7 +112,7 @@ public class GuardTest extends MyTest{
 	}
 	
 	@Test
-	public void climb_valide() {
+	public void climbL_valide() {
 		edit.init(7,3);
 		for(int i = 0; i < 7; i++) {
 			edit.setNature(i, 0, Cell.MTL);
@@ -133,7 +133,22 @@ public class GuardTest extends MyTest{
 				engine.getGuards().get(0).climbLeft();
 				edit.setNature(2, 1, Cell.PLT);
 				edit.setNature(2, 2, Cell.EMP);
-				
+			}
+	}
+	
+	@Test
+	public void climbR_valide() {
+		edit.init(7,3);
+		for(int i = 0; i < 7; i++) {
+			edit.setNature(i, 0, Cell.MTL);
+			edit.setNature(i, 1, Cell.PLT);
+		}
+		edit.setNature(0,1,Cell.EMP);
+		guards.add(new Point(3,2));
+		guards.add(new Point(0,1));
+		Point player = new Point(5,2);
+		for(Cell c1 : Cell.values())
+			for(Cell c2 : Cell.values()) {				
 				edit.setNature(4, 1, c1);
 				edit.setNature(4, 2, c2);
 				engine = new EngineContract(new EngineImpl(true));
