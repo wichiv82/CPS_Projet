@@ -4,7 +4,6 @@ import decorators.PlayerDecorator;
 import services.Cell;
 import services.EngineService;
 import services.PlayerService;
-import services.ScreenService;
 
 public class PlayerContract extends PlayerDecorator {
 

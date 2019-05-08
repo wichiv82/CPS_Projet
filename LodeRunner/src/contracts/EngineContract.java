@@ -1,18 +1,14 @@
 package contracts;
 
 import java.awt.Point;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import decorators.EngineDecorator;
 import services.Command;
 import services.EditableScreenService;
 import services.EngineService;
-import services.EnvironmentService;
 import services.GuardService;
-import services.ItemService;
-import services.PlayerService;
-import services.Status;
 
 public class EngineContract extends EngineDecorator{
 

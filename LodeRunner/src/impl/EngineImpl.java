@@ -16,7 +16,6 @@ import services.EnvironmentService;
 import services.GuardService;
 import services.ItemService;
 import services.ItemType;
-import services.Paire;
 import services.PlayerService;
 import services.ShadowService;
 import services.Status;
@@ -60,7 +59,6 @@ public class EngineImpl implements EngineService {
 			this.player = new PlayerContract(new PlayerImpl());
 		else this.player = new PlayerImpl();
 		this.player.init(e, player.x, player.y);
-		//envi.setCellContent(player.x, player.y, new Paire(this.player, null));
 		envi.cellContent(player.x, player.y).setCharacter(this.player);
 		spawn = player;
 		
@@ -71,7 +69,6 @@ public class EngineImpl implements EngineService {
 			else t = new ItemImpl();
 			t.init(i, ItemType.TREASURE, treasures.get(i).x, treasures.get(i).y);
 			this.treasures.add(t);
-			//envi.setCellContent(treasures.get(i).x, treasures.get(i).y, new Paire(null, t));
 			envi.cellContent(treasures.get(i).x, treasures.get(i).y).setItem(t);
 		}
 		
@@ -80,10 +77,9 @@ public class EngineImpl implements EngineService {
 			if(contract)
 				g = new GuardContract(new GuardImpl());
 			else g = new GuardImpl();
-			g.init(e, guards.get(i).x, guards.get(i).y, i, this.player); // TOUS LES GARDES PORTENT UN TRESOR A L'HEURE ACTUELLE !!!
+			g.init(e, guards.get(i).x, guards.get(i).y, i, this.player);
 			g.setEngine(this);
 			this.guards.add(g);
-			//envi.setCellContent(guards.get(i).x, guards.get(i).y, new Paire(this.guards.get(i),null));
 			envi.cellContent(guards.get(i).x, guards.get(i).y).setCharacter(this.guards.get(i));
 		}
 		
@@ -130,10 +126,6 @@ public class EngineImpl implements EngineService {
 	@Override
 	public ArrayList<ItemService> getTreasures() {
 		// TODO Auto-generated method stub
-		/*ArrayList<ItemService> tresors = new ArrayList<ItemService>();
-		for (ItemService i : treasures)
-			if (i.getNature() == ItemType.TREASURE)
-				tresors.add(i);*/
 		return treasures;
 	}
 	
@@ -209,7 +201,6 @@ public class EngineImpl implements EngineService {
 			for (int j=0; j<holes[i].length; j++){
 				holes[i][j]++;
 				if(holes[i][j] == 10) {
-//					System.out.println("Un trou a été bouché");
 					envi.fill(i, j);
 					player.getEnvi().fill(i, j);
 					ArrayList<Integer> kill = new ArrayList<>(); 
@@ -238,7 +229,6 @@ public class EngineImpl implements EngineService {
 				guards.get(i).getEnvi().cellContent(xshadow, yshadow).removeCharacter();
 			
 			shadow.step();
-//			System.out.println("Clone : "+shadow.getWidth()+" " + shadow.getHeight());
 			
 			xshadow = shadow.getWidth();
 			yshadow = shadow.getHeight();
@@ -298,7 +288,6 @@ public class EngineImpl implements EngineService {
 				
 				if(!shadow.isAlive()) {
 					shadow.setAlive(true);
-//					System.out.println("Apparition d'une ombre !!! ");
 				}
 				break;
 			}
@@ -311,5 +300,4 @@ public class EngineImpl implements EngineService {
 		
 	}
 
-	
 }

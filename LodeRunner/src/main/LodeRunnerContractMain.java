@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Point;
 
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -9,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import contracts.EngineContract;
-import impl.EditableScreenImpl;
 import impl.EngineImpl;
 import services.Command;
 import services.EditableScreenService;

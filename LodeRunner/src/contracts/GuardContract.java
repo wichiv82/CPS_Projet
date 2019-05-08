@@ -1,6 +1,5 @@
 package contracts;
 
-import java.util.ArrayList;
 
 import decorators.GuardDecorator;
 import services.Cell;

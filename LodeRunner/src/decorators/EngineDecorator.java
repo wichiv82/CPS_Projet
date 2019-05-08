@@ -2,7 +2,6 @@ package decorators;
 
 import java.awt.Point;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import services.Command;
 import services.EditableScreenService;

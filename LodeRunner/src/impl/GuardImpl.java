@@ -122,7 +122,6 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 					case EMP:
 					case LAD:
 					case HDR:
-						// FAIRE MONTER LE GARDE A GAUCHE
 						engine.getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
 						getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
 						
@@ -151,7 +150,6 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 					case EMP:
 					case LAD:
 					case HDR:
-						// FAIRE MONTER LE GARDE A DROITE
 						engine.getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
 						getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
 						

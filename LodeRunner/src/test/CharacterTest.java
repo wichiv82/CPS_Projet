@@ -1,22 +1,18 @@
 package test;
 
 import org.junit.Assert;
+
 import org.junit.Test;
 
 import contracts.CharacterContract;
 import contracts.EditableScreenContract;
 import contracts.InvariantError;
-import contracts.PlayerContract;
 import contracts.PreconditionError;
 import impl.CharacterImpl;
 import impl.EditableScreenImpl;
-import impl.PlayerImpl;
-import junit.framework.TestCase;
 import services.Cell;
 import services.CharacterService;
 import services.EditableScreenService;
-import services.EnvironmentService;
-import services.PlayerService;
 
 public class CharacterTest extends MyTest{
 

@@ -1,10 +1,9 @@
 package decorators;
 
 import contracts.CharacterContract;
+
 import services.EngineService;
-import services.EnvironmentService;
 import services.PlayerService;
-import services.ScreenService;
 
 public class PlayerDecorator extends CharacterContract implements PlayerService{
 

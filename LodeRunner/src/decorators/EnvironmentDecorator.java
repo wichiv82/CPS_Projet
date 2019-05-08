@@ -1,7 +1,7 @@
 package decorators;
 
 import contracts.ScreenContract;
-import services.Cell;
+
 import services.EditableScreenService;
 import services.EnvironmentService;
 import services.Paire;
