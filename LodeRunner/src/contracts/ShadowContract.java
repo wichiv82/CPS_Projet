@@ -3,6 +3,8 @@ package contracts;
 import decorators.ShadowDecorator;
 import services.Cell;
 import services.CharacterService;
+import services.Move;
+import services.ScreenService;
 
 public class ShadowContract extends ShadowDecorator{
 
@@ -11,10 +13,23 @@ public class ShadowContract extends ShadowDecorator{
 		// TODO Auto-generated constructor stub
 	}
 	
-	
-
 	public void checkInvariants() {
 		
+	}
+	
+	public void init(ScreenService s, int x, int y) {
+		if(s == null)
+			throw new PreconditionError("ScreenService == null");
+		if(!(0 <= x && x < s.getWidth()) || !(0 <= y && y < s.getHeight()))
+			throw new PreconditionError("Position Shadow (" + x + "," + y + ") hors jeu");
+
+		super.init(s, x, y);
+		checkInvariants();
+		
+		if(!(getBehaviour() == Move.NEUTRAL))
+			throw new PostconditionError("L'ombre ne commence pas la partie en NEUTRAL.");
+		if(!(!isAlive()))
+			throw new PostconditionError("L'ombre commence la partie en alive.");	
 	}
 	
 	public void climbLeft() {
@@ -94,6 +109,7 @@ public class ShadowContract extends ShadowDecorator{
 				
 			}	
 		}
+		
 	}
 	
 	public void climbRight() {

@@ -7,6 +7,7 @@ import services.CharacterService;
 import services.EngineService;
 import services.GuardService;
 import services.ItemService;
+import services.Move;
 import services.ScreenService;
 
 public class GuardContract extends GuardDecorator {
@@ -43,6 +44,8 @@ public class GuardContract extends GuardDecorator {
 					+ "(" + x + "," + y + ").");
 		if(!(getItem() == null))
 			throw new PostconditionError("Le garde commence la partie avec un item.");
+		if(!(getBehaviour() == Move.NEUTRAL))
+			throw new PostconditionError("Le garde ne commence pas la partie en NEUTRAL.");
 	}
 	
 	public void setEngine(EngineService engine) {

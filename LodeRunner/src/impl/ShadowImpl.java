@@ -16,6 +16,7 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 	public void init(ScreenService s, int x, int y) {
 		super.init(s, x, y);
 		alive = false;
+		behaviour = Move.NEUTRAL;
 	}
 	
 	@Override
