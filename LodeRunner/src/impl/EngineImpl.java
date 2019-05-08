@@ -187,14 +187,18 @@ public class EngineImpl implements EngineService {
 				
 			}
 			
+			player.getEnvi().cellContent(xguard, yguard).removeCharacter();
 			envi.cellContent(xguard, yguard).removeCharacter();
+			//shadow.getEnvi().cellContent(xguard, yguard).removeCharacter();
 			
 			guards.get(i).step();
 			
 			xguard = guards.get(i).getWidth();
 			yguard = guards.get(i).getHeight();
 			
+			player.getEnvi().cellContent(xguard, yguard).setCharacter(guards.get(i));
 			envi.cellContent(xguard, yguard).setCharacter(guards.get(i));
+			//shadow.getEnvi().cellContent(xguard, yguard).setCharacter(guards.get(i));
 		}
 		
 		for (int i=0; i<holes.length; i++) {
@@ -203,18 +207,25 @@ public class EngineImpl implements EngineService {
 				if(holes[i][j] == 10) {
 					envi.fill(i, j);
 					player.getEnvi().fill(i, j);
+					shadow.getEnvi().fill(i, j);
 					ArrayList<Integer> kill = new ArrayList<>(); 
 					for(GuardService g : guards) {
 						g.getEnvi().fill(i, j);
-						if(g.getWidth() == i && g.getHeight() == j)
+						if(g.getWidth() == i && g.getHeight() == j) {
 							for(int k = 0; k < getGuards().size(); k++)
 								if(getGuards().get(k).getWidth() == g.getPosInit().getX()
 								&& getGuards().get(k).getHeight() == g.getPosInit().getY())
-									kill.add(k);
+									kill.add(getGuards().get(k).getId());
 							g.respawn();
+						}
 					}
-					for(Integer k : kill)
-						getGuards().remove(k);
+					
+					for (int k=0; k<getGuards().size(); k++) {
+						if (kill.contains(getGuards().get(k).getId())) {
+							getGuards().remove(k);
+							k--;
+						}
+					}
 				}
 			}
 		}

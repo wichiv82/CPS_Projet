@@ -27,7 +27,7 @@ public class PlayerImpl extends CharacterImpl implements PlayerService{
 		if(engine.getEnvi().cellContent(getWidth(), getHeight() - 1).getCharacter() == null &&
 			(engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.EMP || 
 			engine.getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL) &&
-			engine.getEnvi().cellContent(getWidth(), getHeight()-1).getCharacter() == null &&
+			//engine.getEnvi().cellContent(getWidth(), getHeight()-1).getCharacter() == null &&
 			(engine.getEnvi().cellNature(getWidth(), getHeight()-1) ==  Cell.EMP
 			|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HDR
 			|| engine.getEnvi().cellNature(getWidth(), getHeight()-1) == Cell.HOL)) {
@@ -54,6 +54,7 @@ public class PlayerImpl extends CharacterImpl implements PlayerService{
 				engine.getHoles()[engine.getPlayer().getWidth()-1][engine.getPlayer().getHeight()-1] = -1;
 				for (GuardService g : engine.getGuards()) 
 					g.getEnvi().dig(engine.getPlayer().getWidth()-1, engine.getPlayer().getHeight()-1);
+				engine.getShadow().getEnvi().dig(engine.getPlayer().getWidth()-1, engine.getPlayer().getHeight()-1);
 				break;
 			case DIGR:
 				getEnvi().dig(engine.getPlayer().getWidth()+1, engine.getPlayer().getHeight()-1);
@@ -61,6 +62,7 @@ public class PlayerImpl extends CharacterImpl implements PlayerService{
 				engine.getHoles()[engine.getPlayer().getWidth()+1][engine.getPlayer().getHeight()-1] = -1;
 				for (GuardService g : engine.getGuards()) 
 					g.getEnvi().dig(engine.getPlayer().getWidth()+1, engine.getPlayer().getHeight()-1);
+				engine.getShadow().getEnvi().dig(engine.getPlayer().getWidth()+1, engine.getPlayer().getHeight()-1);
 				break;
 			case NEUTRAL:
 			default:
