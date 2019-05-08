@@ -24,8 +24,6 @@ public class ShadowTest extends MyTest {
 	private EngineService engine = new EngineContract(new EngineImpl(true));
 	private ArrayList<Point> guards = new ArrayList<>();
 	private ArrayList<Point> treasures = new ArrayList<>();
-	private Cell[] platform = {Cell.PLT, Cell.MTL, Cell.LAD};
-	private Cell[] valide = {Cell.EMP, Cell.HDR, Cell.LAD};
 	
 	@Test
 	public void climb_valide() {
