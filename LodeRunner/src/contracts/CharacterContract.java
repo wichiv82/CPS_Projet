@@ -170,7 +170,7 @@ public class CharacterContract extends CharacterDecorator {
 								switch(getEnvi().cellNature(width_atPre, height_atPre - 1)) {
 									case EMP:
 									case HOL:
-										if(getEnvi().cellContent(getWidth(), getHeight() - 1).getCharacter() != null) {
+										if(getEnvi().cellContent(getWidth(), getHeight() - 1).getCharacter() == null) {
 											break;
 										}
 									case PLT:

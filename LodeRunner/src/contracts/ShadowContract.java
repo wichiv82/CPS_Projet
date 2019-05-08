@@ -3,6 +3,7 @@ package contracts;
 import decorators.ShadowDecorator;
 import services.Cell;
 import services.CharacterService;
+import services.EngineService;
 import services.Move;
 import services.ScreenService;
 
@@ -26,27 +27,32 @@ public class ShadowContract extends ShadowDecorator{
 		super.init(s, x, y);
 		checkInvariants();
 		
-		if(!(getBehaviour() == Move.NEUTRAL))
-			throw new PostconditionError("L'ombre ne commence pas la partie en NEUTRAL.");
 		if(!(!isAlive()))
 			throw new PostconditionError("L'ombre commence la partie en alive.");	
 		if(!(getTimeInHole() == 0))
 			throw new PostconditionError("L'ombre commence la partie avec un timeInHole different de 0.");
 	}
 	
+	public void setEngine(EngineService engine) {
+		checkInvariants();
+		super.setEngine(engine);
+		checkInvariants();
+		
+		if(!(getBehaviour() == Move.NEUTRAL))
+			throw new PostconditionError("L'ombre ne commence pas la partie en NEUTRAL.");
+	}
+	
 	public void climbLeft() {
 		int x_atPre = getWidth();
 		int y_atPre = getHeight();
-		System.out.println(getHeight() + " " + getEnvi());
 		checkInvariants();
 		super.climbLeft();
 		checkInvariants();
 		
-		if(!(getWidth() == x_atPre))
-			throw new PostconditionError("La shadow se deplace lateralement pendant un climb.");
 		
-		System.out.println(getHeight() + " " + getEnvi());
-		if(getHeight() == getEngine().getEnvi().getHeight() - 1)
+		
+		
+		if(y_atPre == getEngine().getEnvi().getHeight() - 1)
 			if(!(getHeight() == y_atPre))
 				throw new PostconditionError("La cellule (" + getWidth() + "," + getHeight() + ") est hors jeu.");
 		
@@ -55,12 +61,11 @@ public class ShadowContract extends ShadowDecorator{
 				throw new PostconditionError("La Shadow escalade le bord gauche de la carte.");
 		
 		
-		if(!(getEnvi().cellNature(x_atPre, y_atPre) != Cell.HOL))
+		if(!(getEnvi().cellNature(x_atPre, y_atPre) == Cell.HOL))
 			if(!(getHeight() == y_atPre))
-				throw new PostconditionError("La Shadow escalade par la gauche alors que la cellule (" + x_atPre + "," + y_atPre + ")"
-						+ " n'est pas un HOL.");
+				throw new PostconditionError("Cellule (" + x_atPre + "," + y_atPre + ") is " + getEnvi().cellNature(x_atPre, y_atPre));
 		
-		System.out.println(getEnvi().getHeight() - 1);
+		
 		if(!(x_atPre == 0 || y_atPre == getEnvi().getHeight() - 1)) {
 			switch(getEnvi().cellNature(x_atPre - 1, y_atPre)) {
 				case HOL:
@@ -100,10 +105,10 @@ public class ShadowContract extends ShadowDecorator{
 					case EMP:
 					case LAD:
 					case HDR:
-						if(!(getHeight() == y_atPre + 1))
+						if(!(getHeight() == y_atPre + 1 && getHeight() == x_atPre - 1))
 							throw new PostconditionError("La Shadow s'est déplacé en "
 									+ "(" + getWidth() + "," + getHeight() + ") au lieu d'aller en "
-									+ "(" + x_atPre + "," + (y_atPre + 1) + ") pour sortir d'un HOL");
+									+ "(" + (x_atPre - 1) + "," + (y_atPre + 1) + ") pour sortir d'un HOL");
 						break;
 					default:
 						break;
@@ -121,11 +126,8 @@ public class ShadowContract extends ShadowDecorator{
 		checkInvariants();
 		super.climbRight();
 		checkInvariants();
-		
-		if(!(getWidth() == x_atPre))
-			throw new PostconditionError("La shadow se deplace lateralement pendant un climb.");
-		
-		if(getHeight() == getEnvi().getHeight() - 1)
+
+		if(y_atPre == getEnvi().getHeight() - 1)
 			if(!(getHeight() == y_atPre))
 				throw new PostconditionError("La cellule (" + getWidth() + "," + getHeight() + ") est hors jeu.");
 		
@@ -134,10 +136,9 @@ public class ShadowContract extends ShadowDecorator{
 				throw new PostconditionError("La Shadow escalade le bord droit de la carte.");
 		
 		
-		if(!(getEnvi().cellNature(x_atPre, y_atPre) != Cell.HOL))
+		if(!(getEnvi().cellNature(x_atPre, y_atPre) == Cell.HOL))
 			if(!(getHeight() == y_atPre))
-				throw new PostconditionError("La Shadow escalade par la droit alors que la cellule (" + x_atPre + "," + y_atPre + ")"
-						+ " n'est pas un HOL.");
+				throw new PostconditionError("Cellule (" + x_atPre + "," + y_atPre + ") is " + getEnvi().cellNature(x_atPre, y_atPre));
 		
 		if(!(x_atPre == getEnvi().getWidth() - 1 || y_atPre == getEnvi().getHeight() - 1)) {
 			switch(getEnvi().cellNature(x_atPre + 1, y_atPre)) {

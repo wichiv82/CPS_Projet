@@ -44,8 +44,7 @@ public class GuardContract extends GuardDecorator {
 					+ "(" + x + "," + y + ").");
 		if(!(getItem() == null))
 			throw new PostconditionError("Le garde commence la partie avec un item.");
-		if(!(getBehaviour() == Move.NEUTRAL))
-			throw new PostconditionError("Le garde ne commence pas la partie en NEUTRAL.");
+		
 		if(!(getTimeInHole() == 0))
 			throw new PostconditionError("Le garde commence la partie avec un timeInHole different de 0.");
 	}
@@ -80,15 +79,11 @@ public class GuardContract extends GuardDecorator {
 	public void climbLeft() {
 		int x_atPre = getWidth();
 		int y_atPre = getHeight();
-		
 		checkInvariants();
 		super.climbLeft();
 		checkInvariants();
-		
-		if(!(getWidth() == x_atPre))
-			throw new PostconditionError("La Guard se deplace lateralement pendant un climb.");
-		
-		if(getHeight() == getEnvi().getHeight() - 1)
+
+		if(y_atPre == getEngine().getEnvi().getHeight() - 1)
 			if(!(getHeight() == y_atPre))
 				throw new PostconditionError("La cellule (" + getWidth() + "," + getHeight() + ") est hors jeu.");
 		
@@ -97,10 +92,10 @@ public class GuardContract extends GuardDecorator {
 				throw new PostconditionError("Le Guard escalade le bord gauche de la carte.");
 		
 		
-		if(!(getEnvi().cellNature(x_atPre, y_atPre) != Cell.HOL))
+		if(!(getEnvi().cellNature(x_atPre, y_atPre) == Cell.HOL))
 			if(!(getHeight() == y_atPre))
-				throw new PostconditionError("Le Guard escalade par la gauche alors que la cellule (" + x_atPre + "," + y_atPre + ")"
-						+ " n'est pas un HOL.");
+				throw new PostconditionError("Cellule (" + x_atPre + "," + y_atPre + ") is " + getEnvi().cellNature(x_atPre, y_atPre));
+		
 		
 		if(!(x_atPre == 0 || y_atPre == getEnvi().getHeight() - 1)) {
 			switch(getEnvi().cellNature(x_atPre - 1, y_atPre)) {
@@ -113,43 +108,24 @@ public class GuardContract extends GuardDecorator {
 				default:
 			}
 			switch(getEnvi().cellNature(x_atPre, y_atPre + 1)) {
+			case PLT:
+			case MTL:
+				if(!(getHeight() == y_atPre))
+					throw new PostconditionError("Le Guard escalade le HOL alors que la cellule "
+							+ "(" + x_atPre + "," + (y_atPre + 1) + ") est " + getEnvi().cellNature(x_atPre, y_atPre + 1) + ".");
+			default:
+				if(!(getEnvi().cellContent(x_atPre, y_atPre + 1).getCharacter() == null))
+					if(!(getHeight() == y_atPre))
+						throw new PostconditionError("Le Guard escalade le HOL alors qu'un shadow est sur la cellule "
+								+ "(" + x_atPre + "," + (y_atPre + 1) + ").");
+			}
+			switch(getEnvi().cellNature(x_atPre - 1, y_atPre + 1)) {
 				case PLT:
 				case MTL:
 					if(!(getHeight() == y_atPre))
-						throw new PostconditionError("Le Guard escalade le HOL alors que la cellule "
-								+ "(" + x_atPre + "," + (y_atPre + 1) + ") est " + getEnvi().cellNature(x_atPre, y_atPre + 1) + ".");
+						throw new PostconditionError("Le Guard escalade alors que le mur est trop haut.");
 				default:
-					if(!(getEnvi().cellContent(x_atPre, y_atPre + 1).getCharacter() == null))
-						if(!(getHeight() == y_atPre))
-							throw new PostconditionError("Le guard escalade le HOL alors qu'un garde est sur la cellule "
-									+ "(" + x_atPre + "," + (y_atPre + 1) + ").");
-				}
-				switch(getEnvi().cellNature(x_atPre - 1, y_atPre + 1)) {
-					case PLT:
-					case MTL:
-						if(!(getHeight() == y_atPre))
-							throw new PostconditionError("Le Guard escalade alors que le mur est trop haut.");
-					default:
-				}
-		}
-			
-		if(getWidth()>0 && getHeight()<getEngine().getEnvi().getHeight()-1){
-			if(getEngine().getEnvi().cellNature(getWidth(), getHeight()) == Cell.HOL &&
-				getEngine().getEnvi().cellContent(getWidth(), getHeight()+1).getCharacter() == null &&
-				getEngine().getEnvi().cellContent(getWidth()-1, getHeight()+1).getCharacter() == null){
-				switch(getEngine().getEnvi().cellNature(getWidth()-1, getHeight()+1)){
-					case EMP:
-					case LAD:
-					case HDR:
-						if(!(getHeight() == y_atPre + 1))
-							throw new PostconditionError("Le Guard s'est déplacé en "
-									+ "(" + getWidth() + "," + getHeight() + ") au lieu d'aller en "
-									+ "(" + x_atPre + "," + (y_atPre + 1) + ") pour sortir d'un HOL");
-						break;
-					default:
-				}
-				
-			}	
+			}
 		}
 	}
 	
@@ -161,22 +137,18 @@ public class GuardContract extends GuardDecorator {
 		super.climbRight();
 		checkInvariants();
 		
-		if(!(getWidth() == x_atPre))
-			throw new PostconditionError("La Guard se deplace lateralement pendant un climb.");
-		
-		if(getHeight() == getEnvi().getHeight() - 1)
+		if(y_atPre == getEngine().getEnvi().getHeight() - 1)
 			if(!(getHeight() == y_atPre))
 				throw new PostconditionError("La cellule (" + getWidth() + "," + getHeight() + ") est hors jeu.");
 		
-		if(getWidth() == getEnvi().getWidth() - 1)
+		if(getWidth() == 0)
 			if(!(getHeight() == y_atPre))
-				throw new PostconditionError("Le Guard escalade le bord droit de la carte.");
+				throw new PostconditionError("Le Guard escalade le bord gauche de la carte.");
 		
 		
-		if(!(getEnvi().cellNature(x_atPre, y_atPre) != Cell.HOL))
+		if(!(getEnvi().cellNature(x_atPre, y_atPre) == Cell.HOL))
 			if(!(getHeight() == y_atPre))
-				throw new PostconditionError("Le Guard escalade par la droit alors que la cellule (" + x_atPre + "," + y_atPre + ")"
-						+ " n'est pas un HOL.");
+				throw new PostconditionError("Cellule (" + x_atPre + "," + y_atPre + ") is " + getEnvi().cellNature(x_atPre, y_atPre));
 		
 		if(!(x_atPre == getEnvi().getWidth() - 1 || y_atPre == getEnvi().getHeight() - 1)) {
 			switch(getEnvi().cellNature(x_atPre + 1, y_atPre)) {
