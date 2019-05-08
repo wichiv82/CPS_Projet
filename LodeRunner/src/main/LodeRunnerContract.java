@@ -22,7 +22,7 @@ public class LodeRunnerContract extends LodeRunnerContractMain{
 		int niveau = 1;
 		int life = 3;
 		
-		while (niveau <= 5) {
+		while (niveau <= 6) {
 			EditableScreenImpl e = new EditableScreenImpl();
 			EditableScreenContract edit = new EditableScreenContract(e);
 			

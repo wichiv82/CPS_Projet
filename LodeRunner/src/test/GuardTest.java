@@ -11,153 +11,275 @@ import contracts.EditableScreenContract;
 import contracts.EngineContract;
 import contracts.GuardContract;
 import contracts.PreconditionError;
+import contracts.ShadowContract;
 import impl.CharacterImpl;
 import impl.EditableScreenImpl;
 import impl.EngineImpl;
 import impl.GuardImpl;
+import impl.ShadowImpl;
 import services.Cell;
 import services.CharacterService;
 import services.EditableScreenService;
 import services.EngineService;
+import services.EnvironmentService;
 import services.GuardService;
+import services.Paire;
 
 public class GuardTest extends MyTest{
-	
-	private GuardService guard = new GuardContract(new GuardImpl());
-	private CharacterService character = new CharacterContract(new CharacterImpl());
-	private EditableScreenService edit = new EditableScreenContract(new EditableScreenImpl());
-	private EngineService engine = new EngineContract(new EngineImpl(true));
-	private ArrayList<Point> guards = new ArrayList<>();
-	private ArrayList<Point> treasures = new ArrayList<>();
-	
-	public GuardTest() {
-		NameClassTest = "Guard";
-	}
-	
-	
 	@Test
-	public void init_valide(){
-		edit.init(2, 1);
-		character.init(edit, 0, 0);
-		guard.init(edit, 1, 0, 0, character);
-	}
-	
-	@Test
-	public void init_null_target() {
+	public void init_valid() {
+		edit = new EditableScreenContract(new EditableScreenImpl());
+		guard = new GuardContract(new GuardImpl());
 		edit.init(1,1);
-		try {
-			guard.init(edit, 0, 0, 0, null);
-		} catch(PreconditionError e) {
-			message("init_null_target", e);
-			return;
-		} Assert.fail();
+		guard.init(edit, 0, 0);		
 	}
 	
 	@Test
-	public void init_unvalide_target() {
-		edit.init(1,1);
-		character.init(edit,  0, 0);
-		try {
-			guard.init(edit, 0, 0, 0, character);
-		} catch(PreconditionError e) {
-			message("init_unvalide_target", e);
-			return;
-		} Assert.fail();
+	public void init_unbound() {
+		edit = new EditableScreenContract(new EditableScreenImpl());
+		guard = new GuardContract(new GuardImpl());
+		edit.init(1, 1);
+		for(int x = -1; x < 2; x = x + 2)
+			for(int y = -1; y < 2; y = y + 2) {
+				try {
+					guard.init(edit, x, y);
+				} catch(PreconditionError e) {
+					continue;
+				} Assert.fail("Guard : (" + x + "," + y + ")");
+			}
 	}
-	
-	
+
 	@Test
-	public void respawn_valide() {
-		edit.init(3,2);
-		for(int i = 0; i < 3; i++) {
-			edit.setNature(i, 0, Cell.MTL);
-			edit.setNature(i, 1, Cell.EMP);
-		}
-		guards.add(new Point(0,1));
-		engine.init(edit, new Point(2,1), guards, treasures);
-		engine.getGuards().get(0).goRight();
-		if(!(engine.getGuards().get(0).getWidth() == 1 && engine.getGuards().get(0).getHeight() == 1))
-			Assert.fail();
-		engine.getGuards().get(0).respawn();
-		if(!(engine.getGuards().get(0).getWidth() == 0 && engine.getGuards().get(0).getHeight() == 1))
-			Assert.fail();
-	}
-	
-	
-	/* difficile a tester mais ceci m'a permis de corriger Engine.step pour le respawn */
-	@Test
-	public void respawn_failed() {
-		edit.init(4,2);
+	public void climbL_valid() {
+		treasures = new ArrayList<>();
+		guards = new ArrayList<>();
+		edit = new EditableScreenContract(new EditableScreenImpl());
+		edit.init(4,3);
 		for(int i = 0; i < 4; i++) {
 			edit.setNature(i, 0, Cell.MTL);
-			edit.setNature(i, 1, Cell.EMP);
+			edit.setNature(i, 1, Cell.PLT);
 		}
-		guards.add(new Point(1,1));
-		guards.add(new Point(0,1));
-		engine.init(edit, new Point(3,1), guards, treasures);
-		engine.getGuards().get(0).goRight();
-		if(!(engine.getGuards().get(0).getWidth() == 2 && engine.getGuards().get(0).getHeight() == 1))
-			Assert.fail();
-		
-		engine.getGuards().get(1).goRight();
-		if(!(engine.getGuards().get(1).getWidth() == 1 && engine.getGuards().get(1).getHeight() == 1))
-			Assert.fail();
-		
-		engine.getGuards().get(0).respawn();
-		if(!(engine.getGuards().get(0).getWidth() == 1 && engine.getGuards().get(0).getHeight() == 1))
-			Assert.fail();
-		if(!(engine.getGuards().get(1).getWidth() == 1 && engine.getGuards().get(1).getHeight() == 1))
-			Assert.fail();
-//		Assert.fail();
+		Point player = new Point(0,2);
+		guards.add(new Point(2,2));
+		for(Cell c1 : platform)
+			for(Cell c2 : valid)
+				for(Cell c3 : valid) {
+					edit.setNature(1, 1, c1);
+					edit.setNature(1, 2, c2);
+					edit.setNature(2, 2, c3);
+					engine = new EngineContract(new EngineImpl(true));
+					engine.init(edit, player, guards, treasures);
+					EnvironmentService[] envi = {engine.getEnvi(), engine.getPlayer().getEnvi(), engine.getShadow().getEnvi(), engine.getGuards().get(0).getEnvi()};
+					for(EnvironmentService e : envi)
+						e.dig(2, 1);
+					engine.getGuards().get(0).goDown();
+					for(EnvironmentService e : envi) {
+						e.setCellContent(2, 2, new Paire(null, null));
+						e.setCellContent(2, 1, new Paire(engine.getGuards().get(0), null));
+					}
+					engine.getGuards().get(0).climbLeft();
+					if(!(engine.getGuards().get(0).getWidth() == 1 && engine.getGuards().get(0).getHeight() == 2))
+						Assert.fail("Guard : (" + engine.getGuards().get(0).getWidth() + "," + engine.getGuards().get(0).getHeight() + ")"
+								+ " for Shadow under " + c3 + " to " + c2 + " on " + c1);
+				}
 	}
 	
 	@Test
-	public void climbL_valide() {
-		edit.init(7,3);
-		for(int i = 0; i < 7; i++) {
+	public void climbL_unvalid() {
+		treasures = new ArrayList<>();
+		guards = new ArrayList<>();
+		edit = new EditableScreenContract(new EditableScreenImpl());
+		edit.init(4,3);
+		for(int i = 0; i < 4; i++) {
 			edit.setNature(i, 0, Cell.MTL);
 			edit.setNature(i, 1, Cell.PLT);
 		}
-		edit.setNature(0,1,Cell.EMP);
-		guards.add(new Point(3,2));
-		guards.add(new Point(0,1));
-		Point player = new Point(5,2);
-		for(Cell c1 : Cell.values())
-			for(Cell c2 : Cell.values()) {
-				edit.setNature(2, 1, c1);
-				edit.setNature(2, 2, c2);
-				engine = new EngineContract(new EngineImpl(true));
-				engine.init(edit, player, guards, treasures);
-				engine.getEnvi().dig(3, 1);
-				engine.getGuards().get(0).goDown();
-				engine.getGuards().get(0).climbLeft();
-				edit.setNature(2, 1, Cell.PLT);
-				edit.setNature(2, 2, Cell.EMP);
-			}
+		Point player = new Point(0,2);
+		guards.add(new Point(2,2));
+		for(Cell c1 : platform)
+			for(Cell c2 : unvalid)
+				for(Cell c3 : valid) {
+					edit.setNature(1, 1, c1);
+					edit.setNature(1, 2, c2);
+					edit.setNature(2, 2, c3);
+					engine = new EngineContract(new EngineImpl(true));
+					engine.init(edit, player, guards, treasures);
+					EnvironmentService[] envi = {engine.getEnvi(), engine.getPlayer().getEnvi(), engine.getShadow().getEnvi(), engine.getGuards().get(0).getEnvi()};
+					for(EnvironmentService e : envi)
+						e.dig(2, 1);
+					engine.getGuards().get(0).goDown();
+					for(EnvironmentService e : envi) {
+						e.setCellContent(2, 2, new Paire(null, null));
+						e.setCellContent(2, 1, new Paire(engine.getGuards().get(0), null));
+					}
+					engine.getGuards().get(0).climbLeft();
+					if(!(engine.getGuards().get(0).getWidth() == 2 && engine.getGuards().get(0).getHeight() == 1))
+						Assert.fail("Guard : (" + engine.getGuards().get(0).getWidth() + "," + engine.getGuards().get(0).getHeight() + ")"
+								+ " for Shadow under " + c3 + " to " + c2 + " on " + c1);
+				}
 	}
 	
 	@Test
-	public void climbR_valide() {
-		edit.init(7,3);
-		for(int i = 0; i < 7; i++) {
+	public void climbL_blocked() {
+		treasures = new ArrayList<>();
+		guards = new ArrayList<>();
+		edit = new EditableScreenContract(new EditableScreenImpl());
+		edit.init(4,3);
+		for(int i = 0; i < 4; i++) {
 			edit.setNature(i, 0, Cell.MTL);
 			edit.setNature(i, 1, Cell.PLT);
 		}
-		edit.setNature(0,1,Cell.EMP);
+		Point player = new Point(0,2);
+		guards.add(new Point(2,2));
+		guards.add(new Point(1,2));
+		for(Cell c1 : platform)
+			for(Cell c2 : valid)
+				for(Cell c3 : valid) {
+					edit.setNature(1, 1, c1);
+					edit.setNature(1, 2, c2);
+					edit.setNature(2, 2, c3);
+					engine = new EngineContract(new EngineImpl(true));
+					engine.init(edit, player, guards, treasures);
+					EnvironmentService[] envi = {engine.getEnvi(), engine.getPlayer().getEnvi(),
+							engine.getShadow().getEnvi(), engine.getGuards().get(0).getEnvi(),
+							engine.getGuards().get(1).getEnvi()};
+					for(EnvironmentService e : envi)
+						e.dig(2, 1);
+					engine.getGuards().get(0).goDown();
+					for(EnvironmentService e : envi) {
+						e.setCellContent(2, 2, new Paire(null, null));
+						e.setCellContent(2, 1, new Paire(engine.getGuards().get(0), null));
+					}
+					engine.getGuards().get(0).climbLeft();
+					if(!(engine.getGuards().get(0).getWidth() == 2 && engine.getGuards().get(0).getHeight() == 1))
+						Assert.fail("Guard : (" + engine.getGuards().get(0).getWidth() + "," + engine.getGuards().get(0).getHeight() + ")"
+								+ " for Guard under " + c3 + " to " + c2 + " on " + c1 + " with Guard : (1,2)");
+					engine.getGuards().get(1).goRight();
+					for(EnvironmentService e : envi) {
+						e.setCellContent(1, 2, new Paire(null, null));
+						e.setCellContent(2, 2, new Paire(engine.getGuards().get(1), null));
+					}
+					engine.getGuards().get(0).climbLeft();
+					if(!(engine.getGuards().get(0).getWidth() == 2 && engine.getGuards().get(0).getHeight() == 1))
+						Assert.fail("Guard : (" + engine.getGuards().get(0).getWidth() + "," + engine.getGuards().get(0).getHeight() + ")"
+								+ " for Guard under " + c3 + " to " + c2 + " on " + c1 + " with Guard : (2,2)");
+				}
+	}
+	
+	@Test
+	public void climbR_valid() {
+		treasures = new ArrayList<>();
+		guards = new ArrayList<>();
+		edit = new EditableScreenContract(new EditableScreenImpl());
+		edit.init(4,3);
+		for(int i = 0; i < 4; i++) {
+			edit.setNature(i, 0, Cell.MTL);
+			edit.setNature(i, 1, Cell.PLT);
+		}
+		Point player = new Point(0,2);
+		guards.add(new Point(2,2));
+		for(Cell c1 : platform)
+			for(Cell c2 : valid)
+				for(Cell c3 : valid) {
+					edit.setNature(3, 1, c1);
+					edit.setNature(3, 2, c2);
+					edit.setNature(2, 2, c3);
+					engine = new EngineContract(new EngineImpl(true));
+					engine.init(edit, player, guards, treasures);
+					EnvironmentService[] envi = {engine.getEnvi(), engine.getPlayer().getEnvi(), engine.getShadow().getEnvi(), engine.getGuards().get(0).getEnvi()};
+					for(EnvironmentService e : envi)
+						e.dig(2, 1);
+					engine.getGuards().get(0).goDown();
+					for(EnvironmentService e : envi) {
+						e.setCellContent(2, 2, new Paire(null, null));
+						e.setCellContent(2, 1, new Paire(engine.getGuards().get(0), null));
+					}
+					engine.getGuards().get(0).climbRight();
+					if(!(engine.getGuards().get(0).getWidth() == 3 && engine.getGuards().get(0).getHeight() == 2))
+						Assert.fail("Guard : (" + engine.getGuards().get(0).getWidth() + "," + engine.getGuards().get(0).getHeight() + ")"
+								+ " for Shadow under " + c3 + " to " + c2 + " on " + c1);
+				}
+	}
+	
+	@Test
+	public void climbR_unvalid() {
+		treasures = new ArrayList<>();
+		guards = new ArrayList<>();
+		edit = new EditableScreenContract(new EditableScreenImpl());
+		edit.init(4,3);
+		for(int i = 0; i < 4; i++) {
+			edit.setNature(i, 0, Cell.MTL);
+			edit.setNature(i, 1, Cell.PLT);
+		}
+		Point player = new Point(0,2);
+		guards.add(new Point(2,2));
+		for(Cell c1 : platform)
+			for(Cell c2 : unvalid)
+				for(Cell c3 : valid) {
+					edit.setNature(3, 1, c1);
+					edit.setNature(3, 2, c2);
+					edit.setNature(2, 2, c3);
+					engine = new EngineContract(new EngineImpl(true));
+					engine.init(edit, player, guards, treasures);
+					EnvironmentService[] envi = {engine.getEnvi(), engine.getPlayer().getEnvi(), engine.getShadow().getEnvi(), engine.getGuards().get(0).getEnvi()};
+					for(EnvironmentService e : envi)
+						e.dig(2, 1);
+					engine.getGuards().get(0).goDown();
+					for(EnvironmentService e : envi) {
+						e.setCellContent(2, 2, new Paire(null, null));
+						e.setCellContent(2, 1, new Paire(engine.getGuards().get(0), null));
+					}
+					engine.getGuards().get(0).climbRight();
+					if(!(engine.getGuards().get(0).getWidth() == 2 && engine.getGuards().get(0).getHeight() == 1))
+						Assert.fail("Guard : (" + engine.getGuards().get(0).getWidth() + "," + engine.getGuards().get(0).getHeight() + ")"
+								+ " for Shadow under " + c3 + " to " + c2 + " on " + c1);
+				}
+	}
+	
+	@Test
+	public void climbR_blocked() {
+		treasures = new ArrayList<>();
+		guards = new ArrayList<>();
+		edit = new EditableScreenContract(new EditableScreenImpl());
+		edit.init(4,3);
+		for(int i = 0; i < 4; i++) {
+			edit.setNature(i, 0, Cell.MTL);
+			edit.setNature(i, 1, Cell.PLT);
+		}
+		Point player = new Point(0,2);
+		guards.add(new Point(2,2));
 		guards.add(new Point(3,2));
-		guards.add(new Point(0,1));
-		Point player = new Point(5,2);
-		for(Cell c1 : Cell.values())
-			for(Cell c2 : Cell.values()) {				
-				edit.setNature(4, 1, c1);
-				edit.setNature(4, 2, c2);
-				engine = new EngineContract(new EngineImpl(true));
-				engine.init(edit, player, guards, treasures);
-				engine.getEnvi().dig(3, 1);
-				engine.getGuards().get(0).goDown();
-				engine.getGuards().get(0).climbRight();
-				edit.setNature(4, 1, Cell.PLT);
-				edit.setNature(4, 2, Cell.EMP);
-			}
+		for(Cell c1 : platform)
+			for(Cell c2 : valid)
+				for(Cell c3 : valid) {
+					edit.setNature(3, 1, c1);
+					edit.setNature(3, 2, c2);
+					edit.setNature(2, 2, c3);
+					engine = new EngineContract(new EngineImpl(true));
+					engine.init(edit, player, guards, treasures);
+					EnvironmentService[] envi = {engine.getEnvi(), engine.getPlayer().getEnvi(),
+							engine.getShadow().getEnvi(), engine.getGuards().get(0).getEnvi(),
+							engine.getGuards().get(1).getEnvi()};
+					for(EnvironmentService e : envi)
+						e.dig(2, 1);
+					engine.getGuards().get(0).goDown();
+					for(EnvironmentService e : envi) {
+						e.setCellContent(2, 2, new Paire(null, null));
+						e.setCellContent(2, 1, new Paire(engine.getGuards().get(0), null));
+					}
+					engine.getGuards().get(0).climbRight();
+					if(!(engine.getGuards().get(0).getWidth() == 2 && engine.getGuards().get(0).getHeight() == 1))
+						Assert.fail("Guard : (" + engine.getGuards().get(0).getWidth() + "," + engine.getGuards().get(0).getHeight() + ")"
+								+ " for Guard under " + c3 + " to " + c2 + " on " + c1 + " with Guard : (3,2)");
+					engine.getGuards().get(1).goLeft();
+					for(EnvironmentService e : envi) {
+						e.setCellContent(3, 2, new Paire(null, null));
+						e.setCellContent(2, 2, new Paire(engine.getGuards().get(1), null));
+					}
+					engine.getGuards().get(0).climbRight();
+					if(!(engine.getGuards().get(0).getWidth() == 2 && engine.getGuards().get(0).getHeight() == 1))
+						Assert.fail("Guard : (" + engine.getGuards().get(0).getWidth() + "," + engine.getGuards().get(0).getHeight() + ")"
+								+ " for Guard under " + c3 + " to " + c2 + " on " + c1 + " with Guard : (2,2)");
+				}
 	}
 }

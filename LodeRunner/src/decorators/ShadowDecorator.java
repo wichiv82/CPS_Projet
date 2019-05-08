@@ -49,7 +49,6 @@ public class ShadowDecorator extends CharacterContract implements ShadowService{
 	@Override
 	public void climbLeft() {
 		// TODO Auto-generated method stub
-		System.out.println(getHeight() + " " + getEnvi());
 		getDelegate().climbLeft();
 	}
 

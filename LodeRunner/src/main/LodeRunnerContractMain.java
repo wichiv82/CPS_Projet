@@ -148,6 +148,9 @@ public class LodeRunnerContractMain {
 			case "d":
 				engine.setCommand(Command.RIGHT);
 				break;
+			case "r":
+				engine.setCommand(Command.NEUTRAL);
+				break;
 			case "4":
 				engine.setCommand(Command.DIGL);
 				break;
