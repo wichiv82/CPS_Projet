@@ -17,6 +17,7 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 		super.init(s, x, y);
 		alive = false;
 		behaviour = Move.NEUTRAL;
+		timeInHole = 0;
 	}
 	
 	@Override

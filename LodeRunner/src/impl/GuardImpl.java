@@ -27,6 +27,7 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 		this.posInit = new Point(x,y);
 		this.item = null;
 		this.behaviour = Move.NEUTRAL;
+		this.timeInHole = 0;
 	}
 	
 	

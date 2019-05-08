@@ -46,6 +46,8 @@ public class GuardContract extends GuardDecorator {
 			throw new PostconditionError("Le garde commence la partie avec un item.");
 		if(!(getBehaviour() == Move.NEUTRAL))
 			throw new PostconditionError("Le garde ne commence pas la partie en NEUTRAL.");
+		if(!(getTimeInHole() == 0))
+			throw new PostconditionError("Le garde commence la partie avec un timeInHole different de 0.");
 	}
 	
 	public void setEngine(EngineService engine) {

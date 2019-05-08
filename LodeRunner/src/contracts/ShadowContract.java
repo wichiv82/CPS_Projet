@@ -30,6 +30,8 @@ public class ShadowContract extends ShadowDecorator{
 			throw new PostconditionError("L'ombre ne commence pas la partie en NEUTRAL.");
 		if(!(!isAlive()))
 			throw new PostconditionError("L'ombre commence la partie en alive.");	
+		if(!(getTimeInHole() == 0))
+			throw new PostconditionError("L'ombre commence la partie avec un timeInHole different de 0.");
 	}
 	
 	public void climbLeft() {
