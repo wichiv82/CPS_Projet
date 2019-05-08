@@ -124,19 +124,19 @@ public class CharacterImpl implements CharacterService{
 	@Override
 	public void goUp() {
 		if(getHeight() != getEnvi().getHeight() - 1)
-			if(getEnvi().cellContent(getWidth(), getHeight() + 1).getCharacter() == null &&
-					getEnvi().cellNature(getWidth(), getHeight()) == Cell.LAD)
-				switch(getEnvi().cellNature(getWidth(), getHeight() + 1)) {
-					case EMP:
-					case HDR:
-					case LAD:
-						getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
-						height++;
-						getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
-						break;
-					default:
-						break;
-				}
+			if(getEnvi().cellContent(getWidth(), getHeight() + 1).getCharacter() == null)
+				if(getEnvi().cellNature(getWidth(), getHeight()) == Cell.LAD)
+					switch(getEnvi().cellNature(getWidth(), getHeight() + 1)) {
+						case EMP:
+						case HDR:
+						case LAD:
+							getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
+							height++;
+							getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
+							break;
+						default:
+							break;
+					}
 	}
 
 	@Override

@@ -29,26 +29,32 @@ public class EngineContract extends EngineDecorator{
 
 		switch(getStatus()) {
 			case WIN:
-				if (getTreasures().size() != 0)
+				if (!(getTreasures().size() == 0))
 					throw new InvariantError("La partie est gagné alors qu'il reste " + getTreasures().size() + " trésors.");
+				if (!(getGuards().size() == 0))
+					throw new InvariantError("La partie est gagné alors qu'il reste " + getGuards().size()  + " Guard en vie.");
 				break;
 			case LOSS:
 				if (alive)
 					throw new InvariantError("La partie est perdu alors que le joueur est en vie.");
 				break;
 			case PLAYING:
-				if (getTreasures().size() == 0)
-					throw new InvariantError("La partie continue alors que tous les trésors ont été ramassé.");
+				if (getTreasures().size() == 0 && getGuards().size() == 0)
+					throw new InvariantError("La partie continue alors que tous les trésors ont été ramassé et tous les gardes tué.");
 				if (!alive)
 					throw new InvariantError("La partie continue alors que le joueur est mort.");
 				break;
 
 			default:
-				throw new InvariantError("Le status " + getStatus() + " n'est pas reconnu.");
 		}
 	}
 	
 	public void init(EditableScreenService e, Point player, ArrayList<Point> guards, ArrayList<Point> treasures) {
+		for(Point treasure : treasures)
+			if(!(treasure.getX() >= 0 && treasure.getX() < e.getWidth())
+			|| !(treasure.getY() >= 0 && treasure.getY() < e.getHeight()))
+				throw new PreconditionError("Position Item (" + treasure.getX() + "," + treasure.getY() + ") hors jeu");
+		
 		super.init(e, player, guards, treasures);
 		checkInvariants();
 		
@@ -77,13 +83,14 @@ public class EngineContract extends EngineDecorator{
 						+ "(" + treasures.get(i).getX() + "," + treasures.get(i).getY() + ") mais c'est mal initialisé en "
 						+ "(" + getTreasures().get(i).getColumn() + "," + getTreasures().get(i).getHeight() + ").");
 		
-		System.out.println(getEnvi() + "," + e);
+		if(!(getShadow().getWidth() == getPlayer().getWidth()
+			&& getShadow().getHeight() == getPlayer().getHeight()))
+			throw new PostconditionError("Shadow est initialisé en "
+					+ "(" + getShadow().getWidth() + "," + getShadow().getHeight() + ") au lieu de"
+					+ "(" + getPlayer().getWidth() + "," + getPlayer().getHeight() + ").");
 		
 		if(getEnvi() == null)
 			throw new PostconditionError("EditableScreen ne s'est pas enregistré.");
-		
-//		if (!(getEnvi().get == e))
-//			throw new PostconditionError("EditableScreen c'est mal initialisé dans Engine");
 	}
 
 	public void setCommand(Command m) {
@@ -104,13 +111,18 @@ public class EngineContract extends EngineDecorator{
 	public void step(){
 		int score_atPre = getScore();
 		int number_of_treasures_atPre = getTreasures().size();
+		int number_of_guards_atPre = getGuards().size();
 		checkInvariants();
 		super.step();
 		checkInvariants();
 		
 		if(!(getScore() + getTreasures().size() == score_atPre + number_of_treasures_atPre))
 			throw new PostconditionError("Calcul du score incorrect.");
+		
+		if(getTreasures().size() == number_of_treasures_atPre - 1 && !getShadow().isAlive())
+			throw new PostconditionError("La Shadow n'a pas été crée.");
+		
+		if(getGuards().size() == number_of_guards_atPre - 1 && getShadow().isAlive())
+			throw new PostconditionError("La Shadow n'a pas disparue après avoir tué un Guard.");
 	}
-	
-	
 }

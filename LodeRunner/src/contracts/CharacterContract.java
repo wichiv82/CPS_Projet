@@ -19,8 +19,7 @@ public class CharacterContract extends CharacterDecorator {
 			case HOL :
 				break;
 			default:
-				throw new InvariantError("L'emplacement (" + getWidth() + "," + getHeight() + ")"
-						+ " n'est pas valide : " + getEnvi().cellNature(getWidth(), getHeight()));
+				throw new InvariantError("Cellule Character (" + getWidth() + "," + getHeight() + ") " + getEnvi().cellNature(getWidth(), getHeight()) + " invalide");
 		}
 		if(getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == null)
 			throw new InvariantError("Aucun Character n'est présent sur l'emplacement (" + getWidth() + "," + getHeight() + ").");
@@ -30,8 +29,14 @@ public class CharacterContract extends CharacterDecorator {
 	
 	
 	public void init(ScreenService s, int x, int y) {
+		if(s == null)
+			throw new PreconditionError("ScreenService == null");
+		if(!(0 <= x && x < s.getWidth()) || !(0 <= y && y < s.getHeight()))
+			throw new PreconditionError("Position Character (" + x + "," + y + ") hors jeu");
+			
 		super.init(s, x, y);
 		checkInvariants();
+		
 	}
 	
 	public void goLeft() {
@@ -76,20 +81,26 @@ public class CharacterContract extends CharacterDecorator {
 						switch(getEnvi().cellNature(width_atPre, height_atPre)) {
 							case LAD:
 							case HDR:
+							case HOL:
 								if (!(getWidth() == width_atPre - 1))
 									throw new PostconditionError("Le Character aurait dû se deplacer en "
 											+ "(" + (width_atPre - 1) + "," + height_atPre + ") mais se trouve en "
 											+ "(" + getWidth() + "," + getHeight() + ").");
 							case EMP:
 								switch(getEnvi().cellNature(width_atPre, height_atPre - 1)) {
-								case PLT:
-								case MTL:
-								case LAD:
-									if (!(getWidth() == width_atPre - 1))
-										throw new PostconditionError("Le Character aurait dû se deplacer en "
-												+ "(" + (width_atPre - 1) + "," + height_atPre + ") mais se trouve en "
-												+ "(" + getWidth() + "," + getHeight() + ").");
-								default:
+									case EMP:
+									case HOL:
+										if(getEnvi().cellContent(getWidth(), getHeight() - 1).getCharacter() != null) {
+											break;
+										}
+									case PLT:
+									case MTL:
+									case LAD:
+										if (!(getWidth() == width_atPre - 1))
+											throw new PostconditionError("Le Character aurait dû se deplacer en "
+													+ "(" + (width_atPre - 1) + "," + height_atPre + ") mais se trouve en "
+													+ "(" + getWidth() + "," + getHeight() + ").");
+									default:
 							}
 							default:
 						}
@@ -144,20 +155,26 @@ public class CharacterContract extends CharacterDecorator {
 						switch(getEnvi().cellNature(width_atPre, height_atPre)) {
 							case LAD:
 							case HDR:
+							case HOL:
 								if (!(getWidth() == width_atPre + 1))
 									throw new PostconditionError("Le Character aurait dû se deplacer en "
 											+ "(" + (width_atPre + 1) + "," + height_atPre + ") mais se trouve en "
 											+ "(" + getWidth() + "," + getHeight() + ").");
 							case EMP:
 								switch(getEnvi().cellNature(width_atPre, height_atPre - 1)) {
-								case PLT:
-								case MTL:
-								case LAD:
-									if (!(getWidth() == width_atPre + 1))
-										throw new PostconditionError("Le Character aurait dû se deplacer en "
-												+ "(" + (width_atPre + 1) + "," + height_atPre + ") mais se trouve en "
-												+ "(" + getWidth() + "," + getHeight() + ").");
-								default:
+									case EMP:
+									case HOL:
+										if(getEnvi().cellContent(getWidth(), getHeight() - 1).getCharacter() != null) {
+											break;
+										}
+									case PLT:
+									case MTL:
+									case LAD:
+										if (!(getWidth() == width_atPre + 1))
+											throw new PostconditionError("Le Character aurait dû se deplacer en "
+													+ "(" + (width_atPre + 1) + "," + height_atPre + ") mais se trouve en "
+													+ "(" + getWidth() + "," + getHeight() + ").");
+									default:
 							}
 							default:
 						}
@@ -201,37 +218,17 @@ public class CharacterContract extends CharacterDecorator {
 		
 		if(height_atPre != getEnvi().getHeight() - 1)
 			if(getEnvi().cellContent(width_atPre, height_atPre + 1).getCharacter() == null)
-				switch(getEnvi().cellNature(width_atPre, height_atPre + 1)) {
-					case LAD:
-					case HDR:
-					case EMP:
-						switch(getEnvi().cellNature(width_atPre, height_atPre)) {
-							case LAD:
-								if(!(getHeight() == height_atPre + 1))
-									throw new PostconditionError("Le Character aurait dû se deplacer en "
-											+ "(" + width_atPre + "," + (height_atPre + 1) + ") mais se trouve en "
-											+ "(" + getWidth() + "," + getHeight() + ").");
-							case EMP:
-								switch(getEnvi().cellNature(width_atPre, height_atPre - 1)){
-									case MTL:
-									case PLT:
-									if(!(getHeight() == height_atPre + 1))
-										throw new PostconditionError("Le Character aurait dû se deplacer en "
-												+ "(" + width_atPre + "," + (height_atPre + 1) + ") mais se trouve en "
-												+ "(" + getWidth() + "," + getHeight() + ").");
-									default:
-										if(getEnvi().cellContent(width_atPre, height_atPre - 1).getCharacter() != null)
-											if(!(getHeight() == height_atPre + 1))
-												throw new PostconditionError("Le Character aurait dû se deplacer en "
-														+ "(" + width_atPre + "," + (height_atPre + 1) + ") mais se trouve en "
-														+ "(" + getWidth() + "," + getHeight() + ").");
-								}
-							default:
+				if(getEnvi().cellNature(getWidth(), getHeight()) == Cell.LAD)
+					switch(getEnvi().cellNature(width_atPre, height_atPre + 1)) {
+						case LAD:
+						case HDR:
+						case EMP:
+							if(!(getHeight() == height_atPre + 1))
+								throw new PostconditionError("Le Character aurait dû se deplacer en "
+										+ "(" + width_atPre + "," + (height_atPre + 1) + ") mais se trouve en "
+										+ "(" + getWidth() + "," + getHeight() + ").");
+						default:
 					}
-					default:
-				}
-				
-		
 	}
 	
 	
@@ -253,6 +250,7 @@ public class CharacterContract extends CharacterDecorator {
 		if(!(height_atPre == 0))
 			if(getEnvi().cellContent(width_atPre, height_atPre - 1).getCharacter() == null)
 				switch(getEnvi().cellNature(width_atPre, height_atPre - 1)) {
+				case HOL:
 				case EMP:
 				case LAD:
 				case HDR:
@@ -260,6 +258,7 @@ public class CharacterContract extends CharacterDecorator {
 						case EMP:
 						case LAD:
 						case HDR:
+						case HOL:
 							if(!(getHeight() == height_atPre - 1))
 								throw new PostconditionError("Le Character aurait dû se deplacer en "
 										+ "(" + width_atPre + "," + (height_atPre + 1) + ") mais se trouve en "

@@ -17,6 +17,11 @@ public class ScreenContract extends ScreenDecorator{
 	}
 	
 	public void init(int w, int h) {
+		if (w < 0)
+			throw new PreconditionError("La largeur est négative.");
+		if (h < 0)
+			throw new PreconditionError("La hauteur est négative.");
+		
 		super.init(w, h);
 		checkInvariants();
 		
@@ -99,5 +104,13 @@ public class ScreenContract extends ScreenDecorator{
 						throw new PostconditionError("Fill a modifié la cellule (" + i + "," + j + ") "
 								+ "alors que la cellule cible est (" + x + "," + y + ").");
 			}
+	}
+	
+	public Cell cellNature(int x, int y) {
+		if(x < 0 || x >= getWidth())
+			throw new PreconditionError("La case (" + x + "," + y + ") est hors jeu.");
+		if(y < 0 || y >= getHeight())
+			throw new PreconditionError("La case (" + x + "," + y + ") est hors jeu.");
+		return super.cellNature(x, y);
 	}
 }

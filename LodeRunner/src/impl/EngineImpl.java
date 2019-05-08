@@ -173,7 +173,7 @@ public class EngineImpl implements EngineService {
 		int yplayer = player.getHeight();
 
 		envi.cellContent(xplayer, yplayer).removeCharacter();
-			
+
 		player.step();
 		
 		xplayer = player.getWidth();
@@ -203,21 +203,27 @@ public class EngineImpl implements EngineService {
 			yguard = guards.get(i).getHeight();
 			
 			envi.cellContent(xguard, yguard).setCharacter(guards.get(i));
-			
 		}
 		
 		for (int i=0; i<holes.length; i++) {
 			for (int j=0; j<holes[i].length; j++){
 				holes[i][j]++;
 				if(holes[i][j] == 10) {
-					System.out.println("Un trou a été bouché");
+//					System.out.println("Un trou a été bouché");
 					envi.fill(i, j);
 					player.getEnvi().fill(i, j);
+					ArrayList<Integer> kill = new ArrayList<>(); 
 					for(GuardService g : guards) {
 						g.getEnvi().fill(i, j);
 						if(g.getWidth() == i && g.getHeight() == j)
+							for(int k = 0; k < getGuards().size(); k++)
+								if(getGuards().get(k).getWidth() == g.getPosInit().getX()
+								&& getGuards().get(k).getHeight() == g.getPosInit().getY())
+									kill.add(k);
 							g.respawn();
 					}
+					for(Integer k : kill)
+						getGuards().remove(k);
 				}
 			}
 		}
@@ -232,7 +238,7 @@ public class EngineImpl implements EngineService {
 				guards.get(i).getEnvi().cellContent(xshadow, yshadow).removeCharacter();
 			
 			shadow.step();
-			System.out.println("Clone : "+shadow.getWidth()+" " + shadow.getHeight());
+//			System.out.println("Clone : "+shadow.getWidth()+" " + shadow.getHeight());
 			
 			xshadow = shadow.getWidth();
 			yshadow = shadow.getHeight();
@@ -262,7 +268,6 @@ public class EngineImpl implements EngineService {
 						}
 						
 					}
-					
 					guards.remove(i);
 					shadow.setAlive(false);
 					break;
@@ -271,16 +276,13 @@ public class EngineImpl implements EngineService {
 			}
 		}
 		
-		for (int i=0; i<guards.size(); i++) {
-			int xguard = guards.get(i).getWidth();
-			int yguard = guards.get(i).getHeight();
-			
-			if(player.getWidth() == xguard && player.getHeight() == yguard) {
+		
+		for(GuardService guard : guards)
+			if(player.getWidth() == guard.getWidth() && player.getHeight() == guard.getHeight()) {
 				status = Status.LOSS;
 				life--;
 				return;
 			}
-		}
 		
 		if(envi.cellNature(xplayer, yplayer) == Cell.PLT) {
 			status = Status.LOSS;
@@ -294,9 +296,9 @@ public class EngineImpl implements EngineService {
 				treasures.remove(i);
 				score++;
 				
-				if(!shadow.isAlive() && guards.size() > 0) {
+				if(!shadow.isAlive()) {
 					shadow.setAlive(true);
-					System.out.println("Apparition d'une ombre !!! ");
+//					System.out.println("Apparition d'une ombre !!! ");
 				}
 				break;
 			}

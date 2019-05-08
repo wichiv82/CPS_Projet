@@ -216,7 +216,7 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 			for(int i=0; i<engine.getGuards().size(); i++)
 				engine.getGuards().get(i).getEnvi().cellContent(getWidth(), getHeight()).setCharacter(this);
 				
-			System.out.println("Multiclonage");
+//			System.out.println("Multiclonage");
 		}else if(!a) {
 			alive = a;
 			envi.cellContent(getWidth(), getHeight()).removeCharacter();;
@@ -226,7 +226,7 @@ public class ShadowImpl extends CharacterImpl implements ShadowService {
 			for(int i=0; i<engine.getGuards().size(); i++)
 				engine.getGuards().get(i).getEnvi().cellContent(getWidth(), getHeight()).removeCharacter();
 			
-			System.out.println("Pouf");
+//			System.out.println("Pouf");
 		}
 	}
 

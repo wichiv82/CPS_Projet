@@ -23,6 +23,14 @@ public class GuardContract extends GuardDecorator {
 	
 	
 	public void init(ScreenService s, int x, int y, int id, CharacterService target) {
+		if(s == null)
+			throw new PreconditionError("ScreenService == null");
+		if(!(0 <= x && x < s.getWidth()) || !(0 <= y && y < s.getHeight()))
+			throw new PreconditionError("Position Guard (" + x + "," + y + ") hors jeu");
+		if (target == null)
+			throw new PreconditionError("Target == null");
+		if (target.getWidth() == x && target.getHeight() == y)
+			throw new PreconditionError("Cellule (" + x + "," + y + ") -> 2 Character");
 		super.init(s, x, y, id, target);
 		checkInvariants();
 		
@@ -30,8 +38,6 @@ public class GuardContract extends GuardDecorator {
 			throw new PostconditionError("L'ID du Garde est " + id + " au lieu de " + getId() + ".");
 		if(getTarget() == null)
 			throw new PostconditionError("La target n'a pas été enregistrée.");
-		if(!(getTarget().equals(target)))
-			throw new PostconditionError("La target s'est mal initialisée.");
 		if(!(getPosInit().getX() == x && getPosInit().getY() == y))
 			throw new PostconditionError("La position initial a mal été enregistré en "
 					+ "(" + getPosInit().getX() + "," + getPosInit().getY() + ") au lieu de "
@@ -45,26 +51,15 @@ public class GuardContract extends GuardDecorator {
 		super.setEngine(engine);
 		checkInvariants();
 		
-		if(!(getEngine().equals(engine)))
-			throw new PostconditionError("L'Engine du Guard n°" + getId() + " s'est mal initialisée.");
+		if(!(engine == null) && getEngine() == null)
+			throw new PostconditionError("L'engine n'a pas été enregistré.");
 	}
 	
 	public void respawn() {
 		
 		int x_atPre = getWidth();
 		int y_atPre = getHeight();
-		ArrayList<ArrayList<CharacterService>> character_atPre = new ArrayList<>();
-		ArrayList<ArrayList<CharacterService>> engine_character_atPre = new ArrayList<>();
-		
-		for(int i = 0; i < getEnvi().getWidth(); i++) {
-			character_atPre.add(new ArrayList<>());
-			engine_character_atPre.add(new ArrayList<>());
-			for(int j = 0; j < getEnvi().getHeight(); j++) {
-				character_atPre.get(i).add(getEnvi().cellContent(i, j).getCharacter());
-				engine_character_atPre.get(i).add(getEngine().getEnvi().cellContent(i, j).getCharacter());
-			}
-		}
-		
+
 		checkInvariants();
 		super.respawn();
 		checkInvariants();
@@ -75,6 +70,7 @@ public class GuardContract extends GuardDecorator {
 		
 		if(!(getEnvi().cellContent(x_atPre, y_atPre).getCharacter() == null))
 			throw new PostconditionError("Un garde est présent dans la cellule (" + x_atPre + "," + y_atPre + ") après un respawn.");
+		
 	}
 	
 	public void climbLeft() {

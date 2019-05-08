@@ -1,4 +1,6 @@
-/impl/
+/contracts/
 /decorators/
-/services/
+/impl/
 /main/
+/services/
+/test/

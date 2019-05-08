@@ -35,6 +35,8 @@ public class EnvironmentContract extends EnvironmentDecorator{
 					switch(cellNature(i, j - 1)) {
 						case PLT:
 						case MTL:
+						case LAD:
+						case HOL:
 							if(cellNature(i, j) == Cell.EMP) break;
 						default:
 							throw new InvariantError("Un trésor est dans le vide ou sur un emplacement indisponible.");

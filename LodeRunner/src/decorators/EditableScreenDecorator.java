@@ -17,13 +17,6 @@ public class EditableScreenDecorator extends ScreenContract implements EditableS
 	}
 
 	@Override
-	public void init(int w, int h) {
-		// TODO Auto-generated method stub
-		getDelegate().init(w, h);
-		
-	}
-	
-	@Override
 	public void init(String file_name) {
 		// TODO Auto-generated method stub
 		getDelegate().init(file_name);

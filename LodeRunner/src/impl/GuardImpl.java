@@ -60,6 +60,9 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 	}
 	
 	public void respawn() {
+		System.out.println(engine);
+		System.out.println(engine.getEnvi());
+		System.out.println(engine.getEnvi().cellContent(getWidth(), getHeight()));
 		getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
 		engine.getEnvi().cellContent(getWidth(), getHeight()).setCharacter(null);
 		

@@ -17,28 +17,13 @@ public class EditableScreenContract extends EditableScreenDecorator{
 		for(int i = 0; i < getWidth(); i++) {
 			if(cellNature(i, 0) != Cell.MTL)
 				if(isPlayable())
-					throw new InvariantError("La cellule (" + i + ",0) est une MTL.");
+					throw new InvariantError("La cellule (" + i + ",0) est une " + cellNature(i, 0) + ".");
 			for(int j = 0; j < getHeight(); j++)
 				if(cellNature(i, j) == Cell.HOL)
 					if(isPlayable())
 						throw new InvariantError("La cellule (" + i + "," + j + ") est un HOL.");
 		}
-	}
-	
-	public void init (int w, int h) {
-		if (!(0 < w))
-			throw new PreconditionError("Largeur de EditableScreen est incorrecte : " + w);
-		if (!(0 < h))
-			throw new PreconditionError("Hauteur de EditableScreen est incorrecte : " + h);
-		
-		super.init(w, h);
-		checkInvariants();
-		
-		if(!(isPlayable() == false))
-			throw new PostconditionError("Playable s'est mal initialisé.");		
-	}
-	
-	
+	}	
 	
 	public void setNature(int x, int y, Cell c) {
 		ArrayList<ArrayList<Cell>> tmp = new ArrayList<>();
