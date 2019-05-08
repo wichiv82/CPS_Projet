@@ -8,6 +8,7 @@ import contracts.EnvironmentContract;
 import contracts.GuardContract;
 import contracts.ItemContract;
 import contracts.PlayerContract;
+import contracts.ShadowContract;
 import services.Cell;
 import services.Command;
 import services.EditableScreenService;
@@ -88,7 +89,8 @@ public class EngineImpl implements EngineService {
 		
 		this.player.setEngine(this);
 		
-		this.shadow = new ShadowImpl();
+		if (contract) this.shadow = new ShadowContract(new ShadowImpl());
+		else this.shadow = new ShadowImpl();
 		this.shadow.init(e, spawn.x, spawn.y);
 		this.shadow.setEngine(this);
 		

@@ -3,14 +3,15 @@ package contracts;
 import decorators.ShadowDecorator;
 import services.Cell;
 import services.CharacterService;
-import services.ShadowService;
 
 public class ShadowContract extends ShadowDecorator{
 
-	public ShadowContract(ShadowService delegate) {
+	public ShadowContract(CharacterService delegate) {
 		super(delegate);
 		// TODO Auto-generated constructor stub
 	}
+	
+	
 
 	public void checkInvariants() {
 		
@@ -42,7 +43,8 @@ public class ShadowContract extends ShadowDecorator{
 				throw new PostconditionError("La Shadow escalade par la gauche alors que la cellule (" + x_atPre + "," + y_atPre + ")"
 						+ " n'est pas un HOL.");
 		
-		if(!(x_atPre == 0 && y_atPre == getEnvi().getHeight() - 1)) {
+		System.out.println(getEnvi().getHeight() - 1);
+		if(!(x_atPre == 0 || y_atPre == getEnvi().getHeight() - 1)) {
 			switch(getEnvi().cellNature(x_atPre - 1, y_atPre)) {
 				case HOL:
 					if(!(getEnvi().cellContent(x_atPre - 1, y_atPre).getCharacter() == null))
@@ -119,7 +121,7 @@ public class ShadowContract extends ShadowDecorator{
 				throw new PostconditionError("La Shadow escalade par la droit alors que la cellule (" + x_atPre + "," + y_atPre + ")"
 						+ " n'est pas un HOL.");
 		
-		if(!(x_atPre == getEnvi().getWidth() - 1 && y_atPre == getEnvi().getHeight() - 1)) {
+		if(!(x_atPre == getEnvi().getWidth() - 1 || y_atPre == getEnvi().getHeight() - 1)) {
 			switch(getEnvi().cellNature(x_atPre + 1, y_atPre)) {
 				case HOL:
 					if(!(getEnvi().cellContent(x_atPre + 1, y_atPre).getCharacter() == null))
@@ -172,8 +174,39 @@ public class ShadowContract extends ShadowDecorator{
 	
 	public void setAlive(boolean a) {
 		// TODO Auto-generated method stub
+		boolean alive_atPre = isAlive();
+		CharacterService pos_atPre = getEngine().getEnvi().cellContent(getWidth(), getHeight()).getCharacter();
+		
+		checkInvariants();
 		super.setAlive(a);
-		if(! (super.isAlive() == a))
-			throw new PostconditionError("La variable alive n'a pas été modifiée.");
+		checkInvariants();
+		
+		if(a && !alive_atPre && pos_atPre == null) {
+			if(!isAlive())
+				throw new PostconditionError("Alive n'a pas été modifié.");
+			if(getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == null)
+				throw new PostconditionError("Shadow Environement non mis à jour.");
+			if(getEngine().getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == null)
+				throw new PostconditionError("Engine Environement non mis à jour.");
+			if(getEngine().getPlayer().getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == null)
+				throw new PostconditionError("Player Environement non mis à jour.");
+			
+			for(int i=0; i<getEngine().getGuards().size(); i++)
+				if(getEngine().getGuards().get(i).getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == null)
+					throw new PostconditionError("Guard Environement non mis à jour.");
+		}else if(!a) {
+			if(isAlive())
+				throw new PostconditionError("Alive n'a pas été modifié.");
+			if(!(getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == null))
+				throw new PostconditionError("Shadow Environement non mis à jour.");
+			if(!(getEngine().getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == null))
+				throw new PostconditionError("Engine Environement non mis à jour.");
+			if(!(getEngine().getPlayer().getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == null))
+				throw new PostconditionError("Player Environement non mis à jour.");
+			
+			for(int i=0; i<getEngine().getGuards().size(); i++)
+				if(!(getEngine().getGuards().get(i).getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == null))
+					throw new PostconditionError("Guard Environement non mis à jour.");
+		}
 	}
 }

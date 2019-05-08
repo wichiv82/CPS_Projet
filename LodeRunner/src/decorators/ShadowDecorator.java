@@ -4,11 +4,12 @@ import contracts.CharacterContract;
 import services.CharacterService;
 import services.EngineService;
 import services.Move;
+import services.ScreenService;
 import services.ShadowService;
 
 public class ShadowDecorator extends CharacterContract implements ShadowService{
 
-	public ShadowDecorator(ShadowService delegate) {
+	public ShadowDecorator(CharacterService delegate) {
 		super(delegate);
 		// TODO Auto-generated constructor stub
 	}
@@ -17,6 +18,10 @@ public class ShadowDecorator extends CharacterContract implements ShadowService{
 		return (ShadowService) super.getDelegate();
 	}
 
+	public void init(ScreenService s, int x, int y) {
+		getDelegate().init(s, x, y);
+	}
+	
 	@Override
 	public int getTimeInHole() {
 		// TODO Auto-generated method stub

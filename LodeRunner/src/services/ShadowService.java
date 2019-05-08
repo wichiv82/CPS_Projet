@@ -2,8 +2,6 @@ package services;
 
 public interface ShadowService extends CharacterService{
 
-	public void init(ScreenService s, int x, int y);
-	
 	public int getTimeInHole();
 	
 	public EngineService getEngine();
