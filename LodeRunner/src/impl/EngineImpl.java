@@ -191,7 +191,6 @@ public class EngineImpl implements EngineService {
 			
 			player.getEnvi().cellContent(xguard, yguard).removeCharacter();
 			envi.cellContent(xguard, yguard).removeCharacter();
-			//shadow.getEnvi().cellContent(xguard, yguard).removeCharacter();
 			
 			guards.get(i).step();
 			
@@ -200,7 +199,6 @@ public class EngineImpl implements EngineService {
 			
 			player.getEnvi().cellContent(xguard, yguard).setCharacter(guards.get(i));
 			envi.cellContent(xguard, yguard).setCharacter(guards.get(i));
-			//shadow.getEnvi().cellContent(xguard, yguard).setCharacter(guards.get(i));
 		}
 		
 		for (int i=0; i<holes.length; i++) {

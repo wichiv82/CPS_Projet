@@ -15,8 +15,8 @@ public class LodeRunner1 extends LodeRunnerMain{
 	}
 	
 	public static void main(String[] args) {
-		int niveau = 3;
-		int life = 1000;
+		int niveau = 1;
+		int life = 3;
 		
 		while (niveau <= 6) {
 			EditableScreenImpl e = new EditableScreenImpl();

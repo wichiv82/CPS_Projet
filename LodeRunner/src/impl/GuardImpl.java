@@ -191,7 +191,6 @@ public class GuardImpl extends CharacterImpl implements GuardService{
 				removeItem();
 			}
 			goDown();
-//			System.out.println("CHUTE DU GARDE");
 				
 			if(item != null) {
 				item.setColumn(getWidth());
