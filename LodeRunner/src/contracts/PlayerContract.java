@@ -24,8 +24,6 @@ public class PlayerContract extends PlayerDecorator {
 		}
 		if(getEnvi().cellContent(getWidth(), getHeight()).getCharacter() == null)
 			throw new InvariantError("Le joueur n'est pas présent sur son emplacement.");
-//		if (!getEnvi().cellContent(getWidth(), getHeight()).getCharacter().equals(this))
-//			throw new InvariantError("Le joueur n'est pas présent sur son emplacement.");
 	}
 	
 	public void setEngine(EngineService e) {
@@ -34,8 +32,6 @@ public class PlayerContract extends PlayerDecorator {
 		
 		if(!(e == null) && getEngine() == null)
 			throw new PostconditionError("L'Engine du Player ne s'est pas enregistrée.");
-		if(!(e == null && getEngine() == null) && !(getEngine().equals(e)))
-			throw new PostconditionError("L'Engine enregistrée par le Player n'est pas la bonne.");
 	}
 	
 	public void step() {

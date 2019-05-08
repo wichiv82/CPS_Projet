@@ -108,8 +108,6 @@ public class GuardTest extends MyTest{
 			Assert.fail();
 		if(!(engine.getGuards().get(1).getWidth() == 1 && engine.getGuards().get(1).getHeight() == 1))
 			Assert.fail();
-		for(GuardService g : engine.getGuards())
-			System.out.println("GUARDS : " + g.getWidth() + "," + g.getHeight());
 //		Assert.fail();
 	}
 	

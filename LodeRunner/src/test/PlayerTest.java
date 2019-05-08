@@ -13,9 +13,10 @@ import services.Cell;
 import services.EditableScreenService;
 import services.PlayerService;
 
-public class PlayerTest {
+public class PlayerTest extends MyTest{
 	
-	
-	
+	public PlayerTest() {
+		NameClassTest = "Player";
+	}
 	
 }

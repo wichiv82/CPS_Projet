@@ -75,7 +75,7 @@ public class EngineTest extends MyTest{
 			try {
 				engine.init(edit, player, guards, treasures);
 			}catch(PreconditionError e) {
-				message("init_guard_unbound()", e);
+				message("init_guard_unbound", e);
 				guards.clear();
 				continue;
 			} Assert.fail();

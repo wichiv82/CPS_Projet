@@ -8,11 +8,15 @@ import contracts.ScreenContract;
 import impl.ScreenImpl;
 import services.ScreenService;
 
-public class ScreenTest {
+public class ScreenTest extends MyTest{
 
 	private ScreenService screen = new ScreenContract(new ScreenImpl());
 
 	/* public void init(int w, int h) */
+	
+	public ScreenTest() {
+		NameClassTest = "Screen";
+	}
 	
 	@Test
 	public void init_zeros_dimensions() {
@@ -29,6 +33,7 @@ public class ScreenTest {
 		try {
 			screen.init(-1, 1);
 		} catch(PreconditionError e) {
+			message("init_negative_width", e);
 			return;
 		} Assert.fail();
 	}
@@ -38,6 +43,7 @@ public class ScreenTest {
 		try {
 			screen.init(1, -1);
 		} catch(PreconditionError e) {
+			message("init_negative_height", e);
 			return;
 		}Assert.fail();
 	}
